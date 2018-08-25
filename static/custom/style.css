@@ -1,0 +1,45 @@
+/*
+index.html
+*/
+
+#index-main {
+    height: 100vh;
+    background: url("/static/img/index-background.jpg") no-repeat center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.quote-container {
+    position: relative;
+}
+
+.quote-container blockquote {
+    display: none;
+    position: absolute;
+    top: 0;
+}
+
+.arrows-wrraper {
+    margin-top: 300px;
+}
+
+.arrows-wrraper button {
+    opacity: 0.5;
+    margin: 0 40px;
+    color: #000000;
+    outline-color: transparent;
+    background: transparent;
+    border: none;
+}
+
+.arrows-wrraper button:hover {
+    opacity: 1;
+    color: #5cb85c;
+}
+
+footer {
+    height: 200px;
+    background-color: black;
+}
