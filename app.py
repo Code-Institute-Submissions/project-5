@@ -45,7 +45,7 @@ def sign_up():
 			return f"Sorry profile {request.form['username']} already exist"
 		else:
 			create_user()
-			return redirect(url_for('dashboard'))
+			return redirect(url_for('profile'))
 
 	return render_template("sign-up.html", page_title="Sign up")
 
