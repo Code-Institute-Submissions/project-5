@@ -30,7 +30,7 @@ def login():
 		user_in_db = mongo.db.users.find_one({"username": username})
 		if user_in_db:
 			if check_password_hash(user_in_db['password'], password):
-				return redirect(url_for('profile'))
+				return redirect(url_for('profile', user_id=user_in_db['_id']))
 			else:
 				return "Invalid username or password"
 		else:
@@ -44,15 +44,16 @@ def sign_up():
 		if user_in_db:
 			return f"Sorry profile {request.form['username']} already exist"
 		else:
-			create_user()
-			return redirect(url_for('profile'))
+			return create_user()
+			
 
 	return render_template("sign-up.html", page_title="Sign up")
 
 
-@app.route('/profile')
-def profile():
-	return render_template("profile.html", page_title="profile")
+@app.route('/profile/<user_id>')
+def profile(user_id):
+	user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+	return render_template("profile.html", page_title="profile", user=user)
 
 
 @app.route('/admin_dashboard')
