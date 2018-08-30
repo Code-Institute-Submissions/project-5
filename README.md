@@ -12,3 +12,5 @@ Added @routes for all above
 Added security via hashed password
 
 Users are now stored in mongoDB database
+
+Added unique link for every user 

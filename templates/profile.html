@@ -1,9 +1,17 @@
 {% extends "base.html" %} 
 
-{% block log_in_out_btn %} {% endblock log_in_out_btn %} 
+{% block log_in_out_btn %}
+
+<button class="btn btn-outline-success my-2 my-sm-0" type="button" data-toggle="modal" data-target="#log-out-modal">Log out</button>
+
+{% endblock log_in_out_btn %} 
 
 {% block main_content %}
 <section class="container">
 	<h1>Logged in</h1>
 </section>
 {% endblock main_content %}
+
+{% block log_in_modal %}
+
+{% endblock log_in_modal %}
