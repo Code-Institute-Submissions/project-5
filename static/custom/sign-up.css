@@ -1,0 +1,32 @@
+/*
+Sign up 
+*/
+
+body {
+	background: url("/static/img/sign-up.jpg") no-repeat center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+
+
+#sign-up .card{
+	margin-top: 100px;
+}
+.card,
+#footer {
+	background-color: transparent;
+}
+.btn {
+	background-color: transparent;
+	color: aquamarine;
+	border: 2px solid aquamarine;
+}
+.card-body label,
+.card-body p {
+	color: #ffffff;
+}
+
+

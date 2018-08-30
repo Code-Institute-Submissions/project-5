@@ -1,0 +1,45 @@
+{% extends "base.html" %} 
+
+
+
+{% block main_content %}
+
+<section id="index-welcome" class="vh100 container-fluid"></section>
+
+<section id="index-main" class="vh100 container-fluid"></section>
+
+{% endblock main_content %}
+
+{% block log_in_modal %}
+<!-- Log in Modal -->
+<div id="log-in-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="log-in" aria-hidden="true">
+	<div class="modal-sm mx-auto mt-5">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="log-out">Log in</h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form method="POST" action="/login">
+						<div class="form-group">
+							<label for="username">User name</label>
+							<input name="username" type="text" class="form-control"  required>
+						</div>
+						<div class="form-group">
+							<label for="user_password">Password</label>
+							<input class="form-control" name="user_password" type="password" required>
+						</div>
+						<button type="submit" class="btn btn-primary btn-block">Login</button>
+					</form>
+				</div>
+				<div class="modal-footer justify-content-center">
+					<a class="d-block small mt-3" href="{{url_for('sign_up')}}">Register an Account</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock log_in_modal %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block log_in_out_btn %}
+
+{% endblock log_in_out_btn %}
+
+{% block main_content %}
+	<section class="container">
+		<div class="row">
+			<div class="card-deck">
+				<div class="card">
+					<div class="card-header">Users</div>
+					<div class="card-body">
+						{% for user in users %}
+						<ul>
+							<li>{{user}}</li>
+						</ul>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock main_content %}

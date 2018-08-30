@@ -16,51 +16,66 @@
 
 	<!-- Custom styles -->
 	<link rel="stylesheet" href="{{url_for('static', filename='custom/style.css')}}" type="text/css" />
+	{% block css %}
+		
+	{% endblock css %}
 
 </head>
 
 <body>
 
 	<!-- Navbar -->
-	<nav class="navbar navbar-expand-lg navbar-light navbar-fixed-top ">
-		<a class="navbar-brand font-weight-bold" href="/">Cookbook</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav" aria-controls="navbarSupportedContent"
-		 aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-	
-		<div class="collapse navbar-collapse" id="main-nav">
-			<ul class="navbar-nav ml-auto">
-				<li class="nav-item active">
-					<a class="nav-link" href="#">Home</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#">Link</a>
-				</li>				
-				<li class="nav-item">
-					<a class="nav-link" href="#">Link</a>
-				</li>
-				<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-			</ul>
+	<nav class="navbar navbar-expand-lg navbar-light fixed-top">
+		<div class="container">
+			<a class="navbar-brand font-weight-bold" href="/">Cookbook</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav" aria-controls="navbarSupportedContent"
+			 aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			
+			<div class="collapse navbar-collapse" id="main-nav">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item active">
+						<a class="nav-link" href="#">Home</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Link</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Link</a>
+					</li>
+					{% block log_in_out_btn %}
+					<button class="btn btn-outline-success my-2 my-sm-0" type="button" data-toggle="modal" data-target="#log-in-modal">Log in</button>
+					{% endblock log_in_out_btn %}
+				</ul>
+			</div>
 		</div>
 	</nav>
 
 	<!-- Main Content -->
 
-	{% block main_content %}
-	  
-	{% endblock main_content %}
+	<main>
+		 {% block main_content %} {% endblock main_content %}
+	</main>
 	
 
 	
 	
 	<!-- Footer -->
-	<footer >
-		<div class="container">
-			
+	<footer id="footer" >
+		<div class="container-fluid fixed-bottom">
+			<div class="row">
+				<div class="col-12 text-right ">
+					<a href="{{url_for('dashboard')}}">
+						<i class="twitter fab fa-twitter fa-2x" aria-hidden="true"></i>
+						Admin Dashboard (Testing)
+					</a>
+				</div>
+			</div>
 		</div>
 	</footer>
-
+	{% block log_in_modal %}{% endblock log_in_modal %}
+	 {% block log_out_modal %} {% endblock log_out_modal %}
 	<!-- Bootstrap core JavaScript-->
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
 	 crossorigin="anonymous"></script>

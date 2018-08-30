@@ -1,9 +1,28 @@
+
+/*
+General
+*/
+
+.vh100 {	
+    min-height: 100vh;
+}
+
+section {
+	padding-top: 100px;
+}
+
+/*
+Nav
+*/
+.navbar {
+	background-color: #fefefe
+}
+
 /*
 index.html
 */
 
-#index-main {
-    height: 100vh;
+#index-welcome {
     background: url("/static/img/index-background.jpg") no-repeat center;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -11,14 +30,21 @@ index.html
     background-size: cover;
 }
 
-.quote-container {
+#index-welcome .row {
+	position: absolute;
+	bottom: 5%;
+	left: 42.5%;
+} 
+.slide-container  {
     position: relative;
 }
 
-.quote-container blockquote {
+.slide-container .card {
     display: none;
-    position: absolute;
-    top: 0;
+	position: absolute;
+	min-width: 300px;
+	min-height: 300px;
+	background-color: transparent;
 }
 
 .arrows-wrraper {
@@ -39,7 +65,23 @@ index.html
     color: #5cb85c;
 }
 
-footer {
-    height: 200px;
-    background-color: black;
+
+/*
+Main section
+*/
+
+#index-main {
+    position: relative;
+    background-color: #fefefe;
+}
+
+
+
+/*
+footer
+*/
+
+#footer {
+	height: 150px;
+	background-color: #000000;
 }
