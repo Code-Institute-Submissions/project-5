@@ -20,10 +20,17 @@ mongo = PyMongo(app)
 
 app.config['SECRET_KEY'] = log_in_key()
 
+
+# Index
 @app.route('/')
 @app.route('/index')
 def index():
+    if 'user' in session:
+        user_in_db = mongo.db.users.find_one({"username": session['user']})
+        return render_template("index.html", page_title="Cookbook", username=session['user'], user_id=user_in_db['_id'])
     return render_template("index.html", page_title="Cookbook")
+
+# Login
 
 
 @app.route('/login', methods=['POST'])
@@ -38,19 +45,14 @@ def login():
         if user_in_db:
             if check_password_hash(user_in_db['password'], password):
                 session['user'] = username
-                return redirect(url_for('profile', user_id=user_in_db['_id']))
+                return redirect(url_for('profile', user_id=user_in_db['_id'], username=username))
             else:
                 return "Invalid username or password"
         else:
             return f"Sorry no profile {request.form['username']} found"
 
-@app.route('/logout')
-def logout():
-	session.pop('user')
-	return redirect(url_for('index'))
 
-
-
+# Sign up
 @app.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
     if request.method == "POST":
@@ -61,27 +63,54 @@ def sign_up():
 
         hashed_pass = generate_password_hash(request.form['user_password'])
         return create_user(hashed_pass)
-
+    if 'user' in session:
+        return render_template("sign-up.html", page_title="Sign up", username=session['user'])
     return render_template("sign-up.html", page_title="Sign up")
+
+# Log out
+
+
+@app.route('/logout')
+def logout():
+    session.pop('user')
+    return redirect(url_for('index'))
+
+# Profile Page
 
 
 @app.route('/profile/<user_id>')
 def profile(user_id):
     if 'user' in session:
-        user = mongo.db.users.find_one({"_id": ObjectId(user_id)})		
+        user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
         return render_template("profile.html", page_title="profile", user=user)
 
     return redirect(url_for('index'))
-	
 
 
+@app.route('/recipes')
+def recipes():
+	recipes_id_db = mongo.db.recipes.find()
+	if 'user' in session:		
+		user_in_db = mongo.db.users.find_one({"username": session['user']})
+		return render_template("recipes.html", page_title="Recipes", recipes=recipes_id_db, username=session['user'], user_id=user_in_db['_id'])
+	return render_template("recipes.html", page_title="Recipes", recipes=recipes_id_db)
+
+""" Others """
+
+# Admin Dashboard
 @app.route('/admin_dashboard')
 def dashboard():
     users = mongo.db.users.find()
     return render_template("dashboard.html", page_title="dashboard", users=users)
+
+# Error page
+@app.route('/error')
+def error():
+    return render_template("error.html")
 
 
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=os.environ.get('PORT'),
             debug=True)
+

@@ -12,9 +12,15 @@
 					<div class="card-header">Users</div>
 					<div class="card-body">
 						{% for user in users %}
-						<ul>
-							<li>{{user}}</li>
-						</ul>
+						<div class="card">
+							<div class="card-header"> {{user.username}}</div>
+							<div class="card-body">
+								<ul>
+									<li>email: {{user.email}}</li>
+									<li>password: {{user.password}}</li>
+								</ul>
+							</div>
+						</div>
 						{% endfor %}
 					</div>
 				</div>

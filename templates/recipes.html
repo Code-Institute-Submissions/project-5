@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+  <section class="vh100">
+	{% for recipe in recipes  %}
+	  <div class="card">
+		  {{ recipe }}
+	  </div>
+	{% endfor %}
+  </section>
+{% endblock main_content %}

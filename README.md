@@ -13,4 +13,9 @@ Added security via hashed password
 
 Users are now stored in mongoDB database
 
-Added unique link for every user 
+Added unique link for every user
+Added sessions for users
+
+1.1
+
+Connected to API
