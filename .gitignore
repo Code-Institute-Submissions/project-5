@@ -2,3 +2,6 @@
 key.py
 db.py
 test.html
+__pycache__
+tests.ipynb
+.ipynb_checkpoints

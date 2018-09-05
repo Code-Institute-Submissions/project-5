@@ -11,6 +11,10 @@ section {
 	padding-top: 100px;
 }
 
+.card-text-bold {
+	font-weight: 600;
+}
+
 /*
 Nav
 */

@@ -8,17 +8,24 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 
-	<title>{{page_title}}</title>
-
 	<!-- Bootstrap  CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	 crossorigin="anonymous">
+	
+	<!-- FA -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
 	 crossorigin="anonymous">
 
 	<!-- Custom styles -->
 	<link rel="stylesheet" href="{{url_for('static', filename='custom/style.css')}}" type="text/css" />
-	{% block css %}
-		
-	{% endblock css %}
+	
+	{% block css %} 
+	
+	{% endblock	css %}
+
+	<title>{{page_title}}</title>
+
+	
 
 </head>
 
@@ -36,11 +43,11 @@
 			<div class="collapse navbar-collapse" id="main-nav">
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item">
-						<a class="nav-link" href="#">The Book</a>
+						<a class="nav-link" href="{{url_for('recipes')}}">The Book</a>
 					</li>
 
 					{% block profile_link %} 
-					{% if username %}
+					{% if session %}
 					<li class="nav-item">
 						<a class="nav-link" href="{{url_for('profile', user_id=user_id)}}">Profile</a>
 					</li>
@@ -48,7 +55,7 @@
 					{% endblock profile_link %} 
 					
 					{% block log_in_out_btn %} 
-					{% if username %}
+					{% if session %}
 					<button class="btn btn-outline-success my-2 my-sm-0" type="button" data-toggle="modal" data-target="#log-out-modal">Log out
 					</button>
 					{% else %}
@@ -76,7 +83,6 @@
 			<div class="row">
 				<div class="col-12 text-right ">
 					<a href="{{url_for('dashboard')}}">
-						<i class="twitter fab fa-twitter fa-2x" aria-hidden="true"></i>
 						Admin Dashboard (Testing)
 					</a>
 				</div>

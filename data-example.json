@@ -1,0 +1,498 @@
+{
+	"_id": {
+		"$oid": "5b8b7bb837265c3a6c4a5488"
+	},
+	"recipes": [
+		{
+			"vegetarian": true,
+			"vegan": false,
+			"glutenFree": false,
+			"dairyFree": false,
+			"veryHealthy": false,
+			"cheap": false,
+			"veryPopular": false,
+			"sustainable": false,
+			"weightWatcherSmartPoints": 6,
+			"gaps": "no",
+			"lowFodmap": false,
+			"ketogenic": false,
+			"whole30": false,
+			"sourceUrl": "http://www.budgetgourmetmom.com/apple-cinnamon-pretzels-kids-can-cook-toosday/",
+			"spoonacularSourceUrl": "https://spoonacular.com/apple-cinnamon-pretzels-kids-can-cook-toosday-496150",
+			"aggregateLikes": 260,
+			"spoonacularScore": 25,
+			"healthScore": 1,
+			"creditText": "Budget Gourmet Mom",
+			"sourceName": "Budget Gourmet Mom",
+			"pricePerServing": 52.72,
+			"extendedIngredients": [
+				{
+					"id": 20081,
+					"aisle": "Baking",
+					"image": "flour.png",
+					"consitency": "solid",
+					"name": "all purpose flour",
+					"original": "2 1/2-3 cups all purpose flour",
+					"originalString": "2 1/2-3 cups all purpose flour",
+					"originalName": null,
+					"amount": 2.5,
+					"unit": "cups",
+					"meta": [],
+					"metaInformation": [],
+					"measures": {
+						"us": {
+							"amount": 2.5,
+							"unitShort": "cups",
+							"unitLong": "cups"
+						},
+						"metric": {
+							"amount": 591.47,
+							"unitShort": "g",
+							"unitLong": "grams"
+						}
+					}
+				},
+				{
+					"id": 9003,
+					"aisle": "Produce",
+					"image": "apple.jpg",
+					"consitency": "solid",
+					"name": "apple",
+					"original": "1 small apple, finely diced",
+					"originalString": "1 small apple, finely diced",
+					"originalName": null,
+					"amount": 1,
+					"unit": "",
+					"meta": [
+						"diced",
+						"small",
+						"finely"
+					],
+					"metaInformation": [
+						"diced",
+						"small",
+						"finely"
+					],
+					"measures": {
+						"us": {
+							"amount": 1,
+							"unitShort": "",
+							"unitLong": ""
+						},
+						"metric": {
+							"amount": 1,
+							"unitShort": "",
+							"unitLong": ""
+						}
+					}
+				},
+				{
+					"id": 1001,
+					"aisle": "Milk, Eggs, Other Dairy",
+					"image": "butter-sliced.jpg",
+					"consitency": "solid",
+					"name": "butter",
+					"original": "2 tblsp melted butter",
+					"originalString": "2 tblsp melted butter",
+					"originalName": null,
+					"amount": 2,
+					"unit": "",
+					"meta": [
+						"melted"
+					],
+					"metaInformation": [
+						"melted"
+					],
+					"measures": {
+						"us": {
+							"amount": 2,
+							"unitShort": "",
+							"unitLong": ""
+						},
+						"metric": {
+							"amount": 2,
+							"unitShort": "",
+							"unitLong": ""
+						}
+					}
+				},
+				{
+					"id": 10219335,
+					"aisle": "Spices and Seasonings",
+					"image": "cinnamon-sugar.jpg",
+					"consitency": "solid",
+					"name": "cinnamon sugar",
+					"original": "cinnamon and sugar",
+					"originalString": "cinnamon and sugar",
+					"originalName": null,
+					"amount": 12,
+					"unit": "servings",
+					"meta": [],
+					"metaInformation": [],
+					"measures": {
+						"us": {
+							"amount": 12,
+							"unitShort": "servings",
+							"unitLong": "servings"
+						},
+						"metric": {
+							"amount": 12,
+							"unitShort": "servings",
+							"unitLong": "servings"
+						}
+					}
+				},
+				{
+					"id": 2010,
+					"aisle": "Spices and Seasonings",
+					"image": "cinnamon.jpg",
+					"consitency": "solid",
+					"name": "ground cinnamon",
+					"original": "1 tsp ground cinnamon",
+					"originalString": "1 tsp ground cinnamon",
+					"originalName": null,
+					"amount": 1,
+					"unit": "tsp",
+					"meta": [],
+					"metaInformation": [],
+					"measures": {
+						"us": {
+							"amount": 1,
+							"unitShort": "tsp",
+							"unitLong": "teaspoon"
+						},
+						"metric": {
+							"amount": 1,
+							"unitShort": "tsp",
+							"unitLong": "teaspoon"
+						}
+					}
+				},
+				{
+					"id": 10118375,
+					"aisle": "Baking",
+					"image": "yeast.jpg",
+					"consitency": "solid",
+					"name": "instant yeast",
+					"original": "1 tblsp instant yeast",
+					"originalString": "1 tblsp instant yeast",
+					"originalName": null,
+					"amount": 1,
+					"unit": "",
+					"meta": [],
+					"metaInformation": [],
+					"measures": {
+						"us": {
+							"amount": 1,
+							"unitShort": "",
+							"unitLong": ""
+						},
+						"metric": {
+							"amount": 1,
+							"unitShort": "",
+							"unitLong": ""
+						}
+					}
+				},
+				{
+					"id": 1077,
+					"aisle": "Milk, Eggs, Other Dairy",
+					"image": "milk.jpg",
+					"consitency": "liquid",
+					"name": "milk",
+					"original": "1 tblsp milk",
+					"originalString": "1 tblsp milk",
+					"originalName": null,
+					"amount": 1,
+					"unit": "",
+					"meta": [],
+					"metaInformation": [],
+					"measures": {
+						"us": {
+							"amount": 1,
+							"unitShort": "",
+							"unitLong": ""
+						},
+						"metric": {
+							"amount": 1,
+							"unitShort": "",
+							"unitLong": ""
+						}
+					}
+				},
+				{
+					"id": 19336,
+					"aisle": "Baking",
+					"image": "powdered-sugar.jpg",
+					"consitency": "solid",
+					"name": "powdered sugar",
+					"original": "1/2 cup powdered sugar",
+					"originalString": "1/2 cup powdered sugar",
+					"originalName": null,
+					"amount": 0.5,
+					"unit": "cup",
+					"meta": [],
+					"metaInformation": [],
+					"measures": {
+						"us": {
+							"amount": 0.5,
+							"unitShort": "cups",
+							"unitLong": "cups"
+						},
+						"metric": {
+							"amount": 118.294,
+							"unitShort": "g",
+							"unitLong": "grams"
+						}
+					}
+				},
+				{
+					"id": 2047,
+					"aisle": "Spices and Seasonings",
+					"image": "salt.jpg",
+					"consitency": "solid",
+					"name": "salt",
+					"original": "1 tsp salt",
+					"originalString": "1 tsp salt",
+					"originalName": null,
+					"amount": 1,
+					"unit": "tsp",
+					"meta": [],
+					"metaInformation": [],
+					"measures": {
+						"us": {
+							"amount": 1,
+							"unitShort": "tsp",
+							"unitLong": "teaspoon"
+						},
+						"metric": {
+							"amount": 1,
+							"unitShort": "tsp",
+							"unitLong": "teaspoon"
+						}
+					}
+				},
+				{
+					"id": 19335,
+					"aisle": "Baking",
+					"image": "sugar-cubes.jpg",
+					"consitency": "solid",
+					"name": "sugar",
+					"original": "1 tblsp sugar",
+					"originalString": "1 tblsp sugar",
+					"originalName": null,
+					"amount": 1,
+					"unit": "",
+					"meta": [],
+					"metaInformation": [],
+					"measures": {
+						"us": {
+							"amount": 1,
+							"unitShort": "",
+							"unitLong": ""
+						},
+						"metric": {
+							"amount": 1,
+							"unitShort": "",
+							"unitLong": ""
+						}
+					}
+				},
+				{
+					"id": 14412,
+					"aisle": "Beverages",
+					"image": "water.jpg",
+					"consitency": "liquid",
+					"name": "water",
+					"original": "1 cup warm water",
+					"originalString": "1 cup warm water",
+					"originalName": null,
+					"amount": 1,
+					"unit": "cup",
+					"meta": [],
+					"metaInformation": [],
+					"measures": {
+						"us": {
+							"amount": 1,
+							"unitShort": "cup",
+							"unitLong": "cup"
+						},
+						"metric": {
+							"amount": 236.588,
+							"unitShort": "g",
+							"unitLong": "grams"
+						}
+					}
+				}
+			],
+			"id": 496150,
+			"title": "Apple Cinnamon Pretzels",
+			"readyInMinutes": 45,
+			"servings": 12,
+			"image": "https://spoonacular.com/recipeImages/496150-556x370.jpg",
+			"imageType": "jpg",
+			"cuisines": [],
+			"dishTypes": [
+				"side dish"
+			],
+			"diets": [
+				"lacto ovo vegetarian"
+			],
+			"occasions": [],
+			"winePairing": {},
+			"instructions": "In a medium bowl mix the sugar, yeast, and water.  Let is sit for a minute to let it dissolve.Add the cinnamon, apple, salt, and 2 cups of flour.  Stir until incorporated.Knead in the rest of the flour until the dough becomes smooth and elastic.Cover and let rise for an hour.Preheat oven to 450°.Tear off pieces of the dough, roll, and twist.  Make whatever shapes you like.  We even made initials.Place on a greased baking sheet.  Bake for 8-10 minutes.Melt the butter and brush a little bit onto the pretzels when they come out of the oven.  Sprinkle with cinnamon and sugar and little table salt.Add the powdered sugar and milk to the remaining butter.  Stir until thoroughly mixed.  Serve with the pretzels.",
+			"analyzedInstructions": [
+				{
+					"name": "",
+					"steps": [
+						{
+							"number": 1,
+							"step": "In a medium bowl mix the sugar, yeast, and water.",
+							"ingredients": [
+								{
+									"id": 19335,
+									"name": "sugar",
+									"image": "sugar-in-bowl.png"
+								},
+								{
+									"id": 14412,
+									"name": "water",
+									"image": "water.jpg"
+								},
+								{
+									"id": 18375,
+									"name": "yeast",
+									"image": "yeast.jpg"
+								}
+							],
+							"equipment": [
+								{
+									"id": 404783,
+									"name": "bowl",
+									"image": "bowl.jpg"
+								}
+							]
+						},
+						{
+							"number": 2,
+							"step": "Let is sit for a minute to let it dissolve.",
+							"ingredients": [],
+							"equipment": []
+						},
+						{
+							"number": 3,
+							"step": "Add the cinnamon, apple, salt, and 2 cups of flour.  Stir until incorporated.Knead in the rest of the flour until the dough becomes smooth and elastic.Cover and let rise for an hour.Preheat oven to 450°.Tear off pieces of the dough, roll, and twist.  Make whatever shapes you like.  We even made initials.",
+							"ingredients": [
+								{
+									"id": 2010,
+									"name": "cinnamon",
+									"image": "cinnamon.jpg"
+								},
+								{
+									"id": 9003,
+									"name": "apple",
+									"image": "apple.jpg"
+								},
+								{
+									"id": 20081,
+									"name": "all purpose flour",
+									"image": "flour.png"
+								},
+								{
+									"id": 2047,
+									"name": "salt",
+									"image": "salt.jpg"
+								}
+							],
+							"equipment": [
+								{
+									"id": 404784,
+									"name": "oven",
+									"image": "oven.jpg"
+								}
+							]
+						},
+						{
+							"number": 4,
+							"step": "Place on a greased baking sheet.",
+							"ingredients": [],
+							"equipment": [
+								{
+									"id": 404727,
+									"name": "baking sheet",
+									"image": "baking-sheet.jpg"
+								}
+							]
+						},
+						{
+							"number": 5,
+							"step": "Bake for 8-10 minutes.Melt the butter and brush a little bit onto the pretzels when they come out of the oven.  Sprinkle with cinnamon and sugar and little table salt.",
+							"ingredients": [
+								{
+									"id": 2047,
+									"name": "table salt",
+									"image": "salt.jpg"
+								},
+								{
+									"id": 2010,
+									"name": "cinnamon",
+									"image": "cinnamon.jpg"
+								},
+								{
+									"id": 1001,
+									"name": "butter",
+									"image": "butter-sliced.jpg"
+								},
+								{
+									"id": 19335,
+									"name": "sugar",
+									"image": "sugar-in-bowl.png"
+								}
+							],
+							"equipment": [
+								{
+									"id": 404784,
+									"name": "oven",
+									"image": "oven.jpg"
+								}
+							],
+							"length": {
+								"number": 10,
+								"unit": "minutes"
+							}
+						},
+						{
+							"number": 6,
+							"step": "Add the powdered sugar and milk to the remaining butter.  Stir until thoroughly mixed.",
+							"ingredients": [
+								{
+									"id": 19336,
+									"name": "powdered sugar",
+									"image": "powdered-sugar.jpg"
+								},
+								{
+									"id": 1001,
+									"name": "butter",
+									"image": "butter-sliced.jpg"
+								},
+								{
+									"id": 1077,
+									"name": "milk",
+									"image": "milk.jpg"
+								}
+							],
+							"equipment": []
+						},
+						{
+							"number": 7,
+							"step": "Serve with the pretzels.",
+							"ingredients": [],
+							"equipment": []
+						}
+					]
+				}
+			],
+			"creditsText": "Budget Gourmet Mom"
+		}
+	]
+}
