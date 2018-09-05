@@ -1,25 +1,37 @@
-
 /*
 General
 */
 
-.vh100 {	
+.vh100 {
     min-height: 100vh;
 }
 
 section {
-	padding-top: 100px;
+    padding-top: 100px;
 }
 
 .card-text-bold {
-	font-weight: 600;
+    font-weight: 600;
 }
 
+.form-check,
+.form-h6 {
+    color: #ffffff;
+}
+
+.form-check hr {
+    border: .5px solid #ffffff;
+}
+
+.form-h6 {
+	margin: 15px 0 20px;
+}
 /*
 Nav
 */
+
 .navbar {
-	background-color: #fefefe
+    background-color: #fefefe
 }
 
 /*
@@ -35,20 +47,21 @@ index.html
 }
 
 #index-welcome .row {
-	position: absolute;
-	bottom: 5%;
-	left: 42.5%;
-} 
-.slide-container  {
+    position: absolute;
+    bottom: 5%;
+    left: 42.5%;
+}
+
+.slide-container {
     position: relative;
 }
 
 .slide-container .card {
     display: none;
-	position: absolute;
-	min-width: 300px;
-	min-height: 300px;
-	background-color: transparent;
+    position: absolute;
+    min-width: 300px;
+    min-height: 300px;
+    background-color: transparent;
 }
 
 .arrows-wrraper {
@@ -69,7 +82,6 @@ index.html
     color: #5cb85c;
 }
 
-
 /*
 Main section
 */
@@ -79,13 +91,42 @@ Main section
     background-color: #fefefe;
 }
 
-
-
 /*
 footer
 */
 
 #footer {
-	height: 150px;
-	background-color: #000000;
+    height: 150px;
+    background-color: #000000;
+}
+
+/*
+Side Nav
+*/
+
+#search-btn {
+    padding: 5px 20px;
+}
+
+.btn-outline-success {
+    margin-left: 10px;
+}
+
+.search-overlay {
+    display: none;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    padding-top: 20%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 998;
+}
+
+#dismiss {
+    width: 35px;
+    color: #fefefe;
+    height: 35px;
+    position: absolute;
+    right: 10%;
+    top: 25%;
 }

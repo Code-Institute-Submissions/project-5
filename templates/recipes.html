@@ -1,7 +1,11 @@
 {% extends "base.html" %} {% block main_content %}
 <section class="vh100 container">
-	<div class="row">
 
+	{% if page_title %}
+	<h3 class="text-center"> {{ page_title }}</h3>
+	{% endif %}
+	<div class="row">
+		
 		{% for recipe in recipes %}
 		<div class="card col-md-4">
 			<a href="{{url_for('recipe', recipe_id=recipe._id)}}">

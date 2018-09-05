@@ -7,15 +7,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from key import db_name, uri, log_in_key
 from helper import create_user
-
-from collections import OrderedDict
-
+from classes import SearchRecipes, Database
 app = Flask(__name__)
 
 # mongoDB config
 app.config['MONGO_DBNAME'] = db_name()
 app.config['MONGO_URI'] = uri()
-
 
 mongo = PyMongo(app)
 
@@ -26,6 +23,7 @@ app.config['SECRET_KEY'] = log_in_key()
 @app.route('/')
 @app.route('/index')
 def index():
+    forms = mongo.db.forms.find()
     if 'user' in session:
         user_in_db = mongo.db.users.find_one({"username": session['user']})
         return render_template("index.html", page_title="Cookbook", username=session['user'], user_id=user_in_db['_id'])
@@ -67,7 +65,7 @@ def sign_up():
         hashed_pass = generate_password_hash(request.form['user_password'])
         return create_user(hashed_pass)
 
-    if 'user' in session:
+    if session:
         return render_template("sign-up.html", page_title="Sign up", username=session['user'])
 
     return render_template("sign-up.html", page_title="Sign up")
@@ -94,34 +92,12 @@ def profile(user_id):
 
 """ Recipes """
 
-# Search class
-class Search:
-    recipes = mongo.db.recipes
-
-    def __init__(self, k="dishTypes", sort="aggregateLikes", order=-1, limit=21):
-        self.k = k
-        self.sort = sort
-        self.order = order
-        self.limit = limit
-
-    def find_one(self, recipe_id):
-        return self.recipes.find_one({"_id": ObjectId(recipe_id)})
-
-    def optional_filters(self):
-        return self.recipes.find().sort([(f'recipes.{self.sort}', self.order)]).limit(self.limit)
-
-    def by_all(self, v):
-        self.v = v
-        return self.recipes.find({f"recipes.{self.k}": f"{self.v}"}).sort([(f'recipes.{self.sort}', self.order)]).limit(self.limit)
-
-    def __str__(self):
-        return f"Key to serch for: {self.k},\nValue to search for: {self.v},\nSorted by: {self.sort}, \nLimit recipes: {self.limit}"
-
-
 # Main route for all recipes
+
+
 @app.route('/recipes')
-def recipes(limit=21):
-    recipes_in_db = Search().optional_filters()
+def recipes():
+    recipes_in_db = SearchRecipes().optional_filters()
     if session:
         user_in_db = mongo.db.users.find_one({"username": session['user']})
         return render_template("recipes.html", page_title="Recipes", recipes=recipes_in_db,  user_id=user_in_db['_id'])
@@ -131,19 +107,19 @@ def recipes(limit=21):
 
 
 @app.route('/search/<dish_type>')
-def search_by_type(dish_type, limit=21):
-    recipes_in_db = Search().by_all(dish_type)
+def search_by_type(dish_type):
+    recipes_in_db = SearchRecipes(v=dish_type).by_all()
     if session:
         user_in_db = mongo.db.users.find_one({"username": session['user']})
-        return render_template("recipes.html", page_title=dish_type+"s", recipes=recipes_in_db, user_id=user_in_db['_id'])
-    return render_template("recipes.html", page_title=dish_type+"s", recipes=recipes_in_db)
+        return render_template("recipes.html", page_title=dish_type.capitalize() + "s", recipes=recipes_in_db, user_id=user_in_db['_id'])
+    return render_template("recipes.html", page_title=dish_type.capitalize() + "s", recipes=recipes_in_db)
 
 # Main route for single recipe
 
 
 @app.route('/recipe/<recipe_id>')
 def recipe(recipe_id):
-    recipe = Search().find_one(recipe_id)
+    recipe = SearchRecipes().find_one(recipe_id)
     return render_template("recipe.html", page_title=recipe['recipes'][0]['title'], recipe_id=recipe_id, recipe=recipe)
 
 
@@ -155,7 +131,20 @@ def recipe(recipe_id):
 @app.route('/admin_dashboard')
 def dashboard():
     users = mongo.db.users.find()
-    return render_template("dashboard.html", page_title="dashboard", users=users)
+    forms = mongo.db.forms.find()
+    return render_template("dashboard.html", page_title="dashboard", users=users,  forms=forms)
+
+
+# Update db
+
+@app.route('/update-db')
+def update_db():
+    Database().update_search_form()
+    users = mongo.db.users.find()
+    forms = mongo.db.forms.find()
+    message = "UPDATED"
+	
+    return render_template("dashboard.html", page_title="dashboard", users=users, forms=forms, message=message)
 
 # Error page
 

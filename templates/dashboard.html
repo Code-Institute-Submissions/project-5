@@ -1,30 +1,46 @@
 {% extends "base.html" %}
 
-{% block log_in_out_btn %}
-
-{% endblock log_in_out_btn %}
-
 {% block main_content %}
-	<section class="container vh100">
-		<div class="row">
-			<div class="card-deck col-12">
-				<div class="card">
-					<div class="card-header">Users</div>
-					<div class="card-body">
-						{% for user in users %}
-						<div class="card">
-							<div class="card-header"> {{user.username}}</div>
-							<div class="card-body">
-								<ul>
-									<li>email: {{user.email}}</li>
-									<li>password: {{user.password}}</li>
-								</ul>
-							</div>
+<section class="container vh100">
+	<div class="row">
+		<div class="card-deck col-12">
+			<div class="card">
+				<div class="card-header">Users</div>
+				<div class="card-body">
+					{% for user in users %}
+					<div class="card">
+						<div class="card-header"> {{user.username}}</div>
+						<div class="card-body">
+							<ul>
+								<li>email: {{user.email}}</li>
+								<li>password: {{user.password}}</li>
+							</ul>
 						</div>
-						{% endfor %}
 					</div>
+					{% endfor %}
 				</div>
 			</div>
+			<div class="card">				
+				<div class="card-header">Database</div>
+				<div class="card-body">
+					{% if forms %}
+					<div class="card">
+						<div class="card-header">Currrent</div>
+						<div class="card-body">
+							{% if message %}
+							<h3>{{ message }}</h3>
+							{% endif %}
+							{% for x in forms %}
+							<p>{{ x }}</p>
+							{% endfor %}
+						</div>
+					</div>
+					{% else %}
+					{% endif %}
+				</div>
+				<div class="card-footer"><a href="/update-db" class="btn btn-danger"> Update DB</a></div>
+			</div>
 		</div>
-	</section>
+	</div>
+</section>
 {% endblock main_content %}
