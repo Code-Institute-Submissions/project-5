@@ -25,5 +25,8 @@ Connected to API
 
 Added fundamentals for recipes page
 Added fundamentals for recipe page
-Added Search class for searching the database for recipes
+Added Search class for searching the database for recipes (deleted)
 Added functionality to search by dish types
+Redesign  Search class to work for any colection
+helper.py no longer used
+Updating db now via JS for better user experiences

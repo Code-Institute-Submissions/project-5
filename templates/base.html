@@ -229,6 +229,10 @@
 	 crossorigin="anonymous"></script>
 	<!-- Main JS-->
 	<script src="{{ url_for('static', filename='custom/main.js') }}"></script>
+	
+	{% block scripts %}
+	
+	{% endblock scripts %}
 
 </body>
 

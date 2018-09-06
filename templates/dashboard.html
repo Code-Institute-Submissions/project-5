@@ -20,15 +20,15 @@
 					{% endfor %}
 				</div>
 			</div>
-			<div class="card">				
+			<div class="card">
 				<div class="card-header">Database</div>
 				<div class="card-body">
 					{% if forms %}
 					<div class="card">
 						<div class="card-header">Currrent</div>
-						<div class="card-body">
+						<div id="db" class="card-body">
 							{% if message %}
-							<h3>{{ message }}</h3>
+							<h3 class="text-center">{{ message }}</h3>
 							{% endif %}
 							{% for x in forms %}
 							<p>{{ x }}</p>
@@ -38,9 +38,36 @@
 					{% else %}
 					{% endif %}
 				</div>
-				<div class="card-footer"><a href="/update-db" class="btn btn-danger"> Update DB</a></div>
+				<div class="card-footer">
+					<button id="update-db" class="btn btn-danger " disabled>Update DB</button>
+				</div>
 			</div>
 		</div>
-	</div>
 </section>
 {% endblock main_content %}
+
+{% block scripts %}
+  <script>
+	  $(document).ready(function () {
+			$("#update-db").removeAttr("disabled")
+
+			$("#update-db").on("click", function () {
+				$("#update-db").attr("disabled", true).html("Updating");
+				$.post(`/update-db`, function (data, status) {
+					console.log(status);
+					if (status == "success") {
+
+						window.location.replace("/admin_dashboard");
+					}
+
+				}).fail(function (xhr, status, error) {
+					console.log(xhr);
+					console.log(status);
+					console.log(error);
+				});
+
+			});
+
+		});
+  </script>
+{% endblock scripts %}

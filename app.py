@@ -6,8 +6,8 @@ from bson.objectid import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from key import db_name, uri, log_in_key
-from helper import create_user
-from classes import SearchRecipes, Database
+from classes import Search, Database
+
 app = Flask(__name__)
 
 # mongoDB config
@@ -15,6 +15,10 @@ app.config['MONGO_DBNAME'] = db_name()
 app.config['MONGO_URI'] = uri()
 
 mongo = PyMongo(app)
+users_colection = mongo.db.users
+recipes_colection = mongo.db.recipes
+forms_colection = mongo.db.forms
+
 
 app.config['SECRET_KEY'] = log_in_key()
 
@@ -23,11 +27,11 @@ app.config['SECRET_KEY'] = log_in_key()
 @app.route('/')
 @app.route('/index')
 def index():
-    forms = mongo.db.forms.find()
-    if 'user' in session:
-        user_in_db = mongo.db.users.find_one({"username": session['user']})
-        return render_template("index.html", page_title="Cookbook", username=session['user'], user_id=user_in_db['_id'])
-    return render_template("index.html", page_title="Cookbook")
+    forms = Search(forms_colection).optional_filters()
+    if session:
+        user_in_db = users_colection.find_one({"username": session['user']})
+        return render_template("index.html", page_title="Cookbook", username=session['user'], user_id=user_in_db['_id'], forms=forms)
+    return render_template("index.html", page_title="Cookbook", forms=forms)
 
 
 """ Users / Log-in / Register """
@@ -41,7 +45,7 @@ def login():
         username = request.form['username']
         password = request.form['user_password']
         try:
-            user_in_db = mongo.db.users.find_one({"username": username})
+            user_in_db = users_colection.find_one({"username": username})
         except:
             return "Sorry there seems to be problem with the data"
         if user_in_db:
@@ -57,18 +61,21 @@ def login():
 # Sign up
 @app.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
+    forms = Search(forms_colection).optional_filters()
     if request.method == "POST":
         user_in_db = mongo.db.users.find_one(
             {"username": request.form['username']})
         if user_in_db:
             return f"Sorry profile {request.form['username']} already exist"
         hashed_pass = generate_password_hash(request.form['user_password'])
-        return create_user(hashed_pass)
-
+        users_colection.insert_one({'username': request.form['username'],'password': hashed_pass})
+        user_in_db = users_colection.find_one({"username": request.form['username']})
+        session['user'] = request.form['username']
+        return redirect(url_for('profile', user_id=user_in_db['_id'], forms=forms))
     if session:
-        return render_template("sign-up.html", page_title="Sign up", username=session['user'])
+        return render_template("sign-up.html", page_title="Sign up", username=session['user'], forms=forms)
 
-    return render_template("sign-up.html", page_title="Sign up")
+    return render_template("sign-up.html", page_title="Sign up", forms=forms)
 
 # Log out
 
@@ -83,11 +90,12 @@ def logout():
 
 @app.route('/profile/<user_id>')
 def profile(user_id):
+    forms = Search(forms_colection).optional_filters()
     if session:
-        user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
-        return render_template("profile.html", page_title="profile", user=user)
+        user = Search(users_colection).find_one_by_id(user_id)
+        return render_template("profile.html", page_title="profile", user=user, forms=forms)
 
-    return redirect(url_for('index'))
+    return redirect(url_for('index', forms=forms))
 
 
 """ Recipes """
@@ -97,30 +105,33 @@ def profile(user_id):
 
 @app.route('/recipes')
 def recipes():
-    recipes_in_db = SearchRecipes().optional_filters()
+    recipes_in_db = Search(recipes_colection).optional_filters()
+    forms = Search(forms_colection).optional_filters()
     if session:
-        user_in_db = mongo.db.users.find_one({"username": session['user']})
-        return render_template("recipes.html", page_title="Recipes", recipes=recipes_in_db,  user_id=user_in_db['_id'])
-    return render_template("recipes.html", page_title="Recipes", recipes=recipes_in_db)
+        user_in_db = users_colection.find_one({"username": session['user']})
+        return render_template("recipes.html", page_title="Recipes", recipes=recipes_in_db,  user_id=user_in_db['_id'], forms=forms)
+    return render_template("recipes.html", page_title="Recipes", recipes=recipes_in_db, forms=forms)
 
 # Search by Dish types
 
 
 @app.route('/search/<dish_type>')
 def search_by_type(dish_type):
-    recipes_in_db = SearchRecipes(v=dish_type).by_all()
+    forms = Search(forms_colection).optional_filters()
+    recipes_in_db = Search(colection=recipes_colection, v=dish_type).by_all()
     if session:
-        user_in_db = mongo.db.users.find_one({"username": session['user']})
-        return render_template("recipes.html", page_title=dish_type.capitalize() + "s", recipes=recipes_in_db, user_id=user_in_db['_id'])
-    return render_template("recipes.html", page_title=dish_type.capitalize() + "s", recipes=recipes_in_db)
+        user_in_db = users_colection.find_one({"username": session['user']})
+        return render_template("recipes.html", page_title=dish_type.capitalize() + "s", recipes=recipes_in_db, user_id=user_in_db['_id'], forms=forms)
+    return render_template("recipes.html", page_title=dish_type.capitalize() + "s", recipes=recipes_in_db, forms=forms)
 
 # Main route for single recipe
 
 
 @app.route('/recipe/<recipe_id>')
 def recipe(recipe_id):
-    recipe = SearchRecipes().find_one(recipe_id)
-    return render_template("recipe.html", page_title=recipe['recipes'][0]['title'], recipe_id=recipe_id, recipe=recipe)
+    recipe = Search(recipes_colection).find_one_by_id(recipe_id)
+    forms = Search(forms_colection).optional_filters()
+    return render_template("recipe.html", page_title=recipe['recipes'][0]['title'], recipe_id=recipe_id, recipe=recipe, forms=forms)
 
 
 """ Others """
@@ -130,21 +141,22 @@ def recipe(recipe_id):
 
 @app.route('/admin_dashboard')
 def dashboard():
-    users = mongo.db.users.find()
-    forms = mongo.db.forms.find()
+    users = Search(users_colection).optional_filters()
+    forms = Search(forms_colection).optional_filters()
     return render_template("dashboard.html", page_title="dashboard", users=users,  forms=forms)
 
 
 # Update db
 
-@app.route('/update-db')
+@app.route('/update-db', methods=['POST'])
 def update_db():
-    Database().update_search_form()
-    users = mongo.db.users.find()
-    forms = mongo.db.forms.find()
-    message = "UPDATED"
-	
-    return render_template("dashboard.html", page_title="dashboard", users=users, forms=forms, message=message)
+    if request.method == "POST":
+        Database().update_search_form()
+        users = Search(users_colection).optional_filters()
+        forms = Search(forms_colection).optional_filters()
+
+        return render_template("dashboard.html", page_title="dashboard", users=users, forms=forms)
+
 
 # Error page
 

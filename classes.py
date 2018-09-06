@@ -5,7 +5,6 @@ from bson.objectid import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from key import db_name, uri, log_in_key
-from helper import create_user
 
 app = Flask(__name__)
 
@@ -15,6 +14,9 @@ app.config['MONGO_URI'] = uri()
 
 
 mongo = PyMongo(app)
+users_colection = mongo.db.users
+recipes_colection = mongo.db.recipes
+forms_colection = mongo.db.forms
 
 app.config['SECRET_KEY'] = log_in_key()
 
@@ -22,32 +24,29 @@ app.config['SECRET_KEY'] = log_in_key()
 # Search classes
 
 
-class SearchRecipes:
-    recipes = mongo.db.recipes
-
-    def __init__(self,  k="dishTypes", v="deserts", sort="aggregateLikes", order=-1, limit=21):
+class Search:
+    def __init__(self, colection, k="dishTypes", v="deserts", sort="aggregateLikes", order=-1, limit=21):
+        self.colection = colection
         self.k = k
         self.v = v
         self.sort = sort
         self.order = order
         self.limit = limit
 
-    def find_one(self, recipe_id):
-        return self.recipes.find_one({"_id": ObjectId(recipe_id)})
+    def find_one_by_id(self, id):
+        return self.colection.find_one({"_id": ObjectId(id)})
 
     def optional_filters(self):
-        return self.recipes.find().sort([(f'recipes.{self.sort}', self.order)]).limit(self.limit)
+        return self.colection.find().sort([(f'recipes.{self.sort}', self.order)]).limit(self.limit)
 
     def by_all(self):
-        return self.recipes.find({f"recipes.{self.k}": f"{self.v}"}).sort([(f'recipes.{self.sort}', self.order)]).limit(self.limit)
+        return self.colection.find({f"recipes.{self.k}": f"{self.v}"}).sort([(f'recipes.{self.sort}', self.order)]).limit(self.limit)
 
     def __str__(self):
         return f"Key to serch for: {self.k},\nValue to search for: {self.v},\nSorted by: {self.sort}, \nLimit recipes: {self.limit}"
 
     def __len__(self):
-        return len([x for x in SearchRecipes(limit=50000).optional_filters()])
-
-
+        return len([x for x in self.optional_filters()])
 
 
 class Database:
@@ -57,7 +56,7 @@ class Database:
 
     def update(self, key):
         result = set()
-        for x in SearchRecipes().optional_filters():
+        for x in Search(recipes_colection).optional_filters():
             x = x['recipes'][0][f'{key}']
             for y in x:
                 result.add(y)
@@ -67,7 +66,7 @@ class Database:
         form = {f"{form_name}": {}}
         result = set()
         for x in key:
-            for y in SearchRecipes().optional_filters():
+            for y in Search(recipes_colection).optional_filters():
                 y = y['recipes'][0][x]
                 for z in y:
                     result.add(z)
