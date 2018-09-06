@@ -1,5 +1,8 @@
 import os
 from flask import Flask, render_template, redirect, request, url_for, session
+
+
+
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 
@@ -9,7 +12,6 @@ from key import db_name, uri, log_in_key
 from classes import Search, Database
 
 app = Flask(__name__)
-
 # mongoDB config
 app.config['MONGO_DBNAME'] = db_name()
 app.config['MONGO_URI'] = uri()
@@ -27,11 +29,11 @@ app.config['SECRET_KEY'] = log_in_key()
 @app.route('/')
 @app.route('/index')
 def index():
-    forms = Search(forms_colection).optional_filters()
+    forms = Search(forms_colection, "search_form").optional_filters()
     if session:
         user_in_db = users_colection.find_one({"username": session['user']})
         return render_template("index.html", page_title="Cookbook", username=session['user'], user_id=user_in_db['_id'], forms=forms)
-    return render_template("index.html", page_title="Cookbook", forms=forms)
+    return render_template("index.html", page_title="Cookbook")
 
 
 """ Users / Log-in / Register """
@@ -61,15 +63,17 @@ def login():
 # Sign up
 @app.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
-    forms = Search(forms_colection).optional_filters()
+    forms = Search(forms_colection, "search_form").optional_filters()
     if request.method == "POST":
         user_in_db = mongo.db.users.find_one(
             {"username": request.form['username']})
         if user_in_db:
             return f"Sorry profile {request.form['username']} already exist"
         hashed_pass = generate_password_hash(request.form['user_password'])
-        users_colection.insert_one({'username': request.form['username'],'password': hashed_pass})
-        user_in_db = users_colection.find_one({"username": request.form['username']})
+        users_colection.insert_one(
+            {'username': request.form['username'], 'password': hashed_pass})
+        user_in_db = users_colection.find_one(
+            {"username": request.form['username']})
         session['user'] = request.form['username']
         return redirect(url_for('profile', user_id=user_in_db['_id'], forms=forms))
     if session:
@@ -90,9 +94,9 @@ def logout():
 
 @app.route('/profile/<user_id>')
 def profile(user_id):
-    forms = Search(forms_colection).optional_filters()
+    forms = Search(forms_colection, "search_form").optional_filters()
     if session:
-        user = Search(users_colection).find_one_by_id(user_id)
+        user = Search(users_colection, "users").find_one_by_id(user_id)
         return render_template("profile.html", page_title="profile", user=user, forms=forms)
 
     return redirect(url_for('index', forms=forms))
@@ -105,8 +109,8 @@ def profile(user_id):
 
 @app.route('/recipes')
 def recipes():
-    recipes_in_db = Search(recipes_colection).optional_filters()
-    forms = Search(forms_colection).optional_filters()
+    recipes_in_db = Search(recipes_colection, "recipes").optional_filters()
+    forms = Search(forms_colection, "search_form").optional_filters()
     if session:
         user_in_db = users_colection.find_one({"username": session['user']})
         return render_template("recipes.html", page_title="Recipes", recipes=recipes_in_db,  user_id=user_in_db['_id'], forms=forms)
@@ -117,8 +121,8 @@ def recipes():
 
 @app.route('/search/<dish_type>')
 def search_by_type(dish_type):
-    forms = Search(forms_colection).optional_filters()
-    recipes_in_db = Search(colection=recipes_colection, v=dish_type).by_all()
+    forms = Search(forms_colection, "search_form").optional_filters()
+    recipes_in_db = Search(colection=recipes_colection, dic_name="recipes", v=dish_type).by_all()
     if session:
         user_in_db = users_colection.find_one({"username": session['user']})
         return render_template("recipes.html", page_title=dish_type.capitalize() + "s", recipes=recipes_in_db, user_id=user_in_db['_id'], forms=forms)
@@ -129,8 +133,8 @@ def search_by_type(dish_type):
 
 @app.route('/recipe/<recipe_id>')
 def recipe(recipe_id):
-    recipe = Search(recipes_colection).find_one_by_id(recipe_id)
-    forms = Search(forms_colection).optional_filters()
+    recipe = Search(recipes_colection, "recipes").find_one_by_id(recipe_id)
+    forms = Search(forms_colection, "search_form").optional_filters()
     return render_template("recipe.html", page_title=recipe['recipes'][0]['title'], recipe_id=recipe_id, recipe=recipe, forms=forms)
 
 
@@ -141,9 +145,10 @@ def recipe(recipe_id):
 
 @app.route('/admin_dashboard')
 def dashboard():
-    users = Search(users_colection).optional_filters()
-    forms = Search(forms_colection).optional_filters()
-    return render_template("dashboard.html", page_title="dashboard", users=users,  forms=forms)
+    users = Search(users_colection, "users").optional_filters()
+    forms = forms = forms_colection.find_one(
+        {"_id": ObjectId("5b90eaab37265c27d8db87cc")})
+    return render_template("dashboard.html", page_title="dashboard", users=users, forms=forms)
 
 
 # Update db
@@ -152,8 +157,8 @@ def dashboard():
 def update_db():
     if request.method == "POST":
         Database().update_search_form()
-        users = Search(users_colection).optional_filters()
-        forms = Search(forms_colection).optional_filters()
+        users = Search(users_colection, "users").optional_filters()
+        forms = Search(forms_colection, "search_form").optional_filters()
 
         return render_template("dashboard.html", page_title="dashboard", users=users, forms=forms)
 

@@ -1,0 +1,92 @@
+
+
+
+
+<div class="search-overlay container-fluid">
+	<div class="row ">
+		<form class="container" method="POST" action="/login">
+			<div class="row">
+				<div class="form-group col-xs-12 col-md-6 offset-2">
+					<input name="search_input" type="text" class="form-control text-center font-weight-bold" placeholder="Search">
+				</div>
+				<div class="form-group col-md-2">
+					<select name="search_by" class="form-control font-weight-bold">
+						<option value="title" selected>Name</option>
+						<option value="author">Anthor</option>
+					</select>
+				</div>
+			</div>
+			<br>
+			<hr>
+			<br>
+			<div class="row" >
+				<div class="form-check col-sm-6 col-md-3">
+					<h4>Dish Types</h4>
+					<hr>
+					<div class="row">
+						<div class="col-xs-6">
+							{% for x in forms[0].dishTypes[:10] %}
+							<div class="col">
+							
+								<input class="form-check-input" type="checkbox" value="{{ x }}" id="{{ x }}">
+								<label class="form-check-label" for="{{ x }}">
+									{{x}}
+								</label>
+							
+							</div>
+							{% endfor %}
+						</div>
+						<div class="col-xs-6">
+							{% for x in forms[0].dishTypes[10:] %}
+							<div class="col">
+							
+								<input class="form-check-input" type="checkbox" value="{{ x }}" id="{{ x }}">
+								<label class="form-check-label" for="{{ x }}">
+									{{x}}
+								</label>
+							
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+				<div class="form-check col-sm-6 col-md-3">
+					<h4>Cuisines</h4>
+					<hr>
+					{% for x in forms[0].cuisines %}
+					<div class="col">
+						<input class="form-check-input" type="checkbox" value="{{ x }}" id="{{ x }}">
+						<label class="form-check-label" for="{{ x }}">
+							{{x}}
+						</label>
+					</div>
+					{% endfor %}
+				</div>
+				<div class="form-check col-sm-6 col-md-3">
+					<h4>Diets</h4>
+					<hr>
+					{% for x in forms[0].diets %}
+					<div class="col">
+						<input class="form-check-input" type="checkbox" value="{{ x }}" id="{{ x }}">
+						<label class="form-check-label" for="{{ x }}">
+							{{x}}
+						</label>
+					</div>
+					{% endfor %}
+				</div>
+				<div class="form-check col-sm-6 col-md-3">
+					<h4>Popularity</h4>
+					<hr>
+					{% for x in forms[0].popularity %}
+					<div class="col">
+						<input class="form-check-input" type="radio" value="{{ x }}" id="{{ x }}">
+						<label class="form-check-label" for="{{ x }}">
+							{{x}}
+						</label>						
+					</div>
+					{% endfor %}
+				</div>
+			</div>				
+		</form>
+	</div>
+</div>

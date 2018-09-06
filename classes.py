@@ -25,8 +25,9 @@ app.config['SECRET_KEY'] = log_in_key()
 
 
 class Search:
-    def __init__(self, colection, k="dishTypes", v="deserts", sort="aggregateLikes", order=-1, limit=21):
+    def __init__(self, colection, dic_name, k="dishTypes", v="deserts", sort="aggregateLikes", order=-1, limit=21):
         self.colection = colection
+        self.dic_name = dic_name
         self.k = k
         self.v = v
         self.sort = sort
@@ -37,10 +38,10 @@ class Search:
         return self.colection.find_one({"_id": ObjectId(id)})
 
     def optional_filters(self):
-        return self.colection.find().sort([(f'recipes.{self.sort}', self.order)]).limit(self.limit)
+        return self.colection.find().sort([(f'{self.dic_name}.{self.sort}', self.order)]).limit(self.limit)
 
     def by_all(self):
-        return self.colection.find({f"recipes.{self.k}": f"{self.v}"}).sort([(f'recipes.{self.sort}', self.order)]).limit(self.limit)
+        return self.colection.find({f"{self.dic_name}.{self.k}": f"{self.v}"}).sort([(f'{self.dic_name}.{self.sort}', self.order)]).limit(self.limit)
 
     def __str__(self):
         return f"Key to serch for: {self.k},\nValue to search for: {self.v},\nSorted by: {self.sort}, \nLimit recipes: {self.limit}"
@@ -52,32 +53,32 @@ class Search:
 class Database:
 
     def users(self):
-        return mongo.db.users.find()
+        return users_colection.find()
+
+    def forms(self, keys):
+        pass
 
     def update(self, key):
         result = set()
-        for x in Search(recipes_colection).optional_filters():
+        for x in Search(recipes_colection, "recipes").optional_filters():
             x = x['recipes'][0][f'{key}']
             for y in x:
                 result.add(y)
         return result
 
-    def update_db(self, key, form_name, form_keys):
-        form = {f"{form_name}": {}}
-        result = set()
+    def update_db(self, key, form_keys):
+        form = {}
         for x in key:
-            for y in Search(recipes_colection).optional_filters():
-                y = y['recipes'][0][x]
-                for z in y:
-                    result.add(z)
-        for x in key:
-            form[f"{form_name}"][f"{x}"] = []
+            form[f"{x}"] = []
             for y in self.update(x):
-                form[f"{form_name}"][f"{x}"].append(y.capitalize())
+                form[f"{x}"].append(y.capitalize())
+
         return form
 
     def update_search_form(self, key=["dishTypes", "cuisines", "diets"]):
-        form = self.update_db(key, "search_form", key)
-        form["search_form"]["popularity"] = ["Ascending", "Decreasing"]
-        mongo.db.forms.insert_one(form)
-        return redirect(url_for("index"))
+        form = self.update_db(key, key)
+        form["popularity"] = ["Ascending", "Decreasing"]
+        forms_colection.insert_one(form)
+        for colection in form:
+            forms_colection.insert_one(colection)
+

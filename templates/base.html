@@ -68,83 +68,8 @@
 			</div>
 		</div>
 	</nav>
-
-	<div class="search-overlay container-fluid">
-		<div class="row ">
-			<form class="container" method="POST" action="/login">
-				<div class="row">
-					<div class="form-group col-xs-12 col-md-6 offset-2">
-						<input name="search_input" type="text" class="form-control text-center font-weight-bold" placeholder="Search">
-					</div>
-					<div class="form-group col-md-2">
-						<select name="search_by" class="form-control font-weight-bold">
-							<option value="title" selected>Name</option>
-							<option value="author">Anthor</option>
-						</select>
-					</div>
-				</div>
-				<h6 class="text-center form-h6">*and / or choose below</h6>
-					{% for type in forms.search_form %}
-					{{ type }}
-					{% endfor %}
-
-					<!-- 
-					<div class="form-check col-sm-12 col-md-6">
-						<h4 class="text-center">Dish Type</h4>
-						<hr> {% for type in dishTypes %}
-						<div class="col">
-							<input class="form-check-input" type="checkbox" value="{{ type }}" id="{{ type }}">
-							<label class="form-check-label" for="{{ type }}">
-								{{ type }}
-							</label>
-						</div>
-						{% endfor %}
-					</div>
-					<div class="form-check col-sm-12 col-md-6">
-						<h4 class="text-center">Cuisine</h4>
-						<hr>
-						{% for type in cuisines %}
-						<div class="col">
-							<input class="form-check-input" type="checkbox" value="{{ type }}" id="{{ type }}">
-							<label class="form-check-label" for="{{ type }}">
-								{{ type }}
-							</label>
-						</div>
-						{% endfor %}
-					</div>
-					
-					<div class="form-check col-sm-12 col-md-6">
-						<h4 class="text-center">Popularity</h4>
-						<hr>
-						<div class="col">
-							<input class="form-check-input" type="checkbox" value="1" id="ascending">
-							<label class="form-check-label" for="ascending">
-								Ascending
-							</label>
-						</div>
-						<div class="col">
-							<input class="form-check-input" type="checkbox" value="-1" id="decreasing">
-							<label class="form-check-label" for="decreasing">
-								Decreasing
-							</label>
-						</div>
-					</div>
-					<div class="form-check col-sm-12 col-md-6">
-						<h4 class="text-center">Intolerances</h4>
-						<hr>
-						{% for type in intolerances %}
-						<div class="col">
-							<input class="form-check-input" type="checkbox" value="{{ type }}" id="{{ type }}">
-							<label class="form-check-label" for="{{ type }}">
-								{{ type }}
-							</label>
-						</div>
-						{% endfor %}
-					</div>
-					-->	
-				</div>
-			</form>
-		</div>
+	 {% include 'search-form.html' %}
+	
 	</div>
 
 	<!-- Main Content -->
