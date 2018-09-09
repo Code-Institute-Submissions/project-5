@@ -19,13 +19,25 @@ section {
     color: #ffffff;
 }
 
+.form-check-imput {
+    padding: 0 15px;
+}
+
 .form-check hr {
     border: .5px solid #ffffff;
 }
 
 .form-h6 {
-	margin: 15px 0 20px;
+    margin: 15px 0 20px;
 }
+
+#form_search_btn {
+    margin-top: 50px;
+}
+.fa-star {
+	color: gold;
+}
+
 /*
 Nav
 */
@@ -101,7 +113,7 @@ footer
 }
 
 /*
-Side Nav
+Overlay
 */
 
 #search-btn {
@@ -113,20 +125,11 @@ Side Nav
 }
 
 .search-overlay {
-    display: none;
-    position: fixed;
+	display: none;
+	position: absolute;
     width: 100vw;
     height: 100vh;
-    padding-top: 20%;
+    padding: 20% 0 5%;
     background: rgba(0, 0, 0, 0.7);
     z-index: 998;
-}
-
-#dismiss {
-    width: 35px;
-    color: #fefefe;
-    height: 35px;
-    position: absolute;
-    right: 10%;
-    top: 25%;
 }

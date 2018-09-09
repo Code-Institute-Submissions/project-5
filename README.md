@@ -30,3 +30,5 @@ Added functionality to search by dish types
 Redesign  Search class to work for any colection
 helper.py no longer used
 Updating db now via JS for better user experiences
+Added class for main search 
+Added routes for searching by cuisines and diets

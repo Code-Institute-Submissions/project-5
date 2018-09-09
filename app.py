@@ -1,6 +1,5 @@
 import os
-from flask import Flask, render_template, redirect, request, url_for, session
-
+from flask import Flask, render_template, redirect, request, url_for, session, jsonify
 
 
 from flask_pymongo import PyMongo
@@ -9,7 +8,7 @@ from bson.objectid import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from key import db_name, uri, log_in_key
-from classes import Search, Database
+from classes import Search, SearchForm, Database
 
 app = Flask(__name__)
 # mongoDB config
@@ -29,11 +28,11 @@ app.config['SECRET_KEY'] = log_in_key()
 @app.route('/')
 @app.route('/index')
 def index():
-    forms = Search(forms_colection, "search_form").optional_filters()
+    forms = Search(forms_colection).sort_find_all()
     if session:
         user_in_db = users_colection.find_one({"username": session['user']})
         return render_template("index.html", page_title="Cookbook", username=session['user'], user_id=user_in_db['_id'], forms=forms)
-    return render_template("index.html", page_title="Cookbook")
+    return render_template("index.html", page_title="Cookbook", forms=forms)
 
 
 """ Users / Log-in / Register """
@@ -63,7 +62,7 @@ def login():
 # Sign up
 @app.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
-    forms = Search(forms_colection, "search_form").optional_filters()
+    forms = Search(forms_colection).sort_find_all()
     if request.method == "POST":
         user_in_db = mongo.db.users.find_one(
             {"username": request.form['username']})
@@ -94,7 +93,7 @@ def logout():
 
 @app.route('/profile/<user_id>')
 def profile(user_id):
-    forms = Search(forms_colection, "search_form").optional_filters()
+    forms = Search(forms_colection).sort_find_all()
     if session:
         user = Search(users_colection, "users").find_one_by_id(user_id)
         return render_template("profile.html", page_title="profile", user=user, forms=forms)
@@ -109,24 +108,12 @@ def profile(user_id):
 
 @app.route('/recipes')
 def recipes():
-    recipes_in_db = Search(recipes_colection, "recipes").optional_filters()
-    forms = Search(forms_colection, "search_form").optional_filters()
+    recipes_in_db = Search(recipes_colection, "recipes").sort_find_all()
+    forms = Search(forms_colection).sort_find_all()
     if session:
         user_in_db = users_colection.find_one({"username": session['user']})
         return render_template("recipes.html", page_title="Recipes", recipes=recipes_in_db,  user_id=user_in_db['_id'], forms=forms)
     return render_template("recipes.html", page_title="Recipes", recipes=recipes_in_db, forms=forms)
-
-# Search by Dish types
-
-
-@app.route('/search/<dish_type>')
-def search_by_type(dish_type):
-    forms = Search(forms_colection, "search_form").optional_filters()
-    recipes_in_db = Search(colection=recipes_colection, dic_name="recipes", v=dish_type).by_all()
-    if session:
-        user_in_db = users_colection.find_one({"username": session['user']})
-        return render_template("recipes.html", page_title=dish_type.capitalize() + "s", recipes=recipes_in_db, user_id=user_in_db['_id'], forms=forms)
-    return render_template("recipes.html", page_title=dish_type.capitalize() + "s", recipes=recipes_in_db, forms=forms)
 
 # Main route for single recipe
 
@@ -134,8 +121,79 @@ def search_by_type(dish_type):
 @app.route('/recipe/<recipe_id>')
 def recipe(recipe_id):
     recipe = Search(recipes_colection, "recipes").find_one_by_id(recipe_id)
-    forms = Search(forms_colection, "search_form").optional_filters()
+    forms = Search(forms_colection).sort_find_all()
     return render_template("recipe.html", page_title=recipe['recipes'][0]['title'], recipe_id=recipe_id, recipe=recipe, forms=forms)
+
+
+""" Search  """
+
+# Search via form
+
+
+@app.route('/search_form', methods=['POST'])
+def search_form():
+    if request.method == "POST":
+        form_data = request.form.to_dict()
+        forms = Search(forms_colection).sort_find_all()
+        # For testing only
+        mongo.db.pokus.insert_one(form_data)
+        recipes = SearchForm().search_reluts(form_data)
+
+        return render_template("recipes.html", page_title="Recipes", recipes=recipes, forms=forms)
+
+
+# Search by Dish types
+
+
+@app.route('/dish_types/<dish_type>')
+def search_by_type(dish_type):
+    forms = Search(forms_colection).sort_find_all()
+    recipes_in_db = Search(colection=recipes_colection,
+                           dic_name="recipes").all_filters(key="dishTypes", value=dish_type)
+    if session:
+        user_in_db = users_colection.find_one({"username": session['user']})
+        return render_template("recipes.html", page_title=dish_type.capitalize() + "s", recipes=recipes_in_db, user_id=user_in_db['_id'], forms=forms)
+    return render_template("recipes.html", page_title=dish_type.capitalize() + "s", recipes=recipes_in_db, forms=forms)
+
+
+# Search by Diets types
+
+
+@app.route('/diet_types/<diet_type>')
+def search_by_diet(diet_type):
+    forms = Search(forms_colection).sort_find_all()
+    recipes_in_db = Search(colection=recipes_colection,
+                           dic_name="recipes").all_filters(key="diets", value=diet_type)
+    if session:
+        user_in_db = users_colection.find_one({"username": session['user']})
+        return render_template("recipes.html", page_title=diet_type.capitalize(), recipes=recipes_in_db, user_id=user_in_db['_id'], forms=forms)
+    return render_template("recipes.html", page_title=diet_type.capitalize(), recipes=recipes_in_db, forms=forms)
+
+# Search by Time
+
+
+@app.route('/search_by_time')
+def search_by_time():
+    forms = Search(forms_colection).sort_find_all()
+    recipes_in_db = Search(colection=recipes_colection,
+                           dic_name="recipes", order=1, sort="readyInMinutes").sort_find_all()
+    if session:
+        user_in_db = users_colection.find_one({"username": session['user']})
+        return render_template("recipes.html", page_title="Time", recipes=recipes_in_db, user_id=user_in_db['_id'], forms=forms)
+    return render_template("recipes.html", page_title="Time", recipes=recipes_in_db, forms=forms)
+
+# Search by Cuisines
+
+
+@app.route('/search_by_cuisine/<cuisine>')
+def search_by_cuisines(cuisine):
+    forms = Search(forms_colection).sort_find_all()
+    recipes_in_db = Search(colection=recipes_colection,
+                           dic_name="recipes").all_filters(key="cuisines", value=cuisine)
+    if session:
+        user_in_db = users_colection.find_one({"username": session['user']})
+        return render_template("recipes.html", page_title=cuisine.capitalize(), recipes=recipes_in_db, user_id=user_in_db['_id'], forms=forms)
+    return render_template("recipes.html", page_title=cuisine.capitalize(), recipes=recipes_in_db, forms=forms)
 
 
 """ Others """
@@ -145,9 +203,8 @@ def recipe(recipe_id):
 
 @app.route('/admin_dashboard')
 def dashboard():
-    users = Search(users_colection, "users").optional_filters()
-    forms = forms = forms_colection.find_one(
-        {"_id": ObjectId("5b90eaab37265c27d8db87cc")})
+    users = Search(users_colection, "users").sort_find_all()
+    forms = Search(forms_colection).sort_find_all()
     return render_template("dashboard.html", page_title="dashboard", users=users, forms=forms)
 
 
@@ -157,8 +214,8 @@ def dashboard():
 def update_db():
     if request.method == "POST":
         Database().update_search_form()
-        users = Search(users_colection, "users").optional_filters()
-        forms = Search(forms_colection, "search_form").optional_filters()
+        users = Search(users_colection, "users").sort_find_all()
+        forms = Search(forms_colection).sort_find_all()
 
         return render_template("dashboard.html", page_title="dashboard", users=users, forms=forms)
 
@@ -175,3 +232,19 @@ if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=os.environ.get('PORT'),
             debug=True)
+
+
+
+
+""" 
+
+Temporary notes
+
+"""
+
+# add for user to add new category
+# edit recipes
+# add loop to modify the recepis (add user names)
+# search by user names
+# profile page 
+# edit profile

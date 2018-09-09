@@ -1,24 +1,27 @@
 
 
-
-
 <div class="search-overlay container-fluid">
 	<div class="row ">
-		<form class="container" method="POST" action="/login">
+		<form class="container" method="POST" action="/search_form">
 			<div class="row">
-				<div class="form-group col-xs-12 col-md-6 offset-2">
+				<div class="form-group col-xs-12 col-md-5 offset-md-1">
 					<input name="search_input" type="text" class="form-control text-center font-weight-bold" placeholder="Search">
 				</div>
-				<div class="form-group col-md-2">
+				<div class="form-group col-xs-12 col-md-2 ">
 					<select name="search_by" class="form-control font-weight-bold">
 						<option value="title" selected>Name</option>
-						<option value="author">Anthor</option>
+						<option value="author">Author</option>
 					</select>
 				</div>
+				<div class="col-xs-12">
+					<input name="limit" type="number" class="form-control text-center font-weight-bold" placeholder="Limit results" min="0">
+				</div>				
 			</div>
-			<br>
-			<hr>
-			<br>
+			<div class="row">
+				<br>
+				<hr>
+				<br>
+			</div>
 			<div class="row" >
 				<div class="form-check col-sm-6 col-md-3">
 					<h4>Dish Types</h4>
@@ -26,25 +29,21 @@
 					<div class="row">
 						<div class="col-xs-6">
 							{% for x in forms[0].dishTypes[:10] %}
-							<div class="col">
-							
-								<input class="form-check-input" type="checkbox" value="{{ x }}" id="{{ x }}">
-								<label class="form-check-label" for="{{ x }}">
+							<div class="form-check">
+								<input class="form-check-input" name="dishTypes-0{{ loop.index }}" type="checkbox" value="{{x}}" id="dishTypes-0{{ loop.index }}">
+								<label class="form-check-label" for="dishTypes-0{{ loop.index }}">
 									{{x}}
 								</label>
-							
 							</div>
 							{% endfor %}
 						</div>
 						<div class="col-xs-6">
 							{% for x in forms[0].dishTypes[10:] %}
-							<div class="col">
-							
-								<input class="form-check-input" type="checkbox" value="{{ x }}" id="{{ x }}">
-								<label class="form-check-label" for="{{ x }}">
+							<div class="form-check">
+								<input class="form-check-input" name="dishTypes-{{ loop.index }}" type="checkbox" value="{{x}}" id="dishTypes-{{ loop.index }}">
+								<label class="form-check-label" for="dishTypes-{{ loop.index }}">
 									{{x}}
 								</label>
-							
 							</div>
 							{% endfor %}
 						</div>
@@ -54,9 +53,9 @@
 					<h4>Cuisines</h4>
 					<hr>
 					{% for x in forms[0].cuisines %}
-					<div class="col">
-						<input class="form-check-input" type="checkbox" value="{{ x }}" id="{{ x }}">
-						<label class="form-check-label" for="{{ x }}">
+					<div class="form-check">
+						<input class="form-check-input" name="cuisines-{{ loop.index }}" type="checkbox" value="{{x}}" id="cuisines-{{ loop.index }}">
+						<label class="form-check-label" for="cuisines-{{ loop.index }}">
 							{{x}}
 						</label>
 					</div>
@@ -66,9 +65,9 @@
 					<h4>Diets</h4>
 					<hr>
 					{% for x in forms[0].diets %}
-					<div class="col">
-						<input class="form-check-input" type="checkbox" value="{{ x }}" id="{{ x }}">
-						<label class="form-check-label" for="{{ x }}">
+					<div class="form-check">
+						<input class="form-check-input" name="diets-{{ loop.index }}" type="checkbox" value="{{x}}" id="diets-{{ loop.index }}">
+						<label class="form-check-label" for="diets-{{ loop.index }}">
 							{{x}}
 						</label>
 					</div>
@@ -78,13 +77,18 @@
 					<h4>Popularity</h4>
 					<hr>
 					{% for x in forms[0].popularity %}
-					<div class="col">
-						<input class="form-check-input" type="radio" value="{{ x }}" id="{{ x }}">
-						<label class="form-check-label" for="{{ x }}">
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="sort" id="sort-{{ loop.index }}" value="{{x}}" >
+						<label class="form-check-label" for="sort-{{ loop.index }}">
 							{{x}}
-						</label>						
+						</label>
 					</div>
 					{% endfor %}
+					<br>
+					<hr>
+					<div id="form_search_btn" class="form-group col-xs-12">
+						<button class="btn btn-block btn-outline-warning" type="submit"> Search </button>
+					</div>
 				</div>
 			</div>				
 		</form>

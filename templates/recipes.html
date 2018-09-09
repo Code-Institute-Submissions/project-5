@@ -13,6 +13,7 @@
 			</a>
 			<div class="card-body">
 				<h5 class="card-title">{{ recipe.recipes[0].title }}</h5>
+
 				{% if recipe.recipes[0].dishTypes[0] %}
 				<p class="card-text"><span class="card-text-bold">Dish type: </span>
 					{% for type in recipe.recipes[0].dishTypes %}
@@ -22,9 +23,28 @@
 				{% else %}
 				<p class="card-text"><span class="card-text-bold">Dish type:</span> N/A</p>
 				{% endif %}
-				<p class="card-text"><span class="card-text-bold">Ready in: </span>{{ recipe.recipes[0].readyInMinutes }} min</p>
+				{% if recipe.recipes[0].cuisines[0] %}
+				<p class="card-text"><span class="card-text-bold">Cuisines type: </span>
+					{% for cuisine in recipe.recipes[0].cuisines %}
+					<a href="{{url_for('search_by_cuisines', cuisine=cuisine)}}">{{ cuisine }}</a>
+					{% endfor %}
+				</p>
+				{% else %}
+				<p class="card-text"><span class="card-text-bold">Cuisines type:</span> N/A</p>
+				{% endif %}
+				{% if recipe.recipes[0].diets[0] %}
+				<p class="card-text"><span class="card-text-bold">Diet type: </span>
+					{% for diet in recipe.recipes[0].diets %}
+					<a href="{{url_for('search_by_diet', diet_type=diet)}}">{{ diet }}</a>
+					{% endfor %}
+				</p>
+				{% else %}
+				<p class="card-text"><span class="card-text-bold">Diet type:</span> N/A</p>
+				{% endif %}
+				<p class="card-text"><span class="card-text-bold">Ready in: </span><a href="{{url_for('search_by_time')}}">{{ recipe.recipes[0].readyInMinutes }} min</a>
+				</p>
 				<p>
-					<i class="fas fa-thumbs-up fa-lg"></i> {{ recipe.recipes[0].aggregateLikes }}
+					<i class="fas fa-star fa-lg"></i> {{ recipe.recipes[0].aggregateLikes }}
 				</p>
 			</div>
 		</div>
