@@ -7,7 +7,7 @@ General
 }
 
 section {
-    padding-top: 100px;
+    padding: 100px 0px;
 }
 
 .card-text-bold {
@@ -38,6 +38,17 @@ section {
 	color: gold;
 }
 
+
+.card {
+	margin-bottom: 15px;
+	padding: 15px 15px;
+	border: 0;
+}
+
+.card-img-top {
+	border-radius: 15px;
+}
+
 /*
 Nav
 */
@@ -58,42 +69,6 @@ index.html
     background-size: cover;
 }
 
-#index-welcome .row {
-    position: absolute;
-    bottom: 5%;
-    left: 42.5%;
-}
-
-.slide-container {
-    position: relative;
-}
-
-.slide-container .card {
-    display: none;
-    position: absolute;
-    min-width: 300px;
-    min-height: 300px;
-    background-color: transparent;
-}
-
-.arrows-wrraper {
-    margin-top: 300px;
-}
-
-.arrows-wrraper button {
-    opacity: 0.5;
-    margin: 0 40px;
-    color: #000000;
-    outline-color: transparent;
-    background: transparent;
-    border: none;
-}
-
-.arrows-wrraper button:hover {
-    opacity: 1;
-    color: #5cb85c;
-}
-
 /*
 Main section
 */
@@ -101,6 +76,17 @@ Main section
 #index-main {
     position: relative;
     background-color: #fefefe;
+}
+#index-recipes .card {
+	border: none;
+}
+#index-recipes img {
+	width: 100%;
+
+}
+
+#trivia {
+	padding-top: 130px;
 }
 
 /*
@@ -127,8 +113,8 @@ Overlay
 .search-overlay {
 	display: none;
 	position: absolute;
-    width: 100vw;
-    height: 100vh;
+	width: 100vw;	
+	height: min-content;
     padding: 20% 0 5%;
     background: rgba(0, 0, 0, 0.7);
     z-index: 998;

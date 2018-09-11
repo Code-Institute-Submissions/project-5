@@ -17,7 +17,8 @@
 	 crossorigin="anonymous">
 
 	<!-- Custom styles -->
-	<link rel="stylesheet" href="{{url_for('static', filename='custom/style.css')}}" type="text/css" /> {% block css %} {% endblock
+	<link rel="stylesheet" href="{{url_for('static', filename='custom/style.css')}}" type="text/css" /> 
+	<link rel="stylesheet" href="{{url_for('static', filename='custom/screen.css')}}" type="text/css" /> {% block css %} {% endblock
 	css %}
 
 	<title>{{page_title}}</title>
@@ -67,12 +68,10 @@
 
 			</div>
 		</div>
+		
 	</nav>
-	 
 	
-	</div>
-
-	{% include 'search-form.html' %}
+	{% include 'search-form.html' %}	
 
 	<!-- Main Content -->
 

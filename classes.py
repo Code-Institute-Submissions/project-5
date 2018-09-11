@@ -42,6 +42,9 @@ class Search:
     def all_filters(self, key, value):
         return self.colection.find({f"{self.dic_name}.{key}": value}).sort([(f'{self.dic_name}.{self.sort}', self.order)]).limit(self.limit)
 
+    def random(self, num_of_results):
+        return self.colection.aggregate([{"$sample": {"size": num_of_results}}])
+
     def __str__(self):
         return "Main Constructor Class"
 

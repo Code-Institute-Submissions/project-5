@@ -1,7 +1,5 @@
 import os
 from flask import Flask, render_template, redirect, request, url_for, session, jsonify
-
-
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 
@@ -16,23 +14,28 @@ app.config['MONGO_DBNAME'] = db_name()
 app.config['MONGO_URI'] = uri()
 
 mongo = PyMongo(app)
+
 users_colection = mongo.db.users
 recipes_colection = mongo.db.recipes
 forms_colection = mongo.db.forms
-
-
-app.config['SECRET_KEY'] = log_in_key()
-
+jokes_colection = mongo.db.jokes
+trivia_colection = mongo.db.trivia
 
 # Index
 @app.route('/')
 @app.route('/index')
 def index():
     forms = Search(forms_colection).sort_find_all()
+    trivia = Search(trivia_colection).random(num_of_results=1)
+    random_recipes = [x for x in Search(
+        recipes_colection).random(num_of_results=4)]
+    main_recipe = random_recipes[0]
+    side_recipes = random_recipes[1:]
+	
     if session:
         user_in_db = users_colection.find_one({"username": session['user']})
-        return render_template("index.html", page_title="Cookbook", username=session['user'], user_id=user_in_db['_id'], forms=forms)
-    return render_template("index.html", page_title="Cookbook", forms=forms)
+        return render_template("index.html", page_title="Cookbook", username=session['user'], user_id=user_in_db['_id'], forms=forms, main_recipe=main_recipe, recipes=side_recipes, trivia=trivia)
+    return render_template("index.html", page_title="Cookbook", forms=forms, main_recipe=main_recipe, side_recipes=side_recipes, trivia=trivia)
 
 
 """ Users / Log-in / Register """
@@ -137,9 +140,7 @@ def search_form():
         forms = Search(forms_colection).sort_find_all()
         # For testing only
         mongo.db.pokus.insert_one(form_data)
-        recipes = SearchForm().search_reluts(form_data)
-
-        return render_template("recipes.html", page_title="Recipes", recipes=recipes, forms=forms)
+        return render_template("recipes.html", page_title="Recipes", recipes=SearchForm().search_reluts(form_data), forms=forms)
 
 
 # Search by Dish types

@@ -4,8 +4,7 @@
 	{% if page_title %}
 	<h3 class="text-center"> {{ page_title }}</h3>
 	{% endif %}
-	<div class="row">
-		
+	<div class="row">		
 		{% for recipe in recipes %}
 		<div class="card col-md-4">
 			<a href="{{url_for('recipe', recipe_id=recipe._id)}}">
@@ -24,13 +23,13 @@
 				<p class="card-text"><span class="card-text-bold">Dish type:</span> N/A</p>
 				{% endif %}
 				{% if recipe.recipes[0].cuisines[0] %}
-				<p class="card-text"><span class="card-text-bold">Cuisines type: </span>
+				<p class="card-text"><span class="card-text-bold">Cuisines: </span>
 					{% for cuisine in recipe.recipes[0].cuisines %}
 					<a href="{{url_for('search_by_cuisines', cuisine=cuisine)}}">{{ cuisine }}</a>
 					{% endfor %}
 				</p>
 				{% else %}
-				<p class="card-text"><span class="card-text-bold">Cuisines type:</span> N/A</p>
+				<p class="card-text"><span class="card-text-bold">Cuisines:</span> N/A</p>
 				{% endif %}
 				{% if recipe.recipes[0].diets[0] %}
 				<p class="card-text"><span class="card-text-bold">Diet type: </span>
@@ -51,15 +50,4 @@
 		{% endfor %}
 	</div>
 </section>
-<style>
-	.card {
-		margin-bottom: 15px;
-		padding: 15px 15px;
-		border: 0;
-	}
-
-	.card-img-top {
-		border-radius: 15px;
-	}
-</style>
 {% endblock main_content %}
