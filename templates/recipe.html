@@ -1,12 +1,90 @@
-{% extends "base.html" %}	
+{% extends "base.html" %}
+
+{% block css %}
+<style>
+	h2 {
+		font-family: 'Kaushan Script', cursive;
+	}
+
+	hr {
+		margin: 30px 0px;
+	}
+
+	.list-group-item {
+		padding: .35rem 1.25rem;
+	}
+
+	.col-xs-12 {
+		margin: 15px 0px;
+	}
+	
+</style>
+{% endblock css %}
 
 {% block main_content %}
 
+{% set recipes = recipe.recipes[0] %}
 
 <section class="vh100 container">
-	<div>
-		{{recipe}}
+	<div class="row">
+		<div class="container">
+			<div class="row">
+				<h2 class=" col-12 text-center">{{recipes.title}}</h2>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-xs-12 col-md-6">
+					<div class="row">
+						<div class="col-12">
+							<img class="card-img-top" src="{{ recipes.image }}" alt="{{recipes.title}}">
+							<hr>
+						</div>
+						<div class="col-12">							
+							<div class="row align-items-center justify-content-around">
+								<div class="col-2">
+									<button class="btn btn-outline-success"><i class="fas fa-thumbs-up"></i></button>
+								</div>
+								<div class="col-2">
+									<button class="btn btn-outline-danger"><i class="fas fa-thumbs-up fa-rotate-180"></i></button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			
+				<div class="col-xs-12 col-md-6">
+					<ul class="list-group list-group-flush">
+						{% for ingredient in recipes.extendedIngredients %}
+						<li class="list-group-item">
+							{{ingredient.original|title}}
+						</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+			<hr>
+			
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12">
+					<ol>
+					{% set list = recipes.analyzedInstructions[0].steps %}
+					{% for dic in list %}
+					<li>{{dic.step}}</li>
+					{% endfor %}
+					</ol>
+				</div>
+			</div>
+		</div>
 	</div>
+	<hr>
+	<h6 class="text-center">Credits: {{recipes.creditsText}}</h6>
+	<hr>
 </section>
 
+{{recipe}}
 {% endblock main_content %}
+
+{% block scripts %}
+{% endblock scripts %}
