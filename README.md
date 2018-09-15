@@ -1,10 +1,10 @@
-# project-4
+# The Cookbook
 
-Cookbook
+## CI project-4
 
-## Changelog
+### Changelog
 
-### 1.0
+#### 1.0
 
 - Added User registration and Login  
 - Added Admin dashboard for testing
@@ -17,11 +17,11 @@ Cookbook
 - Added unique link for every user
 - Added sessions for users
 
-### 1.1
+#### 1.1
 
 - Connected to API
 
-### 1.2
+#### 1.2
 
 - Added fundamentals for recipes page
 - Added fundamentals for single recipe page
@@ -30,11 +30,11 @@ Cookbook
 - Redesign  Search class to work for any colection
 - helper.py no longer used
 - Updating db now via JS for better user experiences
-- Added routes for searching by 
 - Added SearchForm class for main search 
 - Also connected the form to back-end 
 
-### 1.3
+#### 1.3
 
 - Finished index recipes section
 - Added random recipes and trivia to this section
+- Finished recipe.html
