@@ -1,0 +1,43 @@
+{
+	"dishTypes": [
+		"Main course",
+		"Hor d'oeuvre",
+		"Snack",
+		"Drink",
+		"Dessert",
+		"Side dish",
+		"Starter",
+		"Dinner",
+		"Lunch",
+		"Appetizer",
+		"Fingerfood",
+		"Morning meal",
+		"Antipasti",
+		"Beverage",
+		"Main dish",
+		"Antipasto",
+		"Breakfast",
+		"Brunch"
+	],
+	"cuisines": [
+		"Mediterranean",
+		"Mexican",
+		"European",
+		"American",
+		"Italian"
+	],
+	"diets": [
+		"Vegan",
+		"Gluten free",
+		"Primal",
+		"Ketogenic",
+		"Paleolithic",
+		"Dairy free",
+		"Lacto ovo vegetarian",
+		"Pescatarian"
+	],
+	"popularity": [
+		"Ascending",
+		"Decreasing"
+	]
+}

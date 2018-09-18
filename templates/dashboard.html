@@ -1,7 +1,31 @@
 {% extends "base.html" %}
 
+{% block css %}
+	<style>
+		.card-header {
+			border-bottom: 1px solid black;
+			background-color: #ffffff;
+		}
+	</style>
+{% endblock css %}
+
 {% block main_content %}
 <section class="container vh100">
+	<div class="row">
+		<div class="card col-12">
+			<div class="card-header">Hidden recipes</div>
+			<div class="card-body">
+				{% if hidden_recipes %}
+					{% for recipe in hidden_recipes %}
+						<div class="card">
+							<a href="{{url_for('recipe', recipe_id=recipe._id)}}" target="_blank">{{recipe._id}} <i class="fas fa-external-link-alt"></i></a>
+						</div>
+					{% endfor %}
+				{% else %}
+				{% endif %}
+			</div>
+		</div>
+	</div>
 	<div class="row">
 		<div class="card-deck col-12">
 			<div class="card">
@@ -37,6 +61,7 @@
 				</div>
 			</div>
 		</div>
+	</div>
 </section>
 {% endblock main_content %}
 

@@ -1,0 +1,38 @@
+
+
+
+<div>
+	{% if recipe.dishTypes[0] %}
+	<ul class="list-inline">
+		{% for type in recipe.dishTypes %}
+		<li class="list-inline-item">
+			<a class="tags" href="{{url_for('search_by_type', dish_type=type)}}">{{ type|title }}</a>
+		</li>
+		{% endfor %}
+	</ul>
+	{% endif %}
+	{% if recipe.cuisines[0] %}
+	<ul class="list-inline">
+		{% for cuisine in recipe.cuisines %}
+		<li class="list-inline-item">
+			<a class="tags" href="{{url_for('search_by_cuisines', cuisine=cuisine)}}">{{ cuisine|title }}</a>
+		</li>
+		{% endfor %}
+	</ul>
+	{% endif %}
+	{% if recipe.diets[0] %}
+	<ul class="list-inline">
+		{% for diet in recipe.diets %}
+		<li class="list-inline-item">
+			<a class="tags" href="{{url_for('search_by_diet', diet_type=diet)}}">{{ diet|title }}</a>
+		</li>
+		{% endfor %}
+	</ul>
+	{% endif %}
+	<p class="card-text"></p><a href="{{url_for('search_by_time')}}"><i class="fas fa-clock"></i> {{ recipe.readyInMinutes
+		}} min</a>
+	</p>
+	<p>
+		<i class="fas fa-star fa-lg"></i> {{ recipe.aggregateLikes }}
+	</p>
+</div>

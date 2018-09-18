@@ -38,3 +38,7 @@
 - Finished index recipes section
 - Added random recipes and trivia to this section
 - Finished recipe.html
+
+#### 1.4
+
+- Added schema for recipe based on the API

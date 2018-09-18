@@ -3,84 +3,106 @@ General
 */
 
 .vh100 {
-	min-height: 100vh;
+    min-height: 100vh;
 }
 
 section {
-	padding: 100px 0px;
+    padding: 100px 0px;
 }
 
 h2,
 h3 {
-	font-family: "Kaushan Script", cursive;
+    font-family: "Kaushan Script", cursive;
 }
 
 h5 {
-	margin: 10px 0px;
+    margin: 10px 0px;
 }
 
 a,
 a:hover {
-	color: #000000;
-	text-decoration: none;
+    color: #000000;
+    text-decoration: none;
 }
 
 .tags,
 .tags:hover {
-	text-decoration: none;
-	color: #ffffff;
-    background-color: rgba(0,0,0,0.6);
+    text-decoration: none;
+    color: #ffffff;
+    background-color: rgba(0, 0, 0, 0.6);
     padding: 7px;
-	border-radius: 15px;
-	font-size: x-small;
+    border-radius: 15px;
+    font-size: x-small;
 }
 
 .list-inline-item:not(:last-child) {
-	margin-right: 0px;
+    margin-right: 0px;
 }
 
 .list-inline-item {
-	margin: 5px 0px;
+    margin: 5px 0px;
 }
 
-
-
-.card-text-bold {
-	font-weight: 600;
+.btn-outline-success {
+    margin-left: 10px;
 }
 
-.form-check,
-.form-h6 {
-	color: #ffffff;
-}
-
-.form-check-imput {
-	padding: 0 15px;
-}
-
-.form-check hr {
-	border: 0.5px solid #ffffff;
-}
-
-.form-h6 {
-	margin: 15px 0 20px;
-}
-
-#form_search_btn {
-	margin-top: 50px;
-}
 .fa-star {
-	color: gold;
+    color: gold;
 }
 
 .card {
-	margin-bottom: 15px;
-	padding: 15px 15px;
-	border: 0;
+    margin-bottom: 15px;
+    padding: 15px 15px;
+    border: 0;
 }
 
 .card-img-top {
-	border-radius: 15px;
+    border-radius: 15px;
+}
+
+.card-text-bold {
+    font-weight: 600;
+}
+
+/*
+Overlay
+*/
+
+.search-overlay {
+    display: none;
+    position: absolute;
+    width: 100vw;
+    height: min-content;
+    padding: 20% 0 5%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 998;
+}
+
+.search-overlay .form-check,
+.search-overlay .form-h6 {
+    color: #ffffff;
+}
+
+
+.form-check-imput {
+    padding: 0 15px;
+}
+
+.form-check hr {
+    border: 0.5px solid #ffffff;
+}
+
+.form-h6 {
+    margin: 15px 0 20px;
+}
+
+#form_search_btn {
+    margin-top: 50px;
+}
+
+#search-btn {
+    padding: 5px 20px;
 }
 
 /*
@@ -88,7 +110,7 @@ Nav
 */
 
 .navbar {
-	background-color: #fefefe;
+    background-color: #fefefe;
 }
 
 /*
@@ -96,11 +118,11 @@ index.html
 */
 
 #index-welcome {
-	background: url("/static/img/index-background.jpg") no-repeat center;
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
+    background: url("/static/img/index-background.jpg") no-repeat center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 /*
@@ -108,19 +130,21 @@ Main section
 */
 
 #index-main {
-	position: relative;
-	background-color: #fefefe;
+    position: relative;
+    background-color: #fefefe;
 }
+
 #index-recipes .card {
-	border: none;
+    border: none;
 }
+
 #index-recipes img {
-	width: 100%;
-	padding: 15px 0px;
+    width: 100%;
+    padding: 15px 0px;
 }
 
 #trivia {
-	padding-top: 130px;
+    padding-top: 130px;
 }
 
 /*
@@ -128,28 +152,6 @@ footer
 */
 
 #footer {
-	height: 150px;
-	background-color: #000000;
-}
-
-/*
-Overlay
-*/
-
-#search-btn {
-	padding: 5px 20px;
-}
-
-.btn-outline-success {
-	margin-left: 10px;
-}
-
-.search-overlay {
-	display: none;
-	position: absolute;
-	width: 100vw;
-	height: min-content;
-	padding: 20% 0 5%;
-	background: rgba(0, 0, 0, 0.7);
-	z-index: 998;
+    height: 150px;
+    background-color: #000000;
 }

@@ -1,14 +1,12 @@
 {% extends "base.html" %}
 
-
-
-
-
 {% block main_content %}
 
 <section id="index-welcome" class="vh100 container-fluid"></section>
 
 <section id="index-recipes" class="vh100 container">
+
+
 	<div class="col-xs-12">
 		<h3 class="text-center col-xs-12 col-md-8 offset-md-2">{{main_recipe.recipes[0].title}}</h3>
 		<hr>
@@ -20,39 +18,8 @@
 			</div>
 			<div class="card col-xs-12 col-md-4">
 				<div class="card-body">
-					{% if main_recipe.recipes[0].dishTypes[0] %}					
-					<p class="card-text"><span class="card-text-bold">Dish type: </span>
-						{% for type in main_recipe.recipes[0].dishTypes %}
-						<a href="{{url_for('search_by_type', dish_type=type)}}">{{ type }}</a>
-						{% endfor %}
-					</p>
-					{% else %}
-					<p class="card-text"><span class="card-text-bold">Dish type:</span> N/A</p>
-					{% endif %}
-					{% if main_recipe.recipes[0].cuisines[0] %}
-					<p class="card-text"><span class="card-text-bold">Cuisines: </span>
-						{% for cuisine in main_recipe.recipes[0].cuisines %}
-						<a href="{{url_for('search_by_cuisines', cuisine=cuisine)}}">{{ cuisine }}</a>
-						{% endfor %}
-					</p>
-					{% else %}
-					<p class="card-text"><span class="card-text-bold">Cuisines:</span> N/A</p>
-					{% endif %}
-					{% if main_recipe.recipes[0].diets[0] %}
-					<p class="card-text"><span class="card-text-bold">Diet type: </span>
-						{% for diet in main_recipe.recipes[0].diets %}
-						<a href="{{url_for('search_by_diet', diet_type=diet)}}">{{ diet }}</a>
-						{% endfor %}
-					</p>
-					{% else %}
-					<p class="card-text"><span class="card-text-bold">Diet type:</span> N/A</p>
-					{% endif %}
-					<p class="card-text"><span class="card-text-bold">Ready in: </span><a href="{{url_for('search_by_time')}}">{{
-							main_recipe.recipes[0].readyInMinutes }} min</a>
-					</p>
-					<p>
-						<i class="fas fa-star fa-lg"></i> {{ main_recipe.recipes[0].aggregateLikes }}
-					</p>
+					{% set recipe = main_recipe.recipes[0] %}
+					{% include "recipe-template.html" %}
 				</div>
 				<hr>
 				<div class="row">

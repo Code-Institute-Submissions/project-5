@@ -4,6 +4,8 @@ from bson.objectid import ObjectId
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from schema import RecipeSchema
+
 from key import db_name, uri, log_in_key
 
 app = Flask(__name__)
@@ -37,10 +39,10 @@ class Search:
         return self.colection.find_one({"_id": ObjectId(id)})
 
     def sort_find_all(self):
-        return self.colection.find().sort([(f'{self.dic_name}.{self.sort}', self.order)]).limit(self.limit)
+        return self.colection.find({"recipes.visibility": True}).sort([(f'{self.dic_name}.{self.sort}', self.order)]).limit(self.limit)
 
     def all_filters(self, key, value):
-        return self.colection.find({f"{self.dic_name}.{key}": value}).sort([(f'{self.dic_name}.{self.sort}', self.order)]).limit(self.limit)
+        return self.colection.find({"$and": [{"recipes.visibility": True}, {f"{self.dic_name}.{key}": value}]}).sort([(f'{self.dic_name}.{self.sort}', self.order)]).limit(self.limit)
 
     def random(self, num_of_results):
         return self.colection.aggregate([{"$sample": {"size": num_of_results}}])

@@ -1,0 +1,204 @@
+{% extends "base.html" %} {% block css %}
+<style>
+	hr {
+		margin: 30px 0px;
+	}
+	.list-group,
+	.form-check {
+		position: relative
+	}
+	.add-remove-element {
+		position: absolute;
+		right: 0;
+		top: 2%;
+	}
+
+	.list-group-item {
+		padding: .35rem 1.25rem;
+	}
+
+	.col-xs-12 {
+		margin: 15px 0px;
+	}
+	.form-control {
+		border: 1px solid #ffffff;
+		border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+		border-radius: 0px;
+	}
+	.form-control:focus {
+		color: #000000;
+		box-shadow: 0 0 0 0.2rem rgba(0,0,0,0.1);
+		border-color: rgba(0,0,0,0.1);
+		border-top-color: rgba(0,0,0,0.1);
+		border-right-color: rgba(0,0,0,0.1);
+		border-bottom-color: rgba(0,0,0,0.1);
+		border-left-color: rgba(0,0,0,0.1);
+	}
+	
+
+</style>
+{% endblock css %}
+{% block main_content %}
+{% set recipes = recipe.recipes[0] %}
+
+<section class="vh100 container-fluid">
+	<form class="container" method="POST" action="{{ url_for('edit_recipe', recipe_id=recipe_id, user_id=user_in_db._id) }}">
+		<div class="row">
+			<div class="form-group col-12">
+				<h3 class="col-12 text-center">Recipe name</h3>
+				<input name="title" value="{{ recipes.title }}" type="text" class="form-control text-center font-weight-bold"
+				 placeholder="{{ recipes.title or 'My lovely recipe' }}" minlength="5" maxlength="45" required>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-md-6">
+				<img class="card-img-top" src="{{ recipes.image }}" alt="{{ recipes.title }}">
+				<div class="form-group col-12">
+				<h3 class="col-12 text-center">Image url</h3>
+					<input name="image" type="url" class="form-control text-center" placeholder="Image URL">
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-6">
+				<h3 class="col-12 text-center">Time needed(min)</h3>				
+				<div class="form-group">
+					<input name="readyInMinutes" type="number" class="form-control text-center"
+					 placeholder="Ready in {{ recipes.readyInMinutes }} min" value="{{ recipes.readyInMinutes }}" min="0" max="240" required>
+				</div>
+				<h3 class="col-12 text-center">Ingredients</h3>
+				<ul id="ingredients" class="list-group form-group">
+					{% for ingredient in recipes.extendedIngredients %}
+					<li class="list-group">
+						<div class="add-remove-element">
+							<button onclick="add_indegrient()" class="add-element btn btn-success" type="button"><i class="fas fa-plus"></i></button>
+							<button onclick="remove_indegrient(this)" class="add-element btn btn-danger" type="button"><i class="fas fa-trash-alt"></i></button>
+						</div>						
+						<input name="ingredient-{{loop.index}}" value="{{ingredient.original}}" type="text" class="col-8 form-control"
+						 placeholder="{{ingredient.original|title or '2 cups all purpose flour'}}" minlength="5" maxlength="30" required>						
+					</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+		<hr>
+		<div class="row">
+			<div id="steps" class="col-12">
+				<h3 class="col-12 text-center">Steps</h3>
+				<ol class="list-group form-group">
+					{% set list = recipes.analyzedInstructions[0].steps %}
+					{% for dic in list %}
+					<li class="list-group">
+						<div class="add-remove-element">
+							<button onclick="add_step()" class="add-element btn btn-success" type="button"><i class="fas fa-plus"></i></button>
+							<button onclick="remove_step(this)" class="add-element btn btn-danger" type="button"><i class="fas fa-trash-alt"></i></button>
+						</div>
+						<input name="step-{{loop.index}}" type="text" value="{{dic.step}}" class=" col-8 form-control" placeholder="{{dic.step or 'In a medium bowl mix the sugar, yeast, and water'}}" minlength="10" maxlength="60" required>
+					</li>
+					{% endfor %}
+				</ol>
+			</div>
+		</div>
+		<div class="row mt-5">
+			<h3 class="col-12 text-center">Wine pairing</h3>
+			<div class="col-12">
+				<textarea name="winePairing" class="form-control text-center" rows="10">{{recipes.winePairing.pairingText or 'Snickerdoodle works really well with Cream Sherry, Madeira, and Prosecco.'}}</textarea>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-check col-sm-6 col-md-4 mt-5">
+				<h3>Dish Types</h3>
+				<div class="add-remove-element">
+					<button onclick="add_dishType()" class="add-element btn btn-success" type="button"><i class="fas fa-plus"></i></button>					
+				</div>
+				<input name="new_dish_type" type="text" class="form-control mt-3 mb-3" placeholder="Add Dish type" minlength="5" maxlength="15">
+				<div class="row justify-content-around">
+					<div id="dish-type-append" class="dish-type col-xs-6">
+						{% for x in forms[0].dishTypes[:10] %}
+						<div class="form-check">
+							{% if x|lower in recipes.dishTypes %}		
+							<input class="form-check-input" name="dishTypes-0{{ loop.index }}" type="checkbox" value="{{x}}" checked>
+							{% else %}
+							<input class="form-check-input" name="dishTypes-0{{ loop.index }}" type="checkbox" value="{{x}}">
+							{% endif %}
+							<label class="form-check-label" for="dishTypes-0{{ loop.index }}">
+								{{x}}
+							</label>
+						</div>
+						{% endfor %}
+					</div>
+					<div class="dish-type col-xs-6">
+						{% for x in forms[0].dishTypes[10:] %}
+						<div class="form-check">							
+							{% if x|lower in recipes.dishTypes %}
+							<input class="form-check-input" name="dishTypes-{{ loop.index }}" type="checkbox" value="{{x}}" checked>
+							{% else %}
+							<input class="form-check-input" name="dishTypes-{{ loop.index }}" type="checkbox" value="{{x}}">
+							{% endif %}
+							<label class="form-check-label" for="dishTypes-{{ loop.index }}">
+								{{x}}
+							</label>
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+			<div class="form-check col-sm-6 col-md-4 mt-5">
+				<h3>Cuisines</h3>
+				<div class="add-remove-element">
+					<button onclick="add_cuisine()" class="add-element btn btn-success" type="button"><i class="fas fa-plus"></i></button>
+				</div>
+				<input name="new_cusine_type" type="text" class="form-control mt-3 mb-3" placeholder="Add Cusine type" minlength="5" maxlength="15">
+				<div class="row">
+					<div id="cuisine" class="col-12">
+						{% for x in forms[0].cuisines %}
+						<div class="form-check">
+							{% if x|lower in recipes.cuisines %}
+							<input class="form-check-input" name="cuisines-{{ loop.index }}" type="checkbox" value="{{x}}" checked>
+							{% else %}
+							<input class="form-check-input" name="cuisines-{{ loop.index }}" type="checkbox" value="{{x}}">
+							{% endif %}
+							<label class="form-check-label" for="cuisines-{{ loop.index }}">
+								{{x}}
+							</label>
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+			<div class="form-check col-sm-6 col-md-4 mt-5">
+				<h3>Diets</h3>
+				<div class="add-remove-element">
+					<button onclick="add_diet()" class="add-element btn btn-success" type="button"><i class="fas fa-plus"></i></button>
+				</div>
+				<input name="new_diet_type" type="text" class="form-control mt-3 mb-3" placeholder="Add Diet type" minlength="5" maxlength="15">
+				<div class="row">
+					<div id="diet" class="col-12">
+						{% for x in forms[0].diets %}
+						<div class="form-check">
+							{% if x|lower in recipes.diets %}
+							<input class="form-check-input" name="diets-{{ loop.index }}" type="checkbox" value="{{x}}" checked>
+							{% else %}
+							<input class="form-check-input" name="diets-{{ loop.index }}" type="checkbox" value="{{x}}">
+							{% endif %}
+							<label class="form-check-label" for="diets-{{ loop.index }}">
+								{{x}}
+							</label>
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row mt-5">
+			<div class="form-group col-xs-12">
+				<button class="btn btn-block btn-outline-warning" type="submit"> TEST </button>
+			</div>
+		</div>
+	</form>
+
+</section>
+
+{% endblock main_content %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='custom/add-edit.js') }}"></script>
+{% endblock scripts %}
