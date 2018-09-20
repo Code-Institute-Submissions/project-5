@@ -4,8 +4,6 @@ from bson.objectid import ObjectId
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from schema import RecipeSchema
-
 from key import db_name, uri, log_in_key
 
 app = Flask(__name__)
@@ -142,9 +140,8 @@ class SearchForm(Search):
 						result.append(recipe)
 
 		return result
-	
 
-
+# DB classes
 
 class Database:
 
@@ -175,4 +172,62 @@ class Database:
         form["popularity"] = ["Ascending", "Decreasing"]
         forms_colection.insert_one(form)
 
-	
+# Main class for add / edit recipe
+
+class Recipe(dict):
+
+	# Make it as constractor
+
+	def __init__(self, form_data):
+		self.recipes = [self.recipe_schema(self.formate_data(form_data))]
+
+	def formate_data(self, form_data):
+		formated_inputs = {}
+		for key in form_data:
+			if key == "_id":
+				continue
+			value_key = key
+			key = key.split("-")
+			key = key[0]
+			if key in formated_inputs:
+				formated_inputs[key].append(form_data[value_key].lower())
+			else:
+				formated_inputs[f"{key}"] = []
+				formated_inputs[key].append(form_data[value_key].lower())
+
+		return formated_inputs
+
+	def get_ingredients(self, form):
+		ingredients = []
+		for ingredient in form["ingredient"]:
+			ingredients.append({"original": ingredient})
+		return ingredients
+
+	def get_steps(self, form):
+		steps = [{"steps": []}]
+		for step in form["step"]:
+			steps[0]["steps"].append(
+                            {
+                                "number": len(steps) + 1,
+                                "step": step
+                            }
+                        )
+		return steps
+
+	def recipe_schema(self, form):
+		return {
+			"aggregateLikes": int(form["aggregateLikes"][0]) or 0,
+			"extendedIngredients": self.get_ingredients(form),
+			"title": form["title"][0],
+			"readyInMinutes": int(form["readyInMinutes"][0]) or 0,
+			"image": form["new_img"][0] or form["old_img"][0] or "https://spoonacular.com/recipeImages/496044-556x370.jpg",
+			"cuisines": form["cuisines"],
+			"dishTypes": form["dishTypes"],
+			"diets": form["diets"],
+			"winePairing": {
+				"pairingText": form["winePairing"][0]
+			},
+			"analyzedInstructions": self.get_steps(form),
+			"creditsText": form["creditsText"][0],
+			"visibility": False
+		}

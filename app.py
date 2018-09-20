@@ -1,14 +1,14 @@
 import os
+
+import pprint
 from flask import Flask, render_template, redirect, request, url_for, session, jsonify
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from schema import RecipeSchema
-
 from key import db_name, uri, log_in_key
-from classes import Search, SearchForm, Database
+from classes import Search, SearchForm, Database, Recipe
 
 app = Flask(__name__)
 # mongoDB config
@@ -24,6 +24,13 @@ forms_colection = mongo.db.forms
 # jokes_colection = mongo.db.jokes
 trivia_colection = mongo.db.trivia
 
+
+""" testing """
+
+testing_colection = mongo.db.testing
+
+"""  """
+
 # Index
 @app.route('/')
 @app.route('/index')
@@ -37,7 +44,7 @@ def index():
     	
     if session:
         user_in_db = users_colection.find_one({"username": session['user']})
-        return render_template("index.html", page_title="Cookbook", username=session['user'], user_id=user_in_db['_id'], forms=forms, main_recipe=main_recipe, recipes=side_recipes, trivia=trivia)
+        return render_template("index.html", page_title="Cookbook", username=session['user'], user_id=user_in_db['_id'], forms=forms, main_recipe=main_recipe, side_recipes=side_recipes, trivia=trivia)
     return render_template("index.html", page_title="Cookbook", forms=forms, main_recipe=main_recipe, side_recipes=side_recipes, trivia=trivia)
 
 
@@ -130,10 +137,12 @@ def recipes():
 # Main route for single recipe
 
 
-@app.route('/recipe/<recipe_id>')
+@app.route('/recipe/<recipe_id>', methods=['GET', 'POST'])
 def recipe(recipe_id):
 	recipe = Search(recipes_colection, "recipes").find_one_by_id(recipe_id)
 	forms = forms_colection.find()
+	if request.method == "POST":
+		return render_template("recipe.html", page_title=recipe['recipes'][0]['title'], recipe_id=recipe_id, recipe=recipe, forms=forms)
 	if session:
 		user_in_db = users_colection.find_one({"username": session['user']})
 		return render_template("recipe.html", page_title=recipe['recipes'][0]['title'], recipe_id=recipe_id, recipe=recipe, forms=forms,  user_in_db=user_in_db)
@@ -143,14 +152,18 @@ def recipe(recipe_id):
 
 @app.route('/edit_recipe/<recipe_id>/<user_id>', methods=['GET', 'POST'])
 def edit_recipe(recipe_id, user_id):
+	forms = forms_colection.find()
 	if request.method == "POST":
 		form_data = request.form.to_dict()
-		print(form_data)
-		print("-------------------------------------------------")
+		data = Recipe(form_data)
+		recipes_colection.update(
+		    {'_id': ObjectId(recipe_id)}, data.__dict__)
+		# testing_colection.insert_one(data.__dict__)
+		recipe = data.__dict__
+		return redirect(url_for("recipe", page_title=recipe['recipes'][0]['title'], recipe_id=recipe_id, recipe=recipe, forms=forms,  user_in_db=users_colection.find_one({"username": session['user']})))
 	else:
 		if session:
-			recipe = Search(recipes_colection, "recipes").find_one_by_id(recipe_id)
-			forms = forms_colection.find()
+			recipe = Search(recipes_colection, "recipes").find_one_by_id(recipe_id)			
 			user_in_db = Search(users_colection, "").find_one_by_id(user_id)
 			for x in user_in_db["recipes"]:
 				if x == recipe_id:
@@ -273,9 +286,8 @@ Temporary notes
 
 """
 
-# add for user to add new category
+
 # edit recipes
-# add loop to modify the recepis (add user names)
 # search by user names
 # profile page 
 # edit profile
