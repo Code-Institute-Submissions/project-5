@@ -221,9 +221,9 @@ class Recipe(dict):
 			"title": form["title"][0],
 			"readyInMinutes": int(form["readyInMinutes"][0]) or 0,
 			"image": form["new_img"][0] or form["old_img"][0] or "https://spoonacular.com/recipeImages/496044-556x370.jpg",
-			"cuisines": form["cuisines"],
-			"dishTypes": form["dishTypes"],
-			"diets": form["diets"],
+			"cuisines": form.get("cuisines") or [],
+			"dishTypes": form.get("dishTypes") or [],
+			"diets": form.get("diets") or [],
 			"winePairing": {
 				"pairingText": form["winePairing"][0]
 			},

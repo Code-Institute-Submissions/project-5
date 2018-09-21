@@ -164,10 +164,18 @@ def add_recipe(user_id):
     forms = forms_colection.find()
     recipe_schema = Search(shemas_colection, "recipes").find_one_by_id(recipe_schema_id)
     if request.method == "POST":
-    	pass
+    	form_data = request.form.to_dict()
+    	data = Recipe(form_data)
+    	new_recipe = recipes_colection.insert(data.__dict__)
+    	recipe_id = str(new_recipe)
+    	recipe = Search(recipes_colection).find_one_by_id(recipe_id)
+    	user_in_db = users_colection.find_one({"username": session['user']})
+    	users_colection.update({'_id': user_in_db['_id']}, {'$push': {'recipes': recipe_id}})
+    	flash("Recipe added. Thank you!")    	
+    	return redirect(url_for("recipe", recipe_id=recipe_id, recipe=recipe, forms=forms, user_in_db=user_in_db, user_id=user_in_db['_id'], page_title=recipe['recipes'][0]['title']))
     if 'user' in session:
         user_in_db = users_colection.find_one({"username": session['user']})
-        return render_template("add-recipe.html", page_title="profile", user_in_db=user_in_db, user_id=user_in_db['_id'], forms=forms, recipe_schema=recipe_schema)
+        return render_template("add-recipe.html", page_title="Add recipe", user_in_db=user_in_db, user_id=user_in_db['_id'], forms=forms, recipe_schema=recipe_schema)
 
     return redirect(url_for('index', forms=forms))
 
@@ -180,8 +188,7 @@ def edit_recipe(recipe_id, user_id):
 	if request.method == "POST":
 		form_data = request.form.to_dict()
 		data = Recipe(form_data)
-		recipes_colection.update(
-		    {'_id': ObjectId(recipe_id)}, data.__dict__)
+		recipes_colection.update({'_id': ObjectId(recipe_id)}, data.__dict__)
 		recipe = data.__dict__
 		flash("Your recipe has been updated")
 		user_in_db = users_colection.find_one({"username": session['user']})
@@ -272,6 +279,11 @@ def search_by_cuisines(cuisine):
 
 @app.route('/admin_dashboard')
 def dashboard():
+	if request.method == "GET":
+		"""                       Just for the testing            """
+
+		hidden_recipes = recipes_colection.delete_many({"recipes.visibility": False})
+
 	if 'user' in session:
 		user_in_db = users_colection.find_one({"username": session['user']})
 		users = users_colection.find()

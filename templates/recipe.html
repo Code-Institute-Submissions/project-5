@@ -88,22 +88,24 @@
 			</div>
 		</div>
 	</div>
-	{% if recipes.winePairing %}
+	{% if recipes.winePairing.pairingText %}
 	<hr>
 	<div class="row">
 		<h3 class="col-12 text-center">Wine pairing</h3>
 		<div class="col-xs-12 text-center">
 			<p>{{recipes.winePairing.pairingText}}</p>
 		</div>
-
 	</div>
 	{% endif %}
 	<hr>
 	<h6 class="text-center">Credits: {{recipes.creditsText}}</h6>
 	<hr>
+	{% set recipe = recipe.recipes[0] %}
+	{% if recipe.dishTypes or recipe.cuisines or recipe.diets %}
 	<h6 class="text-center"> Recipe tags </h6>
-	<div class="row justify-content-center">			
-		{% set recipe = recipe.recipes[0] %}
+	{% else %}
+	{% endif %}
+	<div class="row justify-content-center">		
 		{% if recipe.dishTypes[0] %}
 		<ul class="list-inline">
 			{% for type in recipe.dishTypes %}

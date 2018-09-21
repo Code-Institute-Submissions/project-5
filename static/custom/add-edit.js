@@ -99,7 +99,7 @@ function add_step(btn) {
 	$(`
 	<li class="list-group">
 		<div class="add-remove-element">
-			<button onclick="add_step()" class="add-element btn btn-success" type="button"><i class="fas fa-plus"></i></button>
+			<button onclick="add_step(this)" class="add-element btn btn-success" type="button"><i class="fas fa-plus"></i></button>
 			<button onclick="remove_step(this)" class="add-element btn btn-danger" type="button"><i class="fas fa-trash-alt"></i></button>
 		</div>
 		<input name="step-${len + 1}" type="text" class="col-8 col-lg-10 form-control" placeholder="In a medium bowl mix the sugar, yeast, and water" minlength="10" maxlength="60" required>
