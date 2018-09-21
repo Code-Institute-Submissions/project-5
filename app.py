@@ -1,7 +1,7 @@
 import os
 
 import pprint
-from flask import Flask, render_template, redirect, request, url_for, session, jsonify
+from flask import Flask, render_template, redirect, request, url_for, session, flash
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 
@@ -20,10 +20,11 @@ mongo = PyMongo(app)
 
 users_colection = mongo.db.users
 recipes_colection = mongo.db.recipes
+shemas_colection = mongo.db.schemas
 forms_colection = mongo.db.forms
-# jokes_colection = mongo.db.jokes
 trivia_colection = mongo.db.trivia
 
+recipe_schema_id = "5ba2ded543277a316cbf0ef9"
 
 """ testing """
 
@@ -32,6 +33,8 @@ testing_colection = mongo.db.testing
 """  """
 
 # Index
+
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -41,8 +44,8 @@ def index():
         recipes_colection).random(num_of_results=4)]
     main_recipe = random_recipes[0]
     side_recipes = random_recipes[1:]
-    	
-    if session:
+
+    if 'user' in session:
         user_in_db = users_colection.find_one({"username": session['user']})
         return render_template("index.html", page_title="Cookbook", username=session['user'], user_id=user_in_db['_id'], forms=forms, main_recipe=main_recipe, side_recipes=side_recipes, trivia=trivia)
     return render_template("index.html", page_title="Cookbook", forms=forms, main_recipe=main_recipe, side_recipes=side_recipes, trivia=trivia)
@@ -61,15 +64,18 @@ def login():
         try:
             user_in_db = users_colection.find_one({"username": username})
         except:
-            return "Sorry there seems to be problem with the data"
+            flash("Sorry there seems to be problem with the data")
+            return redirect(url_for('index'))
         if user_in_db:
             if check_password_hash(user_in_db['password'], password):
                 session['user'] = username
                 return redirect(url_for('profile', user_id=user_in_db['_id'], username=username))
             else:
-                return "Invalid username or password"
+                flash("Invalid username or password")
+                return redirect(url_for('index'))
         else:
-            return f"Sorry no profile {request.form['username']} found"
+            flash(f"Sorry no profile {request.form['username']} found")
+            return redirect(url_for('index'))
 
 
 # Sign up
@@ -80,7 +86,8 @@ def sign_up():
         user_in_db = mongo.db.users.find_one(
             {"username": request.form['username']})
         if user_in_db:
-            return f"Sorry profile {request.form['username']} already exist"
+            flash(f"Sorry profile {request.form['username']} already exist")
+            return render_template("sign-up.html", page_title="Sign up", forms=forms)
 
         hashed_pass = generate_password_hash(request.form['user_password'])
         users_colection.insert_one(
@@ -89,7 +96,8 @@ def sign_up():
             {"username": request.form['username']})
         session['user'] = request.form['username']
         return redirect(url_for('profile', user_id=user_in_db['_id'], forms=forms))
-    if session:
+
+    if 'user' in session:
         return render_template("sign-up.html", page_title="Sign up", username=session['user'], forms=forms)
 
     return render_template("sign-up.html", page_title="Sign up", forms=forms)
@@ -108,7 +116,7 @@ def logout():
 @app.route('/profile/<user_id>')
 def profile(user_id):
     forms = forms_colection.find()
-    if session:
+    if 'user' in session:
         user = Search(users_colection, "users").find_one_by_id(user_id)
         return render_template("profile.html", page_title="profile", user=user, forms=forms)
 
@@ -129,7 +137,7 @@ Recipes
 def recipes():
     recipes_in_db = Search(recipes_colection, "recipes").sort_find_all()
     forms = forms_colection.find()
-    if session:
+    if 'user' in session:
         user_in_db = users_colection.find_one({"username": session['user']})
         return render_template("recipes.html", page_title="Recipes", recipes=recipes_in_db,  user_id=user_in_db['_id'], forms=forms)
     return render_template("recipes.html", page_title="Recipes", recipes=recipes_in_db, forms=forms)
@@ -139,16 +147,32 @@ def recipes():
 
 @app.route('/recipe/<recipe_id>', methods=['GET', 'POST'])
 def recipe(recipe_id):
-	recipe = Search(recipes_colection, "recipes").find_one_by_id(recipe_id)
+	recipe = Search(recipes_colection).find_one_by_id(recipe_id)
 	forms = forms_colection.find()
 	if request.method == "POST":
 		return render_template("recipe.html", page_title=recipe['recipes'][0]['title'], recipe_id=recipe_id, recipe=recipe, forms=forms)
-	if session:
+	if 'user' in session:
 		user_in_db = users_colection.find_one({"username": session['user']})
-		return render_template("recipe.html", page_title=recipe['recipes'][0]['title'], recipe_id=recipe_id, recipe=recipe, forms=forms,  user_in_db=user_in_db)
+		return render_template("recipe.html", page_title=recipe['recipes'][0]['title'], recipe_id=recipe_id, recipe=recipe, forms=forms,  user_in_db=user_in_db, user_id=user_in_db['_id'])
 	return render_template("recipe.html", page_title=recipe['recipes'][0]['title'], recipe_id=recipe_id, recipe=recipe, forms=forms)
 
+# Add Recipe
+
+
+@app.route('/add_recipe/<user_id>', methods=['GET', 'POST'])
+def add_recipe(user_id):
+    forms = forms_colection.find()
+    recipe_schema = Search(shemas_colection, "recipes").find_one_by_id(recipe_schema_id)
+    if request.method == "POST":
+    	pass
+    if 'user' in session:
+        user_in_db = users_colection.find_one({"username": session['user']})
+        return render_template("add-recipe.html", page_title="profile", user_in_db=user_in_db, user_id=user_in_db['_id'], forms=forms, recipe_schema=recipe_schema)
+
+    return redirect(url_for('index', forms=forms))
+
 # Edit Recipe
+
 
 @app.route('/edit_recipe/<recipe_id>/<user_id>', methods=['GET', 'POST'])
 def edit_recipe(recipe_id, user_id):
@@ -158,17 +182,19 @@ def edit_recipe(recipe_id, user_id):
 		data = Recipe(form_data)
 		recipes_colection.update(
 		    {'_id': ObjectId(recipe_id)}, data.__dict__)
-		# testing_colection.insert_one(data.__dict__)
 		recipe = data.__dict__
-		return redirect(url_for("recipe", page_title=recipe['recipes'][0]['title'], recipe_id=recipe_id, recipe=recipe, forms=forms,  user_in_db=users_colection.find_one({"username": session['user']})))
+		flash("Your recipe has been updated")
+		user_in_db = users_colection.find_one({"username": session['user']})
+		return redirect(url_for("recipe", page_title=recipe['recipes'][0]['title'], recipe_id=recipe_id, recipe=recipe, forms=forms, user_in_db=user_in_db, user_id=user_in_db['_id']))
 	else:
-		if session:
-			recipe = Search(recipes_colection, "recipes").find_one_by_id(recipe_id)			
+		if 'user' in session:
+			recipe = Search(recipes_colection).find_one_by_id(recipe_id)
 			user_in_db = Search(users_colection, "").find_one_by_id(user_id)
 			for x in user_in_db["recipes"]:
 				if x == recipe_id:
-					return render_template("edit-recipe.html", page_title="Edit recipe", recipe_id=recipe_id, recipe=recipe, forms=forms,  user_in_db=user_in_db)
+					return render_template("edit-recipe.html", page_title="Edit recipe", recipe_id=recipe_id, recipe=recipe, forms=forms,  user_in_db=user_in_db, user_id=user_in_db['_id'])
 	return redirect(url_for('index'))
+
 
 """ Search  """
 
@@ -193,7 +219,7 @@ def search_by_type(dish_type):
     forms = forms_colection.find()
     recipes_in_db = Search(colection=recipes_colection,
                            dic_name="recipes").all_filters(key="dishTypes", value=dish_type)
-    if session:
+    if 'user' in session:
         user_in_db = users_colection.find_one({"username": session['user']})
         return render_template("recipes.html", page_title=dish_type.capitalize() + "s", recipes=recipes_in_db, user_id=user_in_db['_id'], forms=forms)
     return render_template("recipes.html", page_title=dish_type.capitalize() + "s", recipes=recipes_in_db, forms=forms)
@@ -207,7 +233,7 @@ def search_by_diet(diet_type):
     forms = forms_colection.find()
     recipes_in_db = Search(colection=recipes_colection,
                            dic_name="recipes").all_filters(key="diets", value=diet_type)
-    if session:
+    if 'user' in session:
         user_in_db = users_colection.find_one({"username": session['user']})
         return render_template("recipes.html", page_title=diet_type.capitalize(), recipes=recipes_in_db, user_id=user_in_db['_id'], forms=forms)
     return render_template("recipes.html", page_title=diet_type.capitalize(), recipes=recipes_in_db, forms=forms)
@@ -220,7 +246,7 @@ def search_by_time():
     forms = forms_colection.find()
     recipes_in_db = Search(colection=recipes_colection,
                            dic_name="recipes", order=1, sort="readyInMinutes").sort_find_all()
-    if session:
+    if 'user' in session:
         user_in_db = users_colection.find_one({"username": session['user']})
         return render_template("recipes.html", page_title="Time", recipes=recipes_in_db, user_id=user_in_db['_id'], forms=forms)
     return render_template("recipes.html", page_title="Time", recipes=recipes_in_db, forms=forms)
@@ -233,7 +259,7 @@ def search_by_cuisines(cuisine):
     forms = forms_colection.find()
     recipes_in_db = Search(colection=recipes_colection,
                            dic_name="recipes").all_filters(key="cuisines", value=cuisine)
-    if session:
+    if 'user' in session:
         user_in_db = users_colection.find_one({"username": session['user']})
         return render_template("recipes.html", page_title=cuisine.capitalize(), recipes=recipes_in_db, user_id=user_in_db['_id'], forms=forms)
     return render_template("recipes.html", page_title=cuisine.capitalize(), recipes=recipes_in_db, forms=forms)
@@ -246,10 +272,13 @@ def search_by_cuisines(cuisine):
 
 @app.route('/admin_dashboard')
 def dashboard():
-    users = users_colection.find()
-    forms = forms_colection.find()
-    hidden_recipes = recipes_colection.find({"recipes.visibility": False})
-    return render_template("dashboard.html", page_title="dashboard", users=users, forms=forms, hidden_recipes=hidden_recipes)
+	if 'user' in session:
+		user_in_db = users_colection.find_one({"username": session['user']})
+		users = users_colection.find()
+		forms = forms_colection.find()
+		hidden_recipes = recipes_colection.find({"recipes.visibility": False})
+		return render_template("dashboard.html", page_title="dashboard", users=users, forms=forms, hidden_recipes=hidden_recipes, user_id=user_in_db['_id'])
+	return redirect(url_for('index'))
 
 
 # Update db
@@ -278,8 +307,6 @@ if __name__ == '__main__':
             debug=True)
 
 
-
-
 """ 
 
 Temporary notes
@@ -289,5 +316,5 @@ Temporary notes
 
 # edit recipes
 # search by user names
-# profile page 
+# profile page
 # edit profile

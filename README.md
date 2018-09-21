@@ -45,3 +45,8 @@
 - Fixed many errors along the way
 - Added filters and errors handling in add / endit form
 - Users are now able to print the recipes 
+
+### 1.5
+
+- schema.py no longer in use
+- Moved Recipe class to classes.py

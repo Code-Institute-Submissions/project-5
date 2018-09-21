@@ -6,6 +6,7 @@ $(document).ready(function () {
 	$("#search-btn").on("click", function() {
 		$(".search-overlay").slideToggle();
 	});
+	flashed_messages()
 });
 
 /*
@@ -13,13 +14,22 @@ Alerts modal
 */
 
 function alerts(message) {	
-	$("#message").html(message)
+	$("#messages").html(`<p>${message}</p>`);
 	$("#alerts").slideDown(1500)
 	setTimeout(() => {
 		$("#alerts").slideUp(1500)		
 	}, 4000);
 }
 
+function flashed_messages() {
+	let messages = parseInt($("#messages p").length)
+	if (messages) {
+		$("#alerts").slideDown(1500);
+		setTimeout(() => {
+			$("#alerts").slideUp(1500)
+		}, 5000);
+	}
+}
 
 /*
 Print recipe

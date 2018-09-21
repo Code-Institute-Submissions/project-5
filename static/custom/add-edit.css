@@ -1,0 +1,40 @@
+hr {
+		margin: 30px 0px;
+	}
+	.list-group,
+	.form-check {
+		position: relative
+	}
+	.add-remove-element {
+		position: absolute;
+		right: 0;
+		top: 2%;
+	}
+
+	.list-group-item {
+		padding: .35rem 1.25rem;
+	}
+
+	.col-xs-12 {
+		margin: 15px 0px;
+	}
+	.form-control {
+		border: 1px solid #ffffff;
+		border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+		border-radius: 0px;
+	}
+	.form-control:focus {
+		color: #000000;
+		box-shadow: 0 0 0 0.2rem rgba(0,0,0,0.1);
+		border-color: rgba(0,0,0,0.1);
+		border-top-color: rgba(0,0,0,0.1);
+		border-right-color: rgba(0,0,0,0.1);
+		border-bottom-color: rgba(0,0,0,0.1);
+		border-left-color: rgba(0,0,0,0.1);
+	}
+
+	input:disabled, textarea:disabled {
+		color: #ffffff;
+		background-color: transparent;
+		border: 0;
+}

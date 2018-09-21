@@ -106,13 +106,17 @@ Overlay
 }
 
 #alerts {
-	position: fixed;
+	position: fixed;	
 	display: none;
+	min-height: 50px;
 	bottom: 0;
 	z-index: 999;
 	background-color: rgba(0, 0, 0, 0.7);
 	color: #ffffff;
 
+}
+#alerts p {
+	margin: 10px 0px;
 }
 
 /*

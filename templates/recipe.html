@@ -53,7 +53,7 @@
 						</div>
 						{% else %}
 						<div class="col-12 text-center">
-							<p>You must be loged in to vote / edit this recipe</p>
+							<p>You must be loged in to vote / edit recipes</p>
 							<p><i class="fas fa-star fa-lg"></i> {{ recipes.aggregateLikes }}</p>
 						</div>
 						{% endif %}
@@ -101,7 +101,8 @@
 	<hr>
 	<h6 class="text-center">Credits: {{recipes.creditsText}}</h6>
 	<hr>
-	<div class="row justify-content-center">
+	<h6 class="text-center"> Recipe tags </h6>
+	<div class="row justify-content-center">			
 		{% set recipe = recipe.recipes[0] %}
 		{% if recipe.dishTypes[0] %}
 		<ul class="list-inline">

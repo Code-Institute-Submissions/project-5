@@ -1,0 +1,167 @@
+
+
+<form id="add_edit_form" class="container" method="POST" action="{{ form_action }}">
+	<div class="row">
+		<div class="form-group col-12">
+			<h3 class="col-12 text-center">Recipe name</h3>
+			<input name="title" value="{{ recipes.title }}" type="text" class="form-control text-center font-weight-bold"
+			 placeholder="{{ recipes.title or 'My lovely recipe' }}" minlength="5" maxlength="45" required>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 col-md-6">
+			<img class="card-img-top" src="{{ recipes.image }}" alt="{{ recipes.title }}">
+			<div class="form-group col-12">
+				<input name="aggregateLikes" type="text" class="form-control text-center d-none" value="{{recipes.aggregateLikes}}">
+			</div>
+			<div class="form-group col-12">
+				<h3 class="col-12 text-center">Image url</h3>
+				<input name="old_img" type="url" class="form-control text-center d-none" value="{{ recipes.image }}">
+				<input name="new_img" type="url" class="form-control text-center" placeholder="Image URL">
+			</div>
+		</div>
+		<div class="col-xs-12 col-md-6">
+			<h3 class="col-12 text-center">Time needed(min)</h3>
+			<div class="form-group">
+				<input name="readyInMinutes" type="number" class="form-control text-center" placeholder="Ready in {{ recipes.readyInMinutes }} min"
+				 value="{{ recipes.readyInMinutes }}" min="0" max="240" required>
+			</div>
+			<h3 class="col-12 text-center">Ingredients</h3>
+			<ul id="ingredients" class="list-group form-group">
+				{% for ingredient in recipes.extendedIngredients %}
+				<li class="list-group">
+					<div class="add-remove-element">
+						<button onclick="add_indegrient(this)" class="add-element btn btn-success" type="button"><i class="fas fa-plus"></i></button>
+						<button onclick="remove_indegrient(this)" class="add-element btn btn-danger" type="button"><i class="fas fa-trash-alt"></i></button>
+					</div>
+					<input name="ingredient-{{loop.index}}" value="{{ingredient.original}}" type="text" class="col-8 form-control"
+					 placeholder="{{ingredient.original|title or '2 cups all purpose flour'}}" minlength="5" maxlength="30" required>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<hr>
+	<div class="row">
+		<div id="steps" class="col-12">
+			<h3 class="col-12 text-center">Steps</h3>
+			<ol class="list-group form-group">
+				{% set list = recipes.analyzedInstructions[0].steps %}
+				{% for dic in list %}
+				<li class="list-group">
+					<div class="add-remove-element">
+						<button onclick="add_step(this)" class="add-element btn btn-success" type="button"><i class="fas fa-plus"></i></button>
+						<button onclick="remove_step(this)" class="add-element btn btn-danger" type="button"><i class="fas fa-trash-alt"></i></button>
+					</div>
+					<input name="step-{{loop.index}}" type="text" value="{{dic.step}}" class=" col-8 col-lg-10 form-control"
+					 placeholder="{{dic.step or 'In a medium bowl mix the sugar, yeast, and water'}}" minlength="10" maxlength="150"
+					 required>
+				</li>
+				{% endfor %}
+			</ol>
+		</div>
+	</div>
+	<div class="row mt-5">
+		<h3 class="col-12 text-center">Wine pairing</h3>
+		<div class="col-12">
+			<textarea name="winePairing" onkeyup="characters_counter(this,'textarea-counter',150);" class="form-control text-center"
+			 maxlength="150" rows="10" placeholder="{{recipes.winePairing.pairingText or 'Snickerdoodle works really well with Cream Sherry, Madeira, and Prosecco.'}}">{{recipes.winePairing.pairingText}}</textarea>
+			<input id="textarea-counter" class="characters_counter text-md-center" disabled value="Remaining: 150">
+		</div>
+	</div>
+	<div>
+		<input name="creditsText" type="text" class="form-control text-center d-none" value="{{ user_in_db.username }}">
+	</div>
+	<div class="row">
+		<div class="form-check col-sm-6 col-md-4 mt-5">
+			<h3>Dish Types</h3>
+			<div class="add-remove-element">
+				<button onclick="add_dishType()" class="add-element btn btn-success" type="button"><i class="fas fa-plus"></i></button>
+			</div>
+			<input name="new_dish_type" type="text" class="form-control mt-3 mb-3" placeholder="Add Dish type" minlength="5"
+			 maxlength="15">
+			<div class="row justify-content-around">
+				<div id="dishType" class="dish-type col-xs-6">
+					{% for x in forms[0].dishTypes[:10] %}
+					<div class="form-check">
+						{% if x|lower in recipes.dishTypes %}
+						<input class="form-check-input" name="dishTypes-0{{ loop.index }}" type="checkbox" value="{{x}}" checked>
+						{% else %}
+						<input class="form-check-input" name="dishTypes-0{{ loop.index }}" type="checkbox" value="{{x}}">
+						{% endif %}
+						<label class="form-check-label" for="dishTypes-0{{ loop.index }}">
+							{{x}}
+						</label>
+					</div>
+					{% endfor %}
+				</div>
+				<div class="dish-type col-xs-6">
+					{% for x in forms[0].dishTypes[10:] %}
+					<div class="form-check">
+						{% if x|lower in recipes.dishTypes %}
+						<input class="form-check-input" name="dishTypes-{{ loop.index }}" type="checkbox" value="{{x}}" checked>
+						{% else %}
+						<input class="form-check-input" name="dishTypes-{{ loop.index }}" type="checkbox" value="{{x}}">
+						{% endif %}
+						<label class="form-check-label" for="dishTypes-{{ loop.index }}">
+							{{x}}
+						</label>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+		<div class="form-check col-sm-6 col-md-4 mt-5">
+			<h3>Cuisines</h3>
+			<div class="add-remove-element">
+				<button onclick="add_type('new_cusine_type', 'cuisines')" class="add-element btn btn-success" type="button"><i
+					 class="fas fa-plus"></i></button>
+			</div>
+			<input name="new_cusine_type" type="text" class="form-control mt-3 mb-3" placeholder="Add Cusine type" minlength="5"
+			 maxlength="15">
+			<div class="row">
+				<div id="cuisines" class="col-12">
+					{% for x in forms[0].cuisines %}
+					<div class="form-check">
+						{% if x|lower in recipes.cuisines %}
+						<input class="form-check-input" name="cuisines-{{ loop.index }}" type="checkbox" value="{{x}}" checked>
+						{% else %}
+						<input class="form-check-input" name="cuisines-{{ loop.index }}" type="checkbox" value="{{x}}">
+						{% endif %}
+						<label class="form-check-label" for="cuisines-{{ loop.index }}">
+							{{x}}
+						</label>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+		<div class="form-check col-sm-6 col-md-4 mt-5">
+			<h3>Diets</h3>
+			<div class="add-remove-element">
+				<button onclick="add_type('new_diet_type', 'diets')" class="add-element btn btn-success" type="button"><i class="fas fa-plus"></i></button>
+			</div>
+			<input name="new_diet_type" type="text" class="form-control mt-3 mb-3" placeholder="Add Diet type" minlength="5"
+			 maxlength="15">
+			<div class="row">
+				<div id="diets" class="col-12">
+					{% for x in forms[0].diets %}
+					<div class="form-check">
+						{% if x|lower in recipes.diets %}
+						<input class="form-check-input" name="diets-{{ loop.index }}" type="checkbox" value="{{x}}" checked>
+						{% else %}
+						<input class="form-check-input" name="diets-{{ loop.index }}" type="checkbox" value="{{x}}">
+						{% endif %}
+						<label class="form-check-label" for="diets-{{ loop.index }}">
+							{{x}}
+						</label>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row mt-5">
+		<button class="btn btn-block btn-outline-warning" type="submit"> TEST </button>
+	</div>
+</form>

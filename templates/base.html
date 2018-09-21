@@ -20,8 +20,9 @@
 	<link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
 
 	<!-- Custom styles -->
-	<link rel="stylesheet" href="{{url_for('static', filename='custom/style.css')}}" type="text/css" /> 
-	<link rel="stylesheet" href="{{url_for('static', filename='custom/screen.css')}}" type="text/css" /> {% block css %} {% endblock
+	<link rel="stylesheet" href="{{url_for('static', filename='custom/style.css')}}" type="text/css" />
+	<link rel="stylesheet" href="{{url_for('static', filename='custom/screen.css')}}" type="text/css" /> {% block css %}
+	{% endblock
 	css %}
 
 	<title>{{page_title}}</title>
@@ -46,22 +47,24 @@
 						<a class="nav-link" href="{{url_for('recipes')}}">The Book</a>
 					</li>
 
-					{% block profile_link %} {% if session %}
+					{% if session.user %}
 					<li class="nav-item">
 						<a class="nav-link" href="{{url_for('profile', user_id=user_id)}}">Profile</a>
 					</li>
-					{% endif %} {% endblock profile_link %}
+					{% endif %} 
 
 					<button type="button" id="search-btn" class="btn btn-outline-info">
 						<i class="fas fa-search"></i>
 					</button>
 
-					{% if session %}
+					{% if session.user %}
 					<button class="btn btn-outline-success my-2 my-sm-0" type="button" data-toggle="modal" data-target="#log-out-modal">Log
 						out
 					</button>
+					<a href="/add_recipe/{{ user_id }}">Add Recipe</a>
 					{% else %}
-					<button class="btn btn-outline-success my-2 my-sm-0" type="button" data-toggle="modal" data-target="#log-in-modal">Sign-in / Log
+					<button class="btn btn-outline-success my-2 my-sm-0" type="button" data-toggle="modal" data-target="#log-in-modal">Sign-in
+						/ Log
 						in
 					</button>
 					{% endif %}
@@ -70,10 +73,11 @@
 
 			</div>
 		</div>
-		
+
 	</nav>
-	
-	{% include 'search-form.html' %}	
+
+
+	{% include 'search-form.html' %}
 
 	<!-- Main Content -->
 
@@ -101,8 +105,14 @@
 
 	<div id="alerts" class="container-fluid">
 		<div class="row justify-content-around">
-			<div>
-				<p id="message"></p>
+			<div id="messages">
+				{% with messages = get_flashed_messages() %}
+				{% if messages %}
+				{% for message in messages %}
+				<p>{{ message }}</p>
+				{% endfor %}				
+				{% endif %}
+				{% endwith %}
 			</div>
 		</div>
 	</div>
@@ -150,7 +160,7 @@
 						<span aria-hidden="true">×</span>
 					</button>
 				</div>
-				<div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+				<div class="modal-body">Select "Logout" below if you are ready to end your current session.user.</div>
 				<div class="modal-footer">
 					<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
 					<a class="btn btn-primary" href="{{url_for('logout')}}">Logout</a>
@@ -167,10 +177,10 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 	 crossorigin="anonymous"></script>
 	<!-- Main JS-->
-	<script src="{{ url_for('static', filename='custom/main.js') }}"></script>
+	<script src="{{ url_for('static', filename='custom/main.js') }}"></script>	
 	
 	{% block scripts %}
-	
+
 	{% endblock scripts %}
 
 </body>
