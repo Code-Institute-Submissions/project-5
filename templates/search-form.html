@@ -2,25 +2,21 @@
 
 <div class="search-overlay vh100 container-fluid">
 	<div class="row ">
-		<form class="container" method="POST" action="/search_form">
-			<div class="row">
-				<div class="form-group col-xs-12 col-md-5 offset-md-1">
-					<input name="search_input" type="text" class="form-control text-center font-weight-bold" placeholder="Search">
+		<h2 class="col-12 text-center text-light"> Search by ...</h2>
+		<form id="search-form" class="container" method="POST" action="/input_form_search">
+			<div class="row">				
+				<div class="form-group col-xs-12 col-md-6 offset-md-1">		
+					<input name="search_input" type="text" class="form-control text-center font-weight-bold">
 				</div>
-				<div class="form-group col-xs-12 col-md-2 ">
-					<select name="search_by" class="form-control font-weight-bold">
-						<option value="title" selected>Name</option>
-						<option value="author">Author</option>
-					</select>
-				</div>
-				<div class="form-group col-xs-12 col-md-4" >
+				<div class="form-group col-xs-12 col-md-2" >
 					<input name="limit" type="number" class="form-control text-center font-weight-bold" placeholder="Limit results" min="0">
-				</div>				
+				</div>
+				<div class="form-group col-xs-12 col-md-2">
+					<button id="input_search_btn" onclick="input_search()" class="btn btn-block btn-outline-warning"> Search! </button>
+				</div>
 			</div>
 			<div class="row">
-				<br>
-				<hr>
-				<br>
+				<h2 class="col-12 text-center text-light"> Or by tags</h2>
 			</div>
 			<div class="row" >
 				<div class="form-check col-sm-6 col-md-3">
@@ -86,8 +82,11 @@
 					{% endfor %}
 					<br>
 					<hr>
-					<div id="form_search_btn" class="form-group col-xs-12">
-						<button class="btn btn-block btn-outline-warning" type="submit"> Search </button>
+					<div class="form-group col-xs-12 text-center" >
+						<p id="num_of_results"></p>
+					</div>
+					<div class="form-group col-xs-12">
+						<button id="tags_search_btn" onclick="tags_search()" class="btn btn-block btn-outline-warning">Search tags! </button>
 					</div>
 				</div>
 			</div>				

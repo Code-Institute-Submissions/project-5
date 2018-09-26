@@ -72,9 +72,13 @@ Overlay
     position: absolute;
     width: 100vw;
     height: min-content;
-    padding: 20% 0 5%;
+    padding-top: 7%;
     background: rgba(0, 0, 0, 0.7);
     z-index: 998;
+}
+
+.search-overlay h2 {
+	margin: 30px 0px;
 }
 
 .search-overlay .form-check,

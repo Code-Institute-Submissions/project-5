@@ -46,7 +46,17 @@
 - Added filters and errors handling in add / endit form
 - Users are now able to print the recipes 
 
-### 1.5
+#### 1.5
 
 - schema.py no longer in use
 - Moved Recipe class to classes.py
+- Slightly improved database structure for better readability and manipulation with data
+- Extended the Search class to be able to search by $match, $text
+
+
+##### Search form
+
+- Added second button to search form for user to clearly see what he is searching for
+- While changing the tags user now see the number of results before searching
+- If no recipes found the search button is disabled and user is asked to remove some of the filters
+- Removed "Search by" as this was getting too confusing for user. Instead the search inout searches fro any matching results

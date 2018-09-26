@@ -1,13 +1,3 @@
-/*
-General
-*/
-
-$(document).ready(function () {
-	$("#search-btn").on("click", function() {
-		$(".search-overlay").slideToggle();
-	});
-	flashed_messages()
-});
 
 /*
 Alerts modal
@@ -46,3 +36,68 @@ function print_recipe(recipe) {
 	});
 	return false;
 }
+
+/* 
+Search form recipes count on filter selection
+*/
+
+$(".search-overlay input[type=checkbox]").change(function() {	
+	return checked_checkboxes()	
+});
+
+function tags_search() {
+	$("#tags_search_btn").attr("disabled", "disabled").html("Working ...");
+	$("#input_search_btn").attr("disabled", "disabled").html("Working ...");
+	$("#search-form").attr("action", "/tags_form_search");
+	$("#search-form").submit();
+}
+
+
+function input_search() {
+	$("#input_search_btn").attr("disabled", "disabled").html("Working ...");
+	$("#tags_search_btn").attr("disabled", "disabled").html("Working ...");
+	$("#search-form").attr("action", "/input_form_search");
+	$("#search-form").submit();
+}
+
+function checked_checkboxes() {
+	let checked = $(".form-check-input:checkbox:checked");
+	let checkboxes = {}
+	for (let i = 0; i < checked.length; i++) {
+		checkboxes[checked[i].name] = checked[i].value;
+	}
+	checkboxes["limit"] = $(".search-overlay input[name=limit]").val();
+	checkboxes["search_input"] = $(".search-overlay input[name=search_input]").val();
+	checkboxes["search_by"] = $(".search-overlay input[name=search_by]").val();
+	$.post("/num_of_results", checkboxes, function (data, status) {
+		if (data != 0) {
+			$("#num_of_results").html(`
+					Found <span class="text-success">${data}</span> recipe/s`);
+			$("#tags_search_btn").removeAttr("disabled").html("Search tags!");
+
+		} else {
+			$("#num_of_results").html(`
+					Found <span class="text-danger">${data}</span> recipes <br>
+					Please consider to remove some of the filters!`);
+			$("#tags_search_btn").attr("disabled", "disabled").html("No recipes");
+
+		}
+
+	}).fail(function (xhr, status, error) {
+		console.log(xhr);
+		console.log(status);
+		console.log(error);
+	});
+	return false;
+}
+
+/*
+Event handlers and ducument ready functions
+*/
+
+$(document).ready(function () {
+	$("#search-btn").on("click", function () {
+		$(".search-overlay").slideToggle();
+	});
+	flashed_messages();
+});

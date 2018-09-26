@@ -12,7 +12,6 @@ app = Flask(__name__)
 app.config['MONGO_DBNAME'] = db_name()
 app.config['MONGO_URI'] = uri()
 
-
 mongo = PyMongo(app)
 users_colection = mongo.db.users
 recipes_colection = mongo.db.recipes
@@ -20,62 +19,76 @@ forms_colection = mongo.db.forms
 
 app.config['SECRET_KEY'] = log_in_key()
 
-
-
 # Search classes
 
-
 class Search:
-    def __init__(self, colection, dic_name=str(),  sort="aggregateLikes", order=int(-1), limit=int(21)):
-        self.colection = colection
-        self.dic_name = dic_name
-        self.sort = sort
-        self.order = order
-        self.limit = limit
+	def __init__(self, colection, sort="aggregateLikes", order=int(-1), limit=int(21)):
+		self.colection = colection
+		self.sort = sort
+		self.order = order
+		self.limit = limit
 
-    def find_one_by_id(self, id):
-        return self.colection.find_one({"_id": ObjectId(id)})
+	def find_one_by_id(self, id):
+		return self.colection.find_one({"_id": ObjectId(id)})
 
-    def sort_find_all(self):
-        return self.colection.find({"recipes.visibility": True}).sort([(f'{self.dic_name}.{self.sort}', self.order)]).limit(self.limit)
+	def sort_find_all(self):
+		return self.colection.find({"visibility": True}).sort([(f'{self.sort}', self.order)]).limit(self.limit)
 
-    def all_filters(self, key, value):
-        return self.colection.find({"$and": [{"recipes.visibility": True}, {f"{self.dic_name}.{key}": value}]}).sort([(f'{self.dic_name}.{self.sort}', self.order)]).limit(self.limit)
+	def match(self, filters):
+		return self.colection.aggregate(
+			[{'$match': {"$and": filters}}, {"$sort": {self.sort: self.order}}, {"$limit": self.limit}])
 
-    def random(self, num_of_results):
-        return self.colection.aggregate([{"$sample": {"size": num_of_results}}])
+	def text(self, value):
+		self.colection.create_index([("$**", 'text')])
+		return self.colection.find({"$and": [{"visibility": True}, {"$text": {"$search": str(value)}}]}).limit(self.limit)
 
-    def __str__(self):
-        return "Main Constructor Class"
+	def all_filters(self, key, value):
+		return self.colection.find({"$and": [{"visibility": True}, {f"{key}": value}]}).sort([(f'{self.sort}', self.order)]).limit(self.limit)
 
-    def __len__(self):
-        return recipes_colection.find().count()
+	def random(self, num_of_results):
+		return self.colection.aggregate([{"$sample": {"size": num_of_results}}])
+
+	def __str__(self):
+		return "Main Search Class"
+
+	def __len__(self):
+		return self.colection.find().count()
 
 class SearchForm(Search):
 	def __init__(self):
-		Search.__init__(self, colection=recipes_colection,
-						dic_name="recipes")
+		Search.__init__(self, colection=recipes_colection)
 
-	def search_reluts(self, form_data):
+	def search_by_tags(self, form_data):
 		self.form_data = form_data
-		self.limit = self.get_limit()
+		self.limit = int(self.get_limit())
 		self.order = self.popularity()
-		self.format_inputs()
-		
-		return self.results()
+		self.filters = [{"visibility": True}]
+		del self.form_data["search_input"]
+		self.format_tags()
+		return self.search_tags()
+
+	def search_by_input(self, form_data):
+		self.form_data = form_data
+		self.limit = int(self.get_limit())
+		self.order = self.popularity()
+
+		if self.form_data["search_input"] != "":
+			return self.search_input()
+		else:
+			print("Empty string")
 
 	def get_limit(self):
 		# Adjust  limt for results
 		if self.form_data.get("limit"):
-			self.limit == self.form_data.get("limit")
+			self.limit = self.form_data.get("limit")
 			del self.form_data["limit"]
+			return self.limit
 		else:
 			del self.form_data["limit"]
 			self.limit = 5000  # All recipes in db
 		return self.limit
 
 	def popularity(self):
-		# Adjust  limt for results
 		if self.form_data.get("sort"):
 			self.order = self.form_data.get("sort").lower()
 			if self.order == "ascending":
@@ -86,91 +99,81 @@ class SearchForm(Search):
 				self.order = -1
 		else:
 			self.order = -1
-
 		return self.order
 
-	def format_inputs(self):
-		# Removes indeximg 
+	def search_input(self):		
+		recipes = [x for x in self.text(str(self.form_data["search_input"].lower()))]
+		return recipes
+
+
+	def form_filters(self):		
+		for key in self.form_data:
+			value_key = key
+			key = key.split("-")
+			key = key[0]
+			key = key.strip()
+			for value in self.form_data[value_key]:
+				search_filter = dict()
+				search_filter[key] = value.lower()
+				self.filters.append(search_filter)
+		return self.filters
+
+	def format_tags(self):
+		# Removes indeximg
 		# and group inputs together
 		formated_inputs = {}
+
 		for key in self.form_data:
-			if key ==  "_id":
+			if key == "_id":
 				continue
 			value_key = key
 			key = key.split("-")
 			key = key[0]
 			if key in formated_inputs:
-				formated_inputs[key].append(self.form_data[value_key].lower())
+				formated_inputs[key].append(
+					self.form_data[value_key].lower())
 			else:
 				formated_inputs[f"{key}"] = []
-				formated_inputs[key].append(self.form_data[value_key].lower())
-
+				formated_inputs[key].append(
+					self.form_data[value_key].lower())
 		self.form_data = formated_inputs
 
 		return self.form_data
 
-	def get_recipes(self):
-		# First search if any diets are required
-		# as that is the best initial filter
-		if "diets" in self.form_data:
-			return self.all_filters(key="diets", value=self.form_data["diets"][0])
-		if self.form_data["dishTypes"]:
-			key = self.form_data.get("search_by")[0]
-			value = {"$in": [f"{self.form_data.get('search_input')[0]}"]}
-			del self.form_data["search_input"]
-			del self.form_data["search_by"]
-			return self.all_filters(key=key, value=value)
-		else:
-			del self.form_data["search_input"]
-			del self.form_data["search_by"]
-		print(self.form_data)
-		return self.form_data
-
-	def results(self):
-		recipes = [x for x in recipes_colection.find()]
-		inputs = self.form_data
-		result = []
-
-		for recipe in recipes:
-			for key in inputs:
-				if key == "search_input" or key == "search_by":
-					continue
-				for value in inputs[key]:
-					if value in recipe["recipes"][0][key]:
-						result.append(recipe)
-
-		return result
+	def search_tags(self):
+		recipes = [x for x in self.match(self.form_filters())]
+		return recipes
 
 # DB classes
 
 class Database:
 
-    def users(self):
-        return users_colection.find()
+	def users(self):
+		return users_colection.find()
 
-    def forms(self, keys):
-        pass
+	def forms(self, keys):
+		pass
 
-    def update(self, key):
-        result = set()
-        for x in Search(recipes_colection, "recipes").sort_find_all():
-            x = x['recipes'][0][f'{key}']
-            for y in x:
-                result.add(y)
-        return result
+	def update(self, key):
+		result = set()
+		for x in Search(recipes_colection, "recipes").sort_find_all():
+			x = x['recipes'][0][f'{key}']
+			for y in x:
+				result.add(y)
+		return result
 
-    def update_db(self, key, form_keys):
-        form = {}
-        for x in key:
-            form[f"{x}"] = []
-            for y in self.update(x):
-                form[f"{x}"].append(y.capitalize())
-        return form
+	def update_db(self, key, form_keys):
+		form = {}
+		for x in key:
+			form[f"{x}"] = []
+			for y in self.update(x):
+				form[f"{x}"].append(y.capitalize())
+		return form
 
-    def update_search_form(self, key=["dishTypes", "cuisines", "diets"]):
-        form = self.update_db(key, key)
-        form["popularity"] = ["Ascending", "Decreasing"]
-        forms_colection.insert_one(form)
+	def update_search_form(self, key=["dishTypes", "cuisines", "diets"]):
+		form = self.update_db(key, key)
+		form["popularity"] = ["Ascending", "Decreasing"]
+		forms_colection.insert_one(form)
 
 # Main class for add / edit recipe
 
@@ -179,7 +182,7 @@ class Recipe(dict):
 	# Make it as constractor
 
 	def __init__(self, form_data):
-		self.recipes = [self.recipe_schema(self.formate_data(form_data))]
+		self.recipe = self.recipe_schema(self.formate_data(form_data))
 
 	def formate_data(self, form_data):
 		formated_inputs = {}
@@ -207,11 +210,11 @@ class Recipe(dict):
 		steps = [{"steps": []}]
 		for step in form["step"]:
 			steps[0]["steps"].append(
-                            {
-                                "number": len(steps) + 1,
-                                "step": step
-                            }
-                        )
+				{
+					"number": len(steps) + 1,
+					"step": step
+				}
+			)
 		return steps
 
 	def recipe_schema(self, form):
@@ -231,3 +234,6 @@ class Recipe(dict):
 			"creditsText": form["creditsText"][0],
 			"visibility": False
 		}
+
+
+

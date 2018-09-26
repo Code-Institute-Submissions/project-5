@@ -18,7 +18,7 @@ function add_indegrient(btn) {
 	$(`
 		<li class="list-group">
 			<div class="add-remove-element">
-				<button onclick="add_indegrient()" class="add-element btn btn-success" type="button"><i class="fas fa-plus"></i></button>
+				<button onclick="add_indegrient(this)" class="add-element btn btn-success" type="button"><i class="fas fa-plus"></i></button>
 				<button onclick="remove_indegrient(this)" class="add-element btn btn-danger" type="button"><i class="fas fa-trash-alt"></i></button>
 			</div>
 			<input name="ingredient-${len + 1}" value="" type="text" class="col-8 form-control"

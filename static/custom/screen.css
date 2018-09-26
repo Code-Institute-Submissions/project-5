@@ -9,7 +9,8 @@
 	.search-overlay {
 		position: fixed;
 	}
-	.btn-outline-success {
+	.btn-outline-success,
+	.navbar .btn-outline-warning {
 		margin-left: 10px;
 	}
 }

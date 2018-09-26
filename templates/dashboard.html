@@ -38,6 +38,13 @@
 							<ul>
 								<li>email: {{user.email}}</li>
 								<li>password: {{user.password}}</li>
+								<li>
+									<ul>Recipes:
+										{% for id in user.recipes %}
+										<li>{{id}}</li>
+										{% endfor %}
+									</ul>
+								</li>
 							</ul>
 						</div>
 					</div>

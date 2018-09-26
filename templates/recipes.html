@@ -13,11 +13,13 @@
 	<div class="row">
 		{% for recipe in recipes %}
 		<div class="card col-md-4">
-			<a href="{{url_for('recipe', recipe_id=recipe._id)}}">
-				<img class="card-img-top" src="{{ recipe.recipes[0].image }}" alt="{{recipe.recipes[0].title}}">
-			</a>
-			{% set recipe = recipe.recipes[0] %}
-			<h5 class="card-title">{{ recipe.title }}</h5>
+			<div>
+				<a href="{{url_for('recipe', recipe_id=recipe._id)}}">
+					<img class="card-img-top" src="{{ recipe.image }}" alt="{{recipe.title}}">
+				</a>
+			</div>
+			{% set recipe = recipe %}
+			<h5 class="text-center card-title">{{ recipe.title }}</h5>
 			<hr>
 			{% include "recipe-template.html" %}
 		</div>

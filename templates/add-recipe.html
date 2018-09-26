@@ -6,7 +6,7 @@
 
 {% block main_content %}
 
-{% set recipes = recipe_schema.recipe_schema[0] %}
+{% set recipes = recipe_schema %}
 {% set form_action = "{{ url_for('add_recipe', user_id=user_id) }}" %}
 
 <section class="vh100 container-fluid">
@@ -19,4 +19,6 @@
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='custom/add-edit.js') }}"></script>
-{% endblock scripts %}
+{% endblock scripts %}.
+
+

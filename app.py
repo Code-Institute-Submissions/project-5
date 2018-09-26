@@ -119,6 +119,7 @@ def profile(user_id):
     if 'user' in session:
         user = Search(users_colection, "users").find_one_by_id(user_id)
         return render_template("profile.html", page_title="profile", user=user, forms=forms)
+		
 
     return redirect(url_for('index', forms=forms))
 
@@ -135,7 +136,7 @@ Recipes
 
 @app.route('/recipes')
 def recipes():
-    recipes_in_db = Search(recipes_colection, "recipes").sort_find_all()
+    recipes_in_db = Search(recipes_colection).sort_find_all()
     forms = forms_colection.find()
     if 'user' in session:
         user_in_db = users_colection.find_one({"username": session['user']})
@@ -150,11 +151,11 @@ def recipe(recipe_id):
 	recipe = Search(recipes_colection).find_one_by_id(recipe_id)
 	forms = forms_colection.find()
 	if request.method == "POST":
-		return render_template("recipe.html", page_title=recipe['recipes'][0]['title'], recipe_id=recipe_id, recipe=recipe, forms=forms)
+		return render_template("recipe.html", page_title=recipe['title'], recipe_id=recipe_id, recipe=recipe, forms=forms)
 	if 'user' in session:
 		user_in_db = users_colection.find_one({"username": session['user']})
-		return render_template("recipe.html", page_title=recipe['recipes'][0]['title'], recipe_id=recipe_id, recipe=recipe, forms=forms,  user_in_db=user_in_db, user_id=user_in_db['_id'])
-	return render_template("recipe.html", page_title=recipe['recipes'][0]['title'], recipe_id=recipe_id, recipe=recipe, forms=forms)
+		return render_template("recipe.html", page_title=recipe['title'], recipe_id=recipe_id, recipe=recipe, forms=forms,  user_in_db=user_in_db, user_id=user_in_db['_id'])
+	return render_template("recipe.html", page_title=recipe['title'], recipe_id=recipe_id, recipe=recipe, forms=forms)
 
 # Add Recipe
 
@@ -162,17 +163,19 @@ def recipe(recipe_id):
 @app.route('/add_recipe/<user_id>', methods=['GET', 'POST'])
 def add_recipe(user_id):
     forms = forms_colection.find()
-    recipe_schema = Search(shemas_colection, "recipes").find_one_by_id(recipe_schema_id)
+    recipe_schema = Search(shemas_colection).find_one_by_id(recipe_schema_id)
     if request.method == "POST":
     	form_data = request.form.to_dict()
     	data = Recipe(form_data)
-    	new_recipe = recipes_colection.insert(data.__dict__)
+    	data = data.__dict__
+    	new_recipe = recipes_colection.insert(data["recipe"])
     	recipe_id = str(new_recipe)
-    	recipe = Search(recipes_colection).find_one_by_id(recipe_id)
+    	recipe = data["recipe"]
+    	users_colection.update({"username": session['user']}, {'$push': {'recipes': recipe_id}})
     	user_in_db = users_colection.find_one({"username": session['user']})
-    	users_colection.update({'_id': user_in_db['_id']}, {'$push': {'recipes': recipe_id}})
+
     	flash("Recipe added. Thank you!")    	
-    	return redirect(url_for("recipe", recipe_id=recipe_id, recipe=recipe, forms=forms, user_in_db=user_in_db, user_id=user_in_db['_id'], page_title=recipe['recipes'][0]['title']))
+    	return redirect(url_for("recipe", recipe_id=recipe_id, recipe=recipe, forms=forms, user_in_db=user_in_db, user_id=user_in_db['_id'], page_title=recipe['title']))
     if 'user' in session:
         user_in_db = users_colection.find_one({"username": session['user']})
         return render_template("add-recipe.html", page_title="Add recipe", user_in_db=user_in_db, user_id=user_in_db['_id'], forms=forms, recipe_schema=recipe_schema)
@@ -188,34 +191,56 @@ def edit_recipe(recipe_id, user_id):
 	if request.method == "POST":
 		form_data = request.form.to_dict()
 		data = Recipe(form_data)
-		recipes_colection.update({'_id': ObjectId(recipe_id)}, data.__dict__)
-		recipe = data.__dict__
+		data = data.__dict__
+		recipes_colection.update({'_id': ObjectId(recipe_id)}, data["recipe"])
+		recipe = data["recipe"]
 		flash("Your recipe has been updated")
 		user_in_db = users_colection.find_one({"username": session['user']})
-		return redirect(url_for("recipe", page_title=recipe['recipes'][0]['title'], recipe_id=recipe_id, recipe=recipe, forms=forms, user_in_db=user_in_db, user_id=user_in_db['_id']))
+		return redirect(url_for("recipe", page_title=recipe['title'], recipe_id=recipe_id, recipe=recipe, forms=forms, user_in_db=user_in_db, user_id=user_in_db['_id']))
 	else:
 		if 'user' in session:
 			recipe = Search(recipes_colection).find_one_by_id(recipe_id)
 			user_in_db = Search(users_colection, "").find_one_by_id(user_id)
 			for x in user_in_db["recipes"]:
 				if x == recipe_id:
-					return render_template("edit-recipe.html", page_title="Edit recipe", recipe_id=recipe_id, recipe=recipe, forms=forms,  user_in_db=user_in_db, user_id=user_in_db['_id'])
+					return render_template("edit-recipe.html", page_title="Edit recipe", recipe_id=recipe_id, recipes=recipe, forms=forms,  user_in_db=user_in_db, user_id=user_in_db['_id'])
 	return redirect(url_for('index'))
 
 
 """ Search  """
 
-# Search via form
+# Search via form input
 
 
-@app.route('/search_form', methods=['POST'])
-def search_form():
+@app.route('/input_form_search', methods=['GET', 'POST'])
+def input_form_search():
     if request.method == "POST":
         form_data = request.form.to_dict()
         forms = forms_colection.find()
-        # For testing only
-        mongo.db.pokus.insert_one(form_data)
-        return render_template("recipes.html", page_title="Recipes", recipes=SearchForm().search_reluts(form_data), forms=forms)
+        recipes = SearchForm().search_by_input(form_data)
+        return render_template("recipes.html", recipes=recipes, forms=forms)
+
+# Search via form tags
+
+@app.route('/tags_form_search', methods=['GET', 'POST'])
+def tags_form_search():
+    if request.method == "POST":
+        form_data = request.form.to_dict()
+        forms = forms_colection.find()
+        recipes = SearchForm().search_by_tags(form_data)
+        return render_template("recipes.html", recipes=recipes, forms=forms)
+
+# Get how many recipes match the results
+
+
+@app.route('/num_of_results', methods=['POSt'])
+def num_of_results():
+    if request.method == "POST":
+    	form_data = request.form.to_dict()
+    	recipes = SearchForm().search_by_tags(form_data)
+    	return str(len(recipes))
+		
+
 
 
 # Search by Dish types
@@ -224,22 +249,20 @@ def search_form():
 @app.route('/dish_types/<dish_type>')
 def search_by_type(dish_type):
     forms = forms_colection.find()
-    recipes_in_db = Search(colection=recipes_colection,
-                           dic_name="recipes").all_filters(key="dishTypes", value=dish_type)
+    recipes_in_db = Search(colection=recipes_colection).all_filters(key="dishTypes", value=dish_type)
     if 'user' in session:
         user_in_db = users_colection.find_one({"username": session['user']})
         return render_template("recipes.html", page_title=dish_type.capitalize() + "s", recipes=recipes_in_db, user_id=user_in_db['_id'], forms=forms)
     return render_template("recipes.html", page_title=dish_type.capitalize() + "s", recipes=recipes_in_db, forms=forms)
 
 
-# Search by Diets types
+# Search by Diets
 
 
 @app.route('/diet_types/<diet_type>')
 def search_by_diet(diet_type):
     forms = forms_colection.find()
-    recipes_in_db = Search(colection=recipes_colection,
-                           dic_name="recipes").all_filters(key="diets", value=diet_type)
+    recipes_in_db = Search(colection=recipes_colection).all_filters(key="diets", value=diet_type)
     if 'user' in session:
         user_in_db = users_colection.find_one({"username": session['user']})
         return render_template("recipes.html", page_title=diet_type.capitalize(), recipes=recipes_in_db, user_id=user_in_db['_id'], forms=forms)
@@ -251,8 +274,7 @@ def search_by_diet(diet_type):
 @app.route('/search_by_time')
 def search_by_time():
     forms = forms_colection.find()
-    recipes_in_db = Search(colection=recipes_colection,
-                           dic_name="recipes", order=1, sort="readyInMinutes").sort_find_all()
+    recipes_in_db = Search(colection=recipes_colection, order=1, sort="readyInMinutes").sort_find_all()
     if 'user' in session:
         user_in_db = users_colection.find_one({"username": session['user']})
         return render_template("recipes.html", page_title="Time", recipes=recipes_in_db, user_id=user_in_db['_id'], forms=forms)
@@ -264,8 +286,7 @@ def search_by_time():
 @app.route('/search_by_cuisine/<cuisine>')
 def search_by_cuisines(cuisine):
     forms = forms_colection.find()
-    recipes_in_db = Search(colection=recipes_colection,
-                           dic_name="recipes").all_filters(key="cuisines", value=cuisine)
+    recipes_in_db = Search(colection=recipes_colection).all_filters(key="cuisines", value=cuisine)
     if 'user' in session:
         user_in_db = users_colection.find_one({"username": session['user']})
         return render_template("recipes.html", page_title=cuisine.capitalize(), recipes=recipes_in_db, user_id=user_in_db['_id'], forms=forms)
@@ -279,16 +300,16 @@ def search_by_cuisines(cuisine):
 
 @app.route('/admin_dashboard')
 def dashboard():
-	if request.method == "GET":
-		"""                       Just for the testing            """
+	""" if request.method == "GET":
+		
 
-		hidden_recipes = recipes_colection.delete_many({"recipes.visibility": False})
+		hidden_recipes = recipes_colection.delete_many({"visibility": False}) """
 
 	if 'user' in session:
 		user_in_db = users_colection.find_one({"username": session['user']})
 		users = users_colection.find()
 		forms = forms_colection.find()
-		hidden_recipes = recipes_colection.find({"recipes.visibility": False})
+		hidden_recipes = recipes_colection.find({"visibility": False})
 		return render_template("dashboard.html", page_title="dashboard", users=users, forms=forms, hidden_recipes=hidden_recipes, user_id=user_in_db['_id'])
 	return redirect(url_for('index'))
 

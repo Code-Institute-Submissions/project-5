@@ -18,13 +18,12 @@
 
 {% block main_content %}
 
-{% set recipes = recipe.recipes[0] %}
 
 <section class="vh100 container">
 	<div class="row">
 		<div class="container">
 			<div class="row">
-				<h2 class=" col-12 text-center">{{recipes.title|title}} 
+				<h2 class=" col-12 text-center">{{recipe.title|title}} 
 					<button onclick="return print_recipe('{{recipe._id}}')" class="btn btn-light"><i class="fas fa-print"></i>
 					</button>
 				</h2>
@@ -34,7 +33,7 @@
 				<div class="col-xs-12 col-md-6">
 					<div class="row">
 						<div class="col-12">
-							<img class="card-img-top" src="{{ recipes.image }}" alt="{{recipes.title}}">
+							<img class="card-img-top" src="{{ recipe.image }}" alt="{{recipe.title}}">
 							<hr>
 						</div>
 						{% if session %}
@@ -44,7 +43,7 @@
 									<button class="btn btn-outline-success"><i class="fas fa-thumbs-up"></i></button>
 								</div>
 								<div class="col-4">
-									<p><i class="fas fa-star fa-lg"></i> {{ recipes.aggregateLikes }}</p>
+									<p><i class="fas fa-star fa-lg"></i> {{ recipe.aggregateLikes }}</p>
 								</div>
 								<div class="col-4">
 									<button class="btn btn-outline-danger"><i class="fas fa-thumbs-up fa-rotate-180"></i></button>
@@ -53,18 +52,18 @@
 						</div>
 						{% else %}
 						<div class="col-12 text-center">
-							<p>You must be loged in to vote / edit recipes</p>
-							<p><i class="fas fa-star fa-lg"></i> {{ recipes.aggregateLikes }}</p>
+							<p>You must be loged in to vote / edit recipe</p>
+							<p><i class="fas fa-star fa-lg"></i> {{ recipe.aggregateLikes }}</p>
 						</div>
 						{% endif %}
 					</div>
 				</div>
 				<div class="col-xs-12 col-md-6">
 					<p class="card-text"></p><a href="{{url_for('search_by_time')}}"><i class="fas fa-clock"></i> {{
-						recipes.readyInMinutes }} min</a>
+						recipe.readyInMinutes }} min</a>
 					</p>
 					<ul class="list-group list-group-flush">
-						{% for ingredient in recipes.extendedIngredients %}
+						{% for ingredient in recipe.extendedIngredients %}
 						<li class="list-group-item">
 							{{ingredient.original|title}}
 						</li>
@@ -79,7 +78,7 @@
 				<h3 class="col-12 text-center">Steps</h3>
 				<div class="col-xs-12">
 					<ol>
-						{% set list = recipes.analyzedInstructions[0].steps %}
+						{% set list = recipe.analyzedInstructions[0].steps %}
 						{% for dic in list %}
 						<li>{{dic.step}}</li>
 						{% endfor %}
@@ -88,19 +87,19 @@
 			</div>
 		</div>
 	</div>
-	{% if recipes.winePairing.pairingText %}
+	{% if recipe.winePairing.pairingText %}
 	<hr>
 	<div class="row">
 		<h3 class="col-12 text-center">Wine pairing</h3>
 		<div class="col-xs-12 text-center">
-			<p>{{recipes.winePairing.pairingText}}</p>
+			<p>{{recipe.winePairing.pairingText}}</p>
 		</div>
 	</div>
 	{% endif %}
 	<hr>
-	<h6 class="text-center">Credits: {{recipes.creditsText}}</h6>
+	<h6 class="text-center">Credits: {{recipe.creditsText}}</h6>
 	<hr>
-	{% set recipe = recipe.recipes[0] %}
+	{% set recipe = recipe %}
 	{% if recipe.dishTypes or recipe.cuisines or recipe.diets %}
 	<h6 class="text-center"> Recipe tags </h6>
 	{% else %}
