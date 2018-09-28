@@ -3,9 +3,9 @@
 
 {% block main_content %}
 
+<div class="pokus"></div>
 
-<section class="vh100 container">
-
+<section class="vh100 container">	
 	{% if page_title %}
 	<h2 class="text-center"> {{ page_title }}</h2>
 	<hr>
@@ -18,8 +18,12 @@
 					<img class="card-img-top" src="{{ recipe.image }}" alt="{{recipe.title}}">
 				</a>
 			</div>
-			{% set recipe = recipe %}
 			<h5 class="text-center card-title">{{ recipe.title }}</h5>
+			<div class="row justify-content-center">				
+				<p>
+					<i class="fas fa-star fa-lg"></i> {{ recipe.aggregateLikes }}
+				</p>
+			</div>
 			<hr>
 			{% include "recipe-template.html" %}
 		</div>

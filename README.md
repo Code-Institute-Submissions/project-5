@@ -52,11 +52,25 @@
 - Moved Recipe class to classes.py
 - Slightly improved database structure for better readability and manipulation with data
 - Extended the Search class to be able to search by $match, $text
-
+- Search class now dynamically set the default limit based on documents count
+- User is now redirected to the last page viewed when log-in/out
+- Add flashed messages for user when login-in / out and search recipes errors
+- Moved "Trivia" section to top for better visibility
 
 ##### Search form
 
 - Added second button to search form for user to clearly see what he is searching for
 - While changing the tags user now see the number of results before searching
 - If no recipes found the search button is disabled and user is asked to remove some of the filters
-- Removed "Search by" as this was getting too confusing for user. Instead the search inout searches fro any matching results
+- Removed "Search by" as this was getting too confusing for user. Instead the search input searches fro any matching results
+- Added min and max length to imput search. JS also chceking for input length and enabling / disabling search input btn
+- JS now also checking how many recipes are found on input change
+- Create separate view for mobile devices search
+
+### What could be done better
+
+- Could take the advantege of WTForms which could greatly speed up the development
+- MUCH better error handling. Right now minimum to none
+- Again tests has been done manualy or with litlle use of automated tests
+- Also need to push to GitHub more often and or number the pushes more clearly 
+- Still think that this project is "better" done by SQL due to relation between recipes, tags and so on

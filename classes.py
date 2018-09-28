@@ -22,11 +22,11 @@ app.config['SECRET_KEY'] = log_in_key()
 # Search classes
 
 class Search:
-	def __init__(self, colection, sort="aggregateLikes", order=int(-1), limit=int(21)):
+	def __init__(self, colection, sort="aggregateLikes", order=int(-1)):
 		self.colection = colection
 		self.sort = sort
 		self.order = order
-		self.limit = limit
+		self.limit = len(self)
 
 	def find_one_by_id(self, id):
 		return self.colection.find_one({"_id": ObjectId(id)})
@@ -55,23 +55,19 @@ class Search:
 		return self.colection.find().count()
 
 class SearchForm(Search):
-	def __init__(self):
+	def __init__(self, form_data):
 		Search.__init__(self, colection=recipes_colection)
-
-	def search_by_tags(self, form_data):
 		self.form_data = form_data
 		self.limit = int(self.get_limit())
 		self.order = self.popularity()
+
+	def search_by_tags(self):		
 		self.filters = [{"visibility": True}]
 		del self.form_data["search_input"]
 		self.format_tags()
 		return self.search_tags()
 
-	def search_by_input(self, form_data):
-		self.form_data = form_data
-		self.limit = int(self.get_limit())
-		self.order = self.popularity()
-
+	def search_by_input(self):
 		if self.form_data["search_input"] != "":
 			return self.search_input()
 		else:
@@ -85,7 +81,6 @@ class SearchForm(Search):
 			return self.limit
 		else:
 			del self.form_data["limit"]
-			self.limit = 5000  # All recipes in db
 		return self.limit
 
 	def popularity(self):
@@ -101,12 +96,7 @@ class SearchForm(Search):
 			self.order = -1
 		return self.order
 
-	def search_input(self):		
-		recipes = [x for x in self.text(str(self.form_data["search_input"].lower()))]
-		return recipes
-
-
-	def form_filters(self):		
+	def form_filters(self):
 		for key in self.form_data:
 			value_key = key
 			key = key.split("-")
@@ -139,6 +129,10 @@ class SearchForm(Search):
 		self.form_data = formated_inputs
 
 		return self.form_data
+
+	def search_input(self):		
+		recipes = [x for x in self.text(str(self.form_data["search_input"].lower()))]
+		return recipes	
 
 	def search_tags(self):
 		recipes = [x for x in self.match(self.form_filters())]

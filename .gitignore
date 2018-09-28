@@ -1,6 +1,7 @@
 .vscode
 key.py
 db.py
+jupyter_tests.py
 test.html
 __pycache__
 tests.ipynb

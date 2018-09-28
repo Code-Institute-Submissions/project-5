@@ -33,7 +33,7 @@
 
 <body>
 	<!-- Navbar -->
-	<nav class="navbar navbar-expand-lg navbar-light fixed-top">
+	<nav class="navbar navbar-expand-md navbar-light fixed-top">
 		<div class="container">
 			<a class="navbar-brand font-weight-bold" href="/">Cookbook</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav" aria-controls="navbarSupportedContent"
@@ -49,26 +49,30 @@
 
 					{% if session.user %}
 					<li class="nav-item">
-						<a class="nav-link" href="{{url_for('profile', user_id=user_id)}}">Profile</a>						
+						<a class="nav-link" href="{{url_for('profile', user_id=user_id)}}">Profile</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="/add_recipe/{{ user_id }}">Add Recipe</a>
 					</li>
-					{% endif %} 
+					{% endif %}
 
+					{% block search_form_btn %}
 					<li class="nav-item">
 						<button type="button" id="search-btn" class="btn btn-outline-info">
 							<i class="fas fa-search"></i>
 						</button>
 					</li>
+					{% endblock search_form_btn %}
 
 					{% if session.user %}
 					<li class="nav-item text-right">
-						<button class="btn btn-outline-warning my-2 my-sm-0" type="button" data-toggle="modal" data-target="#log-out-modal"><i class="fas fa-sign-out-alt"></i></button>
+						<button class="btn btn-outline-warning my-2 my-sm-0" type="button" data-toggle="modal" data-target="#log-out-modal"><i
+							 class="fas fa-sign-out-alt"></i></button>
 					</li>
-					
+
 					{% else %}
-					<button class="btn btn-outline-success my-2 my-sm-0" type="button" data-toggle="modal" data-target="#log-in-modal"><i class="fas fa-sign-in-alt"></i>
+					<button class="btn btn-outline-success my-2 my-sm-0" type="button" data-toggle="modal" data-target="#log-in-modal"><i
+						 class="fas fa-sign-in-alt"></i>
 					</button>
 					{% endif %}
 
@@ -76,11 +80,12 @@
 
 			</div>
 		</div>
-
 	</nav>
 
-
+	{% block search_form_modal %}
 	{% include 'search-form.html' %}
+	{% endblock search_form_modal %}
+
 
 	<!-- Main Content -->
 
@@ -113,7 +118,7 @@
 				{% if messages %}
 				{% for message in messages %}
 				<p>{{ message }}</p>
-				{% endfor %}				
+				{% endfor %}
 				{% endif %}
 				{% endwith %}
 			</div>
@@ -180,8 +185,8 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 	 crossorigin="anonymous"></script>
 	<!-- Main JS-->
-	<script src="{{ url_for('static', filename='custom/main.js') }}"></script>	
-	
+	<script src="{{ url_for('static', filename='custom/main.js') }}"></script>
+
 	{% block scripts %}
 
 	{% endblock scripts %}

@@ -140,21 +140,6 @@ function remove_step(input) {
 
 
 /*
-Validate form
-*/
-
-function validate_form(recipe, user) {
-	
-}
-
-/* 
-Edit recipe post request
-*/
-
-
-
-
-/*
 Others
 */
 
