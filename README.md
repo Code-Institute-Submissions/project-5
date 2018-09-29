@@ -44,7 +44,7 @@
 - Added more JS for user experiences
 - Fixed many errors along the way
 - Added filters and errors handling in add / endit form
-- Users are now able to print the recipes 
+- Users are now able to print the recipes
 
 #### 1.5
 
@@ -74,3 +74,8 @@
 - Again tests has been done manualy or with litlle use of automated tests
 - Also need to push to GitHub more often and or number the pushes more clearly 
 - Still think that this project is "better" done by SQL due to relation between recipes, tags and so on
+
+#### 1.6
+
+- Deployed to Heroku for testing the app on mobile devices
+- Added env variables and removed key.py as no longer in use

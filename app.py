@@ -7,14 +7,13 @@ from bson.objectid import ObjectId
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from key import db_name, uri, log_in_key
 from classes import Search, SearchForm, Database, Recipe
 
 app = Flask(__name__)
 # mongoDB config
-app.config['MONGO_DBNAME'] = db_name()
-app.config['MONGO_URI'] = uri()
-app.config['SECRET_KEY'] = log_in_key()
+app.config['MONGO_DBNAME'] = os.environ.get("MONGO_DBNAME")
+app.config['MONGO_URI'] = os.environ.get("MONGO_URI")
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 
 mongo = PyMongo(app)
 
@@ -372,9 +371,14 @@ def error():
 
 
 if __name__ == '__main__':
-    app.run(host=os.environ.get('IP'),
-            port=os.environ.get('PORT'),
-            debug=True)
+	if os.environ.get("DEVELOPMENT"):
+		app.run(host=os.environ.get('IP'),
+				port=os.environ.get('PORT'),
+				debug=True)
+	else:
+		app.run(host=os.environ.get('IP'),
+                    port=os.environ.get('PORT'),
+                    debug=False)
 
 
 """ 

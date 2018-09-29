@@ -1,23 +1,24 @@
+
+import os
 from flask import Flask, redirect, request, url_for
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from key import db_name, uri, log_in_key
-
 app = Flask(__name__)
 
 # mongoDB config
-app.config['MONGO_DBNAME'] = db_name()
-app.config['MONGO_URI'] = uri()
+app.config['MONGO_DBNAME'] = os.environ.get("MONGO_DBNAME")
+app.config['MONGO_URI'] = os.environ.get("MONGO_URI")
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 
 mongo = PyMongo(app)
 users_colection = mongo.db.users
 recipes_colection = mongo.db.recipes
 forms_colection = mongo.db.forms
 
-app.config['SECRET_KEY'] = log_in_key()
+
 
 # Search classes
 
