@@ -27,8 +27,8 @@
 - Redesign  Search class to work for any colection
 - helper.py no longer used
 - Updating db now via JS for better user experiences
-- Added SearchForm class for main search 
-- Also connected the form to back-end 
+- Added SearchForm class for main search
+- Also connected the form to back-end
 
 #### 1.3
 
@@ -67,15 +67,26 @@
 - JS now also checking how many recipes are found on input change
 - Create separate view for mobile devices search
 
+#### 1.6
+
+- Deployed to Heroku for testing the app on mobile devices
+- Added env variables and removed key.py as no longer in use
+
+#### 1.7
+
+- Send out the app to users for testing
+
+
+## Testing and improvements
+
+- xk lines of manual testing which I never documented :(
+- FIxed bug in add/edit recipe where JS was incorectly injecting maxlength of 60 instead of 150 in "Steps" section
+
+
 ### What could be done better
 
 - Could take the advantege of WTForms which could greatly speed up the development
 - MUCH better error handling. Right now minimum to none
 - Again tests has been done manualy or with litlle use of automated tests
-- Also need to push to GitHub more often and or number the pushes more clearly 
+- Also need to push to GitHub more often and or number the pushes more clearly
 - Still think that this project is "better" done by SQL due to relation between recipes, tags and so on
-
-#### 1.6
-
-- Deployed to Heroku for testing the app on mobile devices
-- Added env variables and removed key.py as no longer in use

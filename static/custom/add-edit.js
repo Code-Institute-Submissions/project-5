@@ -102,7 +102,7 @@ function add_step(btn) {
 			<button onclick="add_step(this)" class="add-element btn btn-success" type="button"><i class="fas fa-plus"></i></button>
 			<button onclick="remove_step(this)" class="add-element btn btn-danger" type="button"><i class="fas fa-trash-alt"></i></button>
 		</div>
-		<input name="step-${len + 1}" type="text" class="col-8 col-lg-10 form-control" placeholder="In a medium bowl mix the sugar, yeast, and water" minlength="10" maxlength="60" required>
+		<input name="step-${len + 1}" type="text" class="col-8 col-lg-10 form-control" placeholder="In a medium bowl mix the sugar, yeast, and water" minlength="10" maxlength="150" required>
 	</li>
 	`).insertAfter(btn_parent);
 	
