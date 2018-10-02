@@ -35,7 +35,7 @@
 						<button onclick="remove_indegrient(this)" class="add-element btn btn-danger" type="button"><i class="fas fa-trash-alt"></i></button>
 					</div>
 					<input name="ingredient-{{loop.index}}" value="{{ingredient.original}}" type="text" class="col-8 form-control"
-					 placeholder="{{ingredient.original|title or '2 cups all purpose flour'}}" minlength="5" maxlength="30" required>
+					 placeholder="{{ingredient.original|title or '2 cups all purpose flour'}}" minlength="3" maxlength="30" required>
 				</li>
 				{% endfor %}
 			</ul>

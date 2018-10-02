@@ -115,10 +115,11 @@ Overlay
 }
 
 #alerts {
-    position: fixed;
+    position: absolute;
     display: none;
     min-height: 50px;
-    bottom: 0;
+	top: 95%;
+	left: 0;
     z-index: 999;
     background-color: rgba(0, 0, 0, 0.7);
     color: #ffffff;
@@ -133,7 +134,7 @@ Nav
 */
 
 .navbar {
-    background-color: #fefefe;
+	background-color: #fefefe;
 }
 
 /*
@@ -174,7 +175,15 @@ Main section
 footer
 */
 
-#footer {
-    height: 150px;
+#footer {	
     background-color: #000000;
+}
+
+#footer a {
+	margin: 0px 15px;
+	color: #ffffff;
+}
+#footer hr {
+	width: 75%;
+	border-top: 1px solid #ffffff;
 }

@@ -75,12 +75,17 @@
 #### 1.7
 
 - Send out the app to users for testing
+- Added links to Footer
 
 
 ## Testing and improvements
 
 - xk lines of manual testing which I never documented :(
 - FIxed bug in add/edit recipe where JS was incorectly injecting maxlength of 60 instead of 150 in "Steps" section
+- Reduced limit on "Ingredients" input minlength from 5 to 3
+- Moved Alerts to top for better visibility
+- Decided to use the mobile search for tablets as well
+
 
 
 ### What could be done better

@@ -105,7 +105,7 @@ Search Form
 */
 
 $("#search-btn").on("click", function() {
-	if (screen.width <= 699) {
+	if (screen.width < 1400) {
 		document.location = "/mobile_search";
 	} else {
 		$(".search-overlay").slideToggle();
