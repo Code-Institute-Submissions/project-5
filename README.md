@@ -24,7 +24,7 @@
 - Added fundamentals for single recipe page
 - Added Search class for searching the database for recipes
 - Added functionality to search by dish types, cuisines, time needed and diets
-- Redesign  Search class to work for any colection
+- Redesign  Search class to work for any collection
 - helper.py no longer used
 - Updating db now via JS for better user experiences
 - Added SearchForm class for main search
@@ -78,6 +78,12 @@
 - Added links to Footer
 
 
+#### 1.8 
+
+- Added Pagination to recipes and search
+- Search class has now option to search without limiting the results
+
+
 ## Testing and improvements
 
 - xk lines of manual testing which I never documented :(
@@ -85,6 +91,7 @@
 - Reduced limit on "Ingredients" input minlength from 5 to 3
 - Moved Alerts to top for better visibility
 - Decided to use the mobile search for tablets as well
+- At least one tag must be selected to use the for for searching recipes
 
 
 

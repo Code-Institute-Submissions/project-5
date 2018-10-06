@@ -1,11 +1,18 @@
 {% extends "base.html" %}
 
+{% block css %}
+  <style>
+	  section {
+		  padding-bottom: 25px;
+	  }
+  </style>
+{% endblock css %}
 
 {% block main_content %}
 
 <div class="pokus"></div>
 
-<section class="vh100 container">	
+<section class="vh100 container">
 	{% if page_title %}
 	<h2 class="text-center"> {{ page_title }}</h2>
 	<hr>
@@ -18,8 +25,8 @@
 					<img class="card-img-top" src="{{ recipe.image }}" alt="{{recipe.title}}">
 				</a>
 			</div>
-			<h5 class="text-center card-title">{{ recipe.title }}</h5>
-			<div class="row justify-content-center">				
+			<h5 class="text-center card-title">{{ recipe.title|title }}</h5>
+			<div class="row justify-content-center">
 				<p>
 					<i class="fas fa-star fa-lg"></i> {{ recipe.aggregateLikes }}
 				</p>
@@ -29,5 +36,15 @@
 		</div>
 		{% endfor %}
 	</div>
+	{% if num_of_results > limit %}
+	<hr>
+	<div class="row justify-content-around">
+		{% if offset > 0 %}
+		<a href="{{previous_url}}"><i class="fas fa-angle-left fa-6x"></i></a>
+		{% endif %}
+		{% if offset + limit < num_of_results %} <a href="{{next_url}}"><i class="fas fa-angle-right fa-6x "></i></a>
+			{% endif %}
+	</div>
+	{% endif %}	  
 </section>
 {% endblock main_content %}

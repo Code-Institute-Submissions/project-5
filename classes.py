@@ -14,55 +14,95 @@ app.config['MONGO_URI'] = os.environ.get("MONGO_URI")
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 
 mongo = PyMongo(app)
-users_colection = mongo.db.users
-recipes_colection = mongo.db.recipes
-forms_colection = mongo.db.forms
-
+users_collection = mongo.db.users
+recipes_collection = mongo.db.recipes
+forms_collection = mongo.db.forms
 
 
 # Search classes
 
 class Search:
-	def __init__(self, colection, sort="aggregateLikes", order=int(-1)):
-		self.colection = colection
-		self.sort = sort
-		self.order = order
-		self.limit = len(self)
+    def __init__(self, collection, sort="aggregateLikes", order=int(-1), no_pagination=False, pagination_base="/", limit=12, offset=0):
+        self.collection = collection
+        self.sort = sort
+        self.order = order
+        self.no_pagination = bool(no_pagination)
+        self.pagination_base = str(pagination_base)
+        self.limit = int(limit)
+        self.offset = int(offset)
 
-	def find_one_by_id(self, id):
-		return self.colection.find_one({"_id": ObjectId(id)})
+    def find_one_by_id(self, id):
+        return self.collection.find_one({"_id": ObjectId(id)})
 
-	def sort_find_all(self):
-		return self.colection.find({"visibility": True}).sort([(f'{self.sort}', self.order)]).limit(self.limit)
+    def sort_find_all(self):
+        if self.no_pagination:
+            return self.collection.find({"visibility": True}).sort(
+                [(f'{self.sort}', self.order)]).skip(self.offset)
+        else:
+            results = self.collection.find({"visibility": True}).sort(
+                [(f'{self.sort}', self.order)]).skip(self.offset)
+            num_of_results = results.count()
+            return self.pagination(results.limit(self.limit), num_of_results)
 
-	def match(self, filters):
-		return self.colection.aggregate(
-			[{'$match': {"$and": filters}}, {"$sort": {self.sort: self.order}}, {"$limit": self.limit}])
+    def match(self, filters):
+        if self.no_pagination:
+            return self.collection.aggregate([{'$match': {"$and": filters}}, {"$sort": {self.sort: self.order}}, {"$skip": self.offset}])
+        else:
+            results = self.collection.aggregate(
+                [{'$match': {"$and": filters}}, {"$sort": {self.sort: self.order}}, {"$skip": self.offset}, {"$limit": self.limit}])
+            results = list(results)
+            num_of_results = len(list(self.collection.aggregate(
+                [{'$match': {"$and": filters}}, {"$sort": {self.sort: self.order}}])))
+            return self.pagination(results, num_of_results)
 
-	def text(self, value):
-		self.colection.create_index([("$**", 'text')])
-		return self.colection.find({"$and": [{"visibility": True}, {"$text": {"$search": str(value)}}]}).limit(self.limit)
+    def text(self, value):
+        self.collection.create_index([("$**", 'text')])
+        if self.no_pagination:
+            return self.collection.find({"$and": [{"visibility": True}, {
+                "$text": {"$search": str(value)}}]}).skip(self.offset)
+        else:
+            results = self.collection.find({"$and": [{"visibility": True}, {
+                "$text": {"$search": str(value)}}]}).skip(self.offset).limit(self.limit)
+            num_of_results = results.count()
+            return self.pagination(results.limit(self.limit), num_of_results)
 
-	def all_filters(self, key, value):
-		return self.colection.find({"$and": [{"visibility": True}, {f"{key}": value}]}).sort([(f'{self.sort}', self.order)]).limit(self.limit)
+    def all_filters(self, key, value):
+        if self.no_pagination:
+            return self.collection.find({"$and": [{"visibility": True}, {f"{key}": value}]}).sort(
+                [(f'{self.sort}', self.order)]).skip(self.offset)
+        else:
+            results = self.collection.find({"$and": [{"visibility": True}, {f"{key}": value}]}).sort(
+                [(f'{self.sort}', self.order)]).skip(self.offset).limit(self.limit)
+            num_of_results = results.count()
+            return self.pagination(results.limit(self.limit), num_of_results)
 
-	def random(self, num_of_results):
-		return self.colection.aggregate([{"$sample": {"size": num_of_results}}])
+    def random(self, num_of_results):
+        return self.collection.aggregate([{"$sample": {"size": num_of_results}}])
 
-	def __str__(self):
-		return "Main Search Class"
+    def pagination(self, results, num_of_results):
+        return {
+            'result': list(results),
+            'num_of_results': num_of_results,
+            'next_url': f"/{self.pagination_base}?limit={self.limit}&offset={self.offset + self.limit}",
+            'previous_url': f"/{self.pagination_base}?limit={self.limit}&offset={self.offset - self.limit}"
+        }
 
-	def __len__(self):
-		return self.colection.find().count()
+    def __str__(self):
+        return "Main Search Class"
 
+    def __len__(self):
+        return self.collection.find().count()
 class SearchForm(Search):
-	def __init__(self, form_data):
-		Search.__init__(self, colection=recipes_colection)
+	def __init__(self, form_data, no_pagination=False, offset=int(), pagination_base=""):
+		Search.__init__(self, collection=recipes_collection)
 		self.form_data = form_data
+		self.no_pagination = no_pagination
+		self.offset = offset
+		self.pagination_base = pagination_base
 		self.limit = int(self.get_limit())
 		self.order = self.popularity()
 
-	def search_by_tags(self):		
+	def search_by_tags(self):
 		self.filters = [{"visibility": True}]
 		del self.form_data["search_input"]
 		self.format_tags()
@@ -131,27 +171,27 @@ class SearchForm(Search):
 
 		return self.form_data
 
-	def search_input(self):		
-		recipes = [x for x in self.text(str(self.form_data["search_input"].lower()))]
-		return recipes	
+	def search_input(self):
+		return self.text(str(self.form_data["search_input"].lower()))
 
 	def search_tags(self):
-		recipes = [x for x in self.match(self.form_filters())]
-		return recipes
+		return self.match(self.form_filters())
+		
 
 # DB classes
+
 
 class Database:
 
 	def users(self):
-		return users_colection.find()
+		return users_collection.find()
 
 	def forms(self, keys):
 		pass
 
 	def update(self, key):
 		result = set()
-		for x in Search(recipes_colection, "recipes").sort_find_all():
+		for x in Search(recipes_collection, "recipes").sort_find_all():
 			x = x['recipes'][0][f'{key}']
 			for y in x:
 				result.add(y)
@@ -168,9 +208,10 @@ class Database:
 	def update_search_form(self, key=["dishTypes", "cuisines", "diets"]):
 		form = self.update_db(key, key)
 		form["popularity"] = ["Ascending", "Decreasing"]
-		forms_colection.insert_one(form)
+		forms_collection.insert_one(form)
 
 # Main class for add / edit recipe
+
 
 class Recipe(dict):
 
@@ -229,6 +270,3 @@ class Recipe(dict):
 			"creditsText": form["creditsText"][0],
 			"visibility": False
 		}
-
-
-

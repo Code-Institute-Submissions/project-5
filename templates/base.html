@@ -44,18 +44,18 @@
 			<div class="collapse navbar-collapse" id="main-nav">
 				<ul class="navbar-nav ml-auto text-center">
 					<li class="nav-item hidden-md-down">
-						<a class="nav-link" href="{{url_for('recipes')}}">The Book</a>
+						<a class="nav-link" href="{{url_for('recipes', limit=12, offset=0)}}">All recipes</a>
 					</li>
-
 					{% if session.user %}
 					<li class="nav-item">
 						<a class="nav-link" href="{{url_for('profile', user_id=user_id)}}">Profile</a>
 					</li>
+					<br>
 					<li class="nav-item">
 						<a class="nav-link" href="/add_recipe/{{ user_id }}">Add Recipe</a>
 					</li>
 					{% endif %}
-
+					<br>
 					{% block search_form_btn %}
 					<li class="nav-item">
 						<button type="button" id="search-btn" class="btn btn-outline-info">
@@ -63,13 +63,13 @@
 						</button>
 					</li>
 					{% endblock search_form_btn %}
-
+					<br>
 					{% if session.user %}
 					<li class="nav-item text-right">
 						<button class="btn btn-outline-warning my-2 my-sm-0" type="button" data-toggle="modal" data-target="#log-out-modal"><i
 							 class="fas fa-sign-out-alt"></i></button>
 					</li>
-
+					<br>
 					{% else %}
 					<button class="btn btn-outline-success my-2 my-sm-0" type="button" data-toggle="modal" data-target="#log-in-modal"><i
 						 class="fas fa-sign-in-alt"></i>
@@ -129,9 +129,9 @@
 					<i class="fab fa-instagram fa-2x" aria-hidden="true"></i>
 				</a>
 			</div>
-		</div>
-		<hr>
-		<div class="row text-center">
+		</div>		
+		<div class="row text-center justify-content-center">
+			<hr>
 			<div class="col-12">
 				<a href="https://www.linkedin.com/in/miroslav-svec-58a448151/" target="_blank">
 					CREATED BY MIROSLAV ŠVEC

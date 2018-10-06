@@ -59,7 +59,7 @@
 					</div>
 				</div>
 				<div class="col-xs-12 col-md-6">
-					<p class="card-text"></p><a href="{{url_for('search_by_time')}}"><i class="fas fa-clock"></i> {{
+					<p class="card-text"></p><a href="{{url_for('search_by_time', limit=12, offset=0)}}"><i class="fas fa-clock"></i> {{
 						recipe.readyInMinutes }} min</a>
 					</p>
 					<ul class="list-group list-group-flush">
@@ -72,8 +72,6 @@
 				</div>
 			</div>
 			<hr>
-		</div>
-		<div class="container">
 			<div class="row">
 				<h3 class="col-12 text-center">Steps</h3>
 				<div class="col-xs-12">
@@ -104,35 +102,7 @@
 	<h6 class="text-center"> Recipe tags </h6>
 	{% else %}
 	{% endif %}
-	<div class="row justify-content-center">		
-		{% if recipe.dishTypes[0] %}
-		<ul class="list-inline">
-			{% for type in recipe.dishTypes %}
-			<li class="list-inline-item">
-				<a class="tags" href="{{url_for('search_by_type', dish_type=type)}}">{{ type|title }}</a>
-			</li>
-			{% endfor %}
-		</ul>
-		{% endif %}
-		{% if recipe.cuisines[0] %}
-		<ul class="list-inline">
-			{% for cuisine in recipe.cuisines %}
-			<li class="list-inline-item">
-				<a class="tags" href="{{url_for('search_by_cuisines', cuisine=cuisine)}}">{{ cuisine|title }}</a>
-			</li>
-			{% endfor %}
-		</ul>
-		{% endif %}
-		{% if recipe.diets[0] %}
-		<ul class="list-inline">
-			{% for diet in recipe.diets %}
-			<li class="list-inline-item">
-				<a class="tags" href="{{url_for('search_by_diet', diet_type=diet)}}">{{ diet|title }}</a>
-			</li>
-			{% endfor %}
-		</ul>
-		{% endif %}
-	</div>
+	{% include "recipe-template.html" %}
 	{% if user_in_db %}
 	{% for id in user_in_db.recipes %}
 	{% if id == recipe_id %}

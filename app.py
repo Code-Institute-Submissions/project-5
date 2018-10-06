@@ -15,17 +15,17 @@ app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 
 mongo = PyMongo(app)
 
-users_colection = mongo.db.users
-recipes_colection = mongo.db.recipes
-shemas_colection = mongo.db.schemas
-forms_colection = mongo.db.forms
-trivia_colection = mongo.db.trivia
+users_collection = mongo.db.users
+recipes_collection = mongo.db.recipes
+shemas_collection = mongo.db.schemas
+forms_collection = mongo.db.forms
+trivia_collection = mongo.db.trivia
 
 recipe_schema_id = "5ba2ded543277a316cbf0ef9"
 
 """ testing """
 
-testing_colection = mongo.db.testing
+testing_collection = mongo.db.testing
 
 """  """
 
@@ -35,20 +35,24 @@ testing_colection = mongo.db.testing
 @app.route('/')
 @app.route('/index')
 def index():
-    forms = forms_colection.find()
-    trivia = Search(trivia_colection).random(num_of_results=1)
+    forms = forms_collection.find()
+    trivia = Search(trivia_collection).random(num_of_results=1)
     random_recipes = [x for x in Search(
-        recipes_colection).random(num_of_results=4)]
+        recipes_collection).random(num_of_results=4)]
     main_recipe = random_recipes[0]
     side_recipes = random_recipes[1:]
 
     if 'user' in session:
-        user_in_db = users_colection.find_one({"username": session['user']})
+        user_in_db = users_collection.find_one({"username": session['user']})
         return render_template("index.html", page_title="Cookbook", username=session['user'], user_id=user_in_db['_id'], forms=forms, main_recipe=main_recipe, side_recipes=side_recipes, trivia=trivia)
     return render_template("index.html", page_title="Cookbook", forms=forms, main_recipe=main_recipe, side_recipes=side_recipes, trivia=trivia)
 
 
-""" Users / Log-in / Register """
+"""
+
+Users / Log-in / Register
+
+"""
 
 # Login
 
@@ -59,7 +63,7 @@ def login():
         username = request.form['username']
         password = request.form['user_password']
         try:
-            user_in_db = users_colection.find_one({"username": username})
+            user_in_db = users_collection.find_one({"username": username})
         except:
             flash("Sorry there seems to be problem with the data")
             return redirect(url_for('index'))
@@ -80,22 +84,20 @@ def login():
 # Sign up
 @app.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
-    forms = forms_colection.find()
+    forms = forms_collection.find()
     if request.method == "POST":
         user_in_db = mongo.db.users.find_one(
             {"username": request.form['username']})
         if user_in_db:
             flash(f"Sorry profile {request.form['username']} already exist")
             return render_template("sign-up.html", page_title="Sign up", forms=forms)
-
         hashed_pass = generate_password_hash(request.form['user_password'])
-        users_colection.insert_one(
+        users_collection.insert_one(
             {'username': request.form['username'], 'password': hashed_pass, 'recipes': []})
-        user_in_db = users_colection.find_one(
+        user_in_db = users_collection.find_one(
             {"username": request.form['username']})
         session['user'] = request.form['username']
         return redirect(url_for('profile', user_id=user_in_db['_id'], forms=forms))
-
     if 'user' in session:
         return render_template("sign-up.html", page_title="Sign up", username=session['user'], forms=forms)
 
@@ -116,9 +118,9 @@ def logout():
 
 @app.route('/profile/<user_id>')
 def profile(user_id):
-    forms = forms_colection.find()
+    forms = forms_collection.find()
     if 'user' in session:
-        user = Search(users_colection, "users").find_one_by_id(user_id)
+        user = Search(users_collection, "users").find_one_by_id(user_id)
         return render_template("profile.html", page_title="profile", user=user, forms=forms)
 
     return redirect(url_for('index', forms=forms))
@@ -136,24 +138,27 @@ Recipes
 
 @app.route('/recipes')
 def recipes():
-    recipes_in_db = Search(recipes_colection).sort_find_all()
-    forms = forms_colection.find()
+    pagination_limit = int(request.args["limit"])
+    pagination_offset = int(request.args["offset"])
+    recipes_in_db = Search(recipes_collection, pagination_base="recipes",
+                           limit=pagination_limit, offset=pagination_offset).sort_find_all()
+    forms = forms_collection.find()
     if 'user' in session:
-        user_in_db = users_colection.find_one({"username": session['user']})
-        return render_template("recipes.html", page_title="Recipes", recipes=recipes_in_db,  user_id=user_in_db['_id'], forms=forms)
-    return render_template("recipes.html", page_title="Recipes", recipes=recipes_in_db, forms=forms)
+        user_in_db = users_collection.find_one({"username": session['user']})
+        return render_template("recipes.html", page_title="Recipes", recipes=recipes_in_db["result"], next_url=recipes_in_db["next_url"], previous_url=recipes_in_db["previous_url"], num_of_results=recipes_in_db["num_of_results"], limit=pagination_limit, offset=pagination_offset,  user_id=user_in_db['_id'], forms=forms)
+    return render_template("recipes.html", page_title="Recipes", recipes=recipes_in_db["result"], next_url=recipes_in_db["next_url"], previous_url=recipes_in_db["previous_url"], num_of_results=recipes_in_db["num_of_results"], limit=pagination_limit, offset=pagination_offset, forms=forms)
 
 # Main route for single recipe
 
 
 @app.route('/recipe/<recipe_id>', methods=['GET', 'POST'])
 def recipe(recipe_id):
-    recipe = Search(recipes_colection).find_one_by_id(recipe_id)
-    forms = forms_colection.find()
+    recipe = Search(recipes_collection).find_one_by_id(recipe_id)
+    forms = forms_collection.find()
     if request.method == "POST":
         return render_template("recipe.html", page_title=recipe['title'], recipe_id=recipe_id, recipe=recipe, forms=forms)
     if 'user' in session:
-        user_in_db = users_colection.find_one({"username": session['user']})
+        user_in_db = users_collection.find_one({"username": session['user']})
         return render_template("recipe.html", page_title=recipe['title'], recipe_id=recipe_id, recipe=recipe, forms=forms,  user_in_db=user_in_db, user_id=user_in_db['_id'])
     return render_template("recipe.html", page_title=recipe['title'], recipe_id=recipe_id, recipe=recipe, forms=forms)
 
@@ -162,23 +167,23 @@ def recipe(recipe_id):
 
 @app.route('/add_recipe/<user_id>', methods=['GET', 'POST'])
 def add_recipe(user_id):
-    forms = forms_colection.find()
-    recipe_schema = Search(shemas_colection).find_one_by_id(recipe_schema_id)
+    forms = forms_collection.find()
+    recipe_schema = Search(shemas_collection).find_one_by_id(recipe_schema_id)
     if request.method == "POST":
         form_data = request.form.to_dict()
         data = Recipe(form_data)
         data = data.__dict__
-        new_recipe = recipes_colection.insert(data["recipe"])
+        new_recipe = recipes_collection.insert(data["recipe"])
         recipe_id = str(new_recipe)
         recipe = data["recipe"]
-        users_colection.update({"username": session['user']}, {
-                               '$push': {'recipes': recipe_id}})
-        user_in_db = users_colection.find_one({"username": session['user']})
+        users_collection.update({"username": session['user']}, {
+            '$push': {'recipes': recipe_id}})
+        user_in_db = users_collection.find_one({"username": session['user']})
 
         flash("Recipe added. Thank you!")
         return redirect(url_for("recipe", recipe_id=recipe_id, recipe=recipe, forms=forms, user_in_db=user_in_db, user_id=user_in_db['_id'], page_title=recipe['title']))
     if 'user' in session:
-        user_in_db = users_colection.find_one({"username": session['user']})
+        user_in_db = users_collection.find_one({"username": session['user']})
         return render_template("add-recipe.html", page_title="Add recipe", user_in_db=user_in_db, user_id=user_in_db['_id'], forms=forms, recipe_schema=recipe_schema)
 
     return redirect(url_for('index', forms=forms))
@@ -188,79 +193,134 @@ def add_recipe(user_id):
 
 @app.route('/edit_recipe/<recipe_id>/<user_id>', methods=['GET', 'POST'])
 def edit_recipe(recipe_id, user_id):
-    forms = forms_colection.find()
+    forms = forms_collection.find()
     if request.method == "POST":
         form_data = request.form.to_dict()
         data = Recipe(form_data)
         data = data.__dict__
-        recipes_colection.update({'_id': ObjectId(recipe_id)}, data["recipe"])
+        recipes_collection.update({'_id': ObjectId(recipe_id)}, data["recipe"])
         recipe = data["recipe"]
         flash("Your recipe has been updated")
-        user_in_db = users_colection.find_one({"username": session['user']})
+        user_in_db = users_collection.find_one({"username": session['user']})
         return redirect(url_for("recipe", page_title=recipe['title'], recipe_id=recipe_id, recipe=recipe, forms=forms, user_in_db=user_in_db, user_id=user_in_db['_id']))
     else:
         if 'user' in session:
-            recipe = Search(recipes_colection).find_one_by_id(recipe_id)
-            user_in_db = Search(users_colection, "").find_one_by_id(user_id)
+            recipe = Search(recipes_collection).find_one_by_id(recipe_id)
+            user_in_db = Search(users_collection, "").find_one_by_id(user_id)
             for x in user_in_db["recipes"]:
                 if x == recipe_id:
                     return render_template("edit-recipe.html", page_title="Edit recipe", recipe_id=recipe_id, recipes=recipe, forms=forms,  user_in_db=user_in_db, user_id=user_in_db['_id'])
     return redirect(url_for('index'))
 
 
-""" Search  """
+"""
+
+Search
+
+"""
 
 # Search view for mobiles
 
 
 @app.route('/mobile_search', methods=['GET', 'POST'])
 def mobile_search():
-    forms = forms_colection.find()
+    forms = forms_collection.find()
     if 'user' in session:
-        user_in_db = users_colection.find_one({"username": session['user']})
+        user_in_db = users_collection.find_one({"username": session['user']})
         return render_template("search-form-sm.html", page_title="Search",  user_id=user_in_db['_id'], forms=forms)
     return render_template("search-form-sm.html", page_title="Search", forms=forms)
 
 
 # Search via form input
-
-
 @app.route('/input_form_search', methods=['GET', 'POST'])
 def input_form_search():
+    forms = forms_collection.find()
+    pagination_limit = int(request.args["limit"])
+    pagination_offset = int(request.args["offset"])
     if request.method == "POST":
         form_data = request.form.to_dict()
-        forms = forms_colection.find()
-        recipes = SearchForm(form_data).search_by_input()
-        if len(recipes) == 0:
+        recipes = SearchForm(
+            form_data, pagination_base="input_form_search").search_by_input()
+        if recipes["num_of_results"] == 0:
             flash("Sorry did not find any recipes!")
             return_url = request.referrer
             return redirect(return_url)
         else:
-            return render_template("recipes.html", recipes=recipes, forms=forms)
-    return redirect(url_for('index', forms=forms))
-
-# Search via form tags
-
-
-@app.route('/tags_form_search', methods=['GET', 'POST'])
-def tags_form_search():
-    if request.method == "POST":
-        form_data = request.form.to_dict()
-        pprint.pprint(form_data)
-        forms = forms_colection.find()
-        recipes = SearchForm(form_data).search_by_tags()
-        return render_template("recipes.html", recipes=recipes, forms=forms)
-    return redirect(url_for('index', forms=forms))
+            recipes['next_url'] = recipes['next_url'] + \
+                f"&input={form_data['search_input']}"
+            recipes['previous_url'] = recipes['previous_url'] + \
+                f"&input={form_data['search_input']}"
+            return render_template("recipes.html", recipes=recipes["result"], next_url=recipes["next_url"], previous_url=recipes["previous_url"], num_of_results=recipes["num_of_results"],  limit=pagination_limit, offset=pagination_offset, forms=forms)
+    else:
+        form_data = {
+            'search_input': str(request.args["input"]),
+            'limit': pagination_limit}
+        recipes = SearchForm(
+            form_data, pagination_base="input_form_search", offset=pagination_offset).search_by_input()
+        if recipes["num_of_results"] == 0:
+            flash("Sorry did not find any recipes!")
+            return_url = request.referrer
+            return redirect(return_url)
+        else:
+            recipes['next_url'] = recipes['next_url'] + \
+                f"&input={form_data['search_input']}"
+            recipes['previous_url'] = recipes['previous_url'] + \
+                f"&input={form_data['search_input']}"
+            return render_template("recipes.html", recipes=recipes["result"], next_url=recipes["next_url"], previous_url=recipes["previous_url"], num_of_results=recipes["num_of_results"],  limit=pagination_limit, offset=pagination_offset, forms=forms)
 
 # Get how many recipes match the input
 
 
-@app.route('/num_of_input_results', methods=['POSt'])
+@app.route('/num_of_input_results', methods=['POST'])
 def num_of_input_results():
     if request.method == "POST":
         form_data = request.form.to_dict()
-        recipes = SearchForm(form_data).search_by_input()
-        return str(len(recipes))
+        recipes = SearchForm(form_data, no_pagination=True).search_by_input()
+        return str(len([x for x in recipes]))
+
+# Search via form tags
+
+@app.route('/tags_form_search', methods=['GET', 'POST'])
+def tags_form_search():
+	forms = forms_collection.find()
+	pagination_limit = int(request.args["limit"])
+	pagination_offset = int(request.args["offset"])
+	if request.method == "POST":
+		form_data = request.form.to_dict()
+		session["search"] = form_data
+		recipes = SearchForm(
+			form_data, pagination_base="tags_form_search").search_by_tags()
+		if recipes["result"] == 0:
+			flash("Sorry did not find any recipes!")
+			return_url = request.referrer
+			return redirect(return_url)
+		else:
+			recipes['next_url'] = recipes['next_url'] + \
+				f"&input={form_data}"
+			recipes['previous_url'] = recipes['previous_url'] + \
+				f"&input={form_data}"
+			return render_template("recipes.html", recipes=recipes["result"], next_url=recipes["next_url"], previous_url=recipes["previous_url"], num_of_results=recipes["num_of_results"], limit=pagination_limit, offset=pagination_offset, forms=forms)
+	else:
+		if session["search"]:
+			form_data = session["search"]
+			form_data["limit"] = pagination_limit
+			form_data["search_input"] = ""
+			recipes = SearchForm(
+				form_data, pagination_base="tags_form_search", offset=pagination_offset).search_by_tags()
+			if recipes["num_of_results"] == 0:
+				flash("Sorry did not find any recipes!")
+				return redirect("/")
+			else:
+				recipes['next_url'] = recipes['next_url'] + \
+					f"&input={form_data}"
+				recipes['previous_url'] = recipes['previous_url'] + \
+					f"&input={form_data}"
+				return render_template("recipes.html", recipes=recipes["result"], next_url=recipes["next_url"], previous_url=recipes["previous_url"], num_of_results=recipes["num_of_results"], limit=pagination_limit, offset=pagination_offset, forms=forms)
+		else:
+			flash("Sorry did not find any recipes!")
+			return redirect("/")
+
+
 
 # Get how many recipes match the tags
 
@@ -269,22 +329,22 @@ def num_of_input_results():
 def num_of_tags_results():
     if request.method == "POST":
         form_data = request.form.to_dict()
-        recipes = SearchForm(form_data).search_by_tags()
-        return str(len(recipes))
+        recipes = SearchForm(form_data, no_pagination=True).search_by_tags()
+        return str(len([x for x in recipes]))
 
 
 # Search by Dish types
-
-
 @app.route('/dish_types/<dish_type>')
 def search_by_type(dish_type):
-    forms = forms_colection.find()
-    recipes_in_db = Search(colection=recipes_colection).all_filters(
+    forms = forms_collection.find()
+    pagination_limit = int(request.args["limit"])
+    pagination_offset = int(request.args["offset"])
+    recipes_in_db = Search(collection=recipes_collection, pagination_base=f"dish_types/{dish_type}", limit=pagination_limit, offset=pagination_offset).all_filters(
         key="dishTypes", value=dish_type)
     if 'user' in session:
-        user_in_db = users_colection.find_one({"username": session['user']})
-        return render_template("recipes.html", page_title=dish_type.capitalize() + "s", recipes=recipes_in_db, user_id=user_in_db['_id'], forms=forms)
-    return render_template("recipes.html", page_title=dish_type.capitalize() + "s", recipes=recipes_in_db, forms=forms)
+        user_in_db = users_collection.find_one({"username": session['user']})
+        return render_template("recipes.html", page_title=dish_type.capitalize() + "s", recipes=recipes_in_db["result"], limit=pagination_limit, next_url=recipes_in_db["next_url"], num_of_results=recipes_in_db["num_of_results"],  offset=pagination_offset, user_id=user_in_db['_id'], forms=forms)
+    return render_template("recipes.html", page_title=dish_type.capitalize() + "s", recipes=recipes_in_db["result"], next_url=recipes_in_db["next_url"], previous_url=recipes_in_db["previous_url"], num_of_results=recipes_in_db["num_of_results"], limit=pagination_limit, offset=pagination_offset, forms=forms)
 
 
 # Search by Diets
@@ -292,39 +352,45 @@ def search_by_type(dish_type):
 
 @app.route('/diet_types/<diet_type>')
 def search_by_diet(diet_type):
-    forms = forms_colection.find()
-    recipes_in_db = Search(colection=recipes_colection).all_filters(
+    forms = forms_collection.find()
+    pagination_limit = int(request.args["limit"])
+    pagination_offset = int(request.args["offset"])
+    recipes_in_db = Search(collection=recipes_collection, pagination_base=f"diet_types/{diet_type}", limit=pagination_limit, offset=pagination_offset).all_filters(
         key="diets", value=diet_type)
     if 'user' in session:
-        user_in_db = users_colection.find_one({"username": session['user']})
-        return render_template("recipes.html", page_title=diet_type.capitalize(), recipes=recipes_in_db, user_id=user_in_db['_id'], forms=forms)
-    return render_template("recipes.html", page_title=diet_type.capitalize(), recipes=recipes_in_db, forms=forms)
+        user_in_db = users_collection.find_one({"username": session['user']})
+        return render_template("recipes.html", page_title=diet_type.capitalize() + "s", recipes=recipes_in_db["result"], limit=pagination_limit, next_url=recipes_in_db["next_url"], previous_url=recipes_in_db["previous_url"], num_of_results=recipes_in_db["num_of_results"],  offset=pagination_offset, user_id=user_in_db['_id'], forms=forms)
+    return render_template("recipes.html", page_title=diet_type.capitalize() + "s", recipes=recipes_in_db["result"], next_url=recipes_in_db["next_url"], previous_url=recipes_in_db["previous_url"], num_of_results=recipes_in_db["num_of_results"], limit=pagination_limit, offset=pagination_offset, forms=forms)
 
 # Search by Time
 
 
 @app.route('/search_by_time')
 def search_by_time():
-    forms = forms_colection.find()
-    recipes_in_db = Search(colection=recipes_colection,
+    forms = forms_collection.find()
+    pagination_limit = int(request.args["limit"])
+    pagination_offset = int(request.args["offset"])
+    recipes_in_db = Search(collection=recipes_collection, pagination_base=f"search_by_time", limit=pagination_limit, offset=pagination_offset,
                            order=1, sort="readyInMinutes").sort_find_all()
     if 'user' in session:
-        user_in_db = users_colection.find_one({"username": session['user']})
-        return render_template("recipes.html", page_title="Time", recipes=recipes_in_db, user_id=user_in_db['_id'], forms=forms)
-    return render_template("recipes.html", page_title="Time", recipes=recipes_in_db, forms=forms)
+        user_in_db = users_collection.find_one({"username": session['user']})
+        return render_template("recipes.html", page_title="Search by time needed", recipes=recipes_in_db["result"], limit=pagination_limit, next_url=recipes_in_db["next_url"], previous_url=recipes_in_db["previous_url"], num_of_results=recipes_in_db["num_of_results"],  offset=pagination_offset, user_id=user_in_db['_id'], forms=forms)
+    return render_template("recipes.html", page_title="Search by time needed", recipes=recipes_in_db["result"], next_url=recipes_in_db["next_url"], previous_url=recipes_in_db["previous_url"], num_of_results=recipes_in_db["num_of_results"],  limit=pagination_limit, offset=pagination_offset, forms=forms)
 
 # Search by Cuisines
 
 
 @app.route('/search_by_cuisine/<cuisine>')
 def search_by_cuisines(cuisine):
-    forms = forms_colection.find()
-    recipes_in_db = Search(colection=recipes_colection).all_filters(
+    forms = forms_collection.find()
+    pagination_limit = int(request.args["limit"])
+    pagination_offset = int(request.args["offset"])
+    recipes_in_db = Search(collection=recipes_collection, pagination_base=f"search_by_cuisine/{cuisine}", limit=pagination_limit, offset=pagination_offset).all_filters(
         key="cuisines", value=cuisine)
     if 'user' in session:
-        user_in_db = users_colection.find_one({"username": session['user']})
-        return render_template("recipes.html", page_title=cuisine.capitalize(), recipes=recipes_in_db, user_id=user_in_db['_id'], forms=forms)
-    return render_template("recipes.html", page_title=cuisine.capitalize(), recipes=recipes_in_db, forms=forms)
+        user_in_db = users_collection.find_one({"username": session['user']})
+        return render_template("recipes.html", page_title=cuisine.capitalize() + "s", recipes=recipes_in_db["result"], limit=pagination_limit, next_url=recipes_in_db["next_url"], previous_url=recipes_in_db["previous_url"], num_of_results=recipes_in_db["num_of_results"],  offset=pagination_offset, user_id=user_in_db['_id'], forms=forms)
+    return render_template("recipes.html", page_title=cuisine.capitalize() + "s", recipes=recipes_in_db["result"], next_url=recipes_in_db["next_url"], previous_url=recipes_in_db["previous_url"], num_of_results=recipes_in_db["num_of_results"], limit=pagination_limit, offset=pagination_offset, forms=forms)
 
 
 """ Others """
@@ -337,13 +403,13 @@ def dashboard():
     """ if request.method == "GET":
 
 
-            hidden_recipes = recipes_colection.delete_many({"visibility": False}) """
+            hidden_recipes = recipes_collection.delete_many({"visibility": False}) """
 
     if 'user' in session:
-        user_in_db = users_colection.find_one({"username": session['user']})
-        users = users_colection.find()
-        forms = forms_colection.find()
-        hidden_recipes = recipes_colection.find({"visibility": False})
+        user_in_db = users_collection.find_one({"username": session['user']})
+        users = users_collection.find()
+        forms = forms_collection.find()
+        hidden_recipes = recipes_collection.find({"visibility": False})
         return render_template("dashboard.html", page_title="dashboard", users=users, forms=forms, hidden_recipes=hidden_recipes, user_id=user_in_db['_id'])
     return redirect(url_for('index'))
 
@@ -354,8 +420,8 @@ def dashboard():
 def update_db():
     if request.method == "POST":
         Database().update_search_form()
-        users = Search(users_colection, "users").sort_find_all()
-        forms = forms_colection.find()
+        users = Search(users_collection, "users").sort_find_all()
+        forms = forms_collection.find()
 
         return render_template("dashboard.html", page_title="dashboard", users=users, forms=forms)
 
@@ -369,14 +435,14 @@ def error():
 
 
 if __name__ == '__main__':
-	if os.environ.get("DEVELOPMENT"):
-		app.run(host=os.environ.get('IP'),
-				port=os.environ.get('PORT'),
-				debug=True)
-	else:
-		app.run(host=os.environ.get('IP'),
-                    port=os.environ.get('PORT'),
-                    debug=False)
+    if os.environ.get("DEVELOPMENT"):
+        app.run(host=os.environ.get('IP'),
+                port=os.environ.get('PORT'),
+                debug=True)
+    else:
+        app.run(host=os.environ.get('IP'),
+                port=os.environ.get('PORT'),
+                debug=False)
 
 
 """ 

@@ -51,7 +51,7 @@ function tags_search() {
 	$("#input_search_btn")
 		.attr("disabled", "disabled")
 		.html("Working ...");
-	$("#search-form").attr("action", "/tags_form_search");
+	$("#search-form").attr("action", "/tags_form_search?limit=12&offset=0");
 	$("#search-form").submit();
 }
 
@@ -62,12 +62,20 @@ function input_search() {
 	$("#tags_search_btn")
 		.attr("disabled", "disabled")
 		.html("Working ...");
-	$("#search-form").attr("action", "/input_form_search");
+	let input = $(".search-overlay input[name=search_input]").val();
+	$("#search-form").attr("action", `/input_form_search?input=${input}&limit=12&offset=0`);
 	$("#search-form").submit();
 }
 
 function checked_checkboxes() {
 	let checked = $(".form-check-input:checkbox:checked");
+	if (checked.length == 0) {	
+		$("#num_of_results").html("");	
+		$("#tags_search_btn")
+			.attr("disabled", "disabled")
+			.html("Select a tag!");
+		return false
+	}
 	let checkboxes = {};
 	for (let i = 0; i < checked.length; i++) {
 		checkboxes[checked[i].name] = checked[i].value;
