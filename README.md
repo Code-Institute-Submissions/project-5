@@ -97,6 +97,7 @@
 - Decided to use the mobile search for tablets as well
 - At least one tag must be selected to use the for for searching recipes
 - Fixed bug where user will not be redirected to mobile search on tablets like screens (medium size resolutions)
+- Fixed 500 error when trying to print recipe while loged out
 
 
 ### What could be done better
