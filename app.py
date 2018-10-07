@@ -215,7 +215,7 @@ def edit_recipe(recipe_id, user_id):
                     return render_template("edit-recipe.html", page_title="Edit recipe", recipe_id=recipe_id, recipes=recipe, forms=forms,  user_in_db=user_in_db, user_id=user_in_db['_id'])
     return redirect(url_for('index'))
 
-# Voting system
+# Vote up for a recipe
 
 
 @app.route('/vote_up/<recipe_id>/<user_id>', methods=['GET'])
@@ -238,6 +238,8 @@ def vote_up(recipe_id, user_id):
         users_collection.update({'_id': ObjectId(user_id)}, {'$push': {'votes': recipe_id}})
         flash("Thank you for your vote!")
         return redirect(request.referrer)
+
+# Vote down for a recipe
 
 
 @app.route('/vote_down/<recipe_id>/<user_id>', methods=['GET'])
@@ -307,7 +309,6 @@ def input_form_search():
         if session["search"]:
             form_data = session["search"]
             form_data["limit"] = pagination_limit
-            form_data["search_input"] = ""
             recipes = SearchForm(
                 form_data, pagination_base="input_form_search", offset=pagination_offset).search_by_input()
             if recipes["num_of_results"] == 0:
