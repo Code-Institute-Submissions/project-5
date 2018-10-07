@@ -113,8 +113,8 @@ Search Form
 */
 
 $("#search-btn").on("click", function() {
-	if (screen.width < 1400) {
-		document.location = "/mobile_search";
+	if ($(window).width() <= 1400) {
+		window.location.replace("/mobile_search");
 	} else {
 		$(".search-overlay").slideToggle();
 	}
