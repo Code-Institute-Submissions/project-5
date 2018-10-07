@@ -13,6 +13,19 @@
 	.col-xs-12 {
 		margin: 15px 0px;
 	}
+
+	.btn-outline-danger {
+		color: #dc3545!important;
+	}
+
+	.btn-outline-success {
+		color: #28a745!important;
+	}
+
+	.btn-outline-danger:hover,
+	.btn-outline-success:hover {
+		color: #ffffff!important;
+	}
 </style>
 {% endblock css %}
 
@@ -23,7 +36,7 @@
 	<div class="row">
 		<div class="container">
 			<div class="row">
-				<h2 class=" col-12 text-center">{{recipe.title|title}} 
+				<h2 class=" col-12 text-center">{{recipe.title|title}}
 					<button onclick="return print_recipe('{{recipe._id}}')" class="btn btn-light"><i class="fas fa-print"></i>
 					</button>
 				</h2>
@@ -37,18 +50,21 @@
 							<hr>
 						</div>
 						{% if session %}
-						<div class="col-12">
-							<div class="row justify-content-around">
-								<div class="col-4">
-									<button class="btn btn-outline-success"><i class="fas fa-thumbs-up"></i></button>
-								</div>
-								<div class="col-4">
-									<p><i class="fas fa-star fa-lg"></i> {{ recipe.aggregateLikes }}</p>
-								</div>
-								<div class="col-4">
-									<button class="btn btn-outline-danger"><i class="fas fa-thumbs-up fa-rotate-180"></i></button>
-								</div>
+						<div class="col-12">							
+							{% if recipe_id in user_in_db.votes %}
+							<div class="row justify-content-center">
+								<p class="font-weight-bold">You already voted or you are owner of the recipe</p>								
 							</div>
+							<div class="row justify-content-center">
+								<p><i class="fas fa-star fa-lg"></i> {{ recipe.aggregateLikes }}</p>
+							</div>
+							{% else %}
+							<div class="row justify-content-around">
+								<a href="/vote_up/{{recipe._id}}/{{user_in_db._id}}" class="btn btn-outline-success"><i class="fas fa-thumbs-up"></i></a>
+								<p><i class="fas fa-star fa-lg"></i> {{ recipe.aggregateLikes }}</p>
+								<a href="/vote_down/{{recipe._id}}/{{user_in_db._id}}" class="btn btn-outline-danger"><i class="fas fa-thumbs-up fa-rotate-180"></i></a>
+							</div>
+							{% endif %}
 						</div>
 						{% else %}
 						<div class="col-12 text-center">
@@ -56,11 +72,12 @@
 							<p><i class="fas fa-star fa-lg"></i> {{ recipe.aggregateLikes }}</p>
 						</div>
 						{% endif %}
+						
 					</div>
 				</div>
 				<div class="col-xs-12 col-md-6">
-					<p class="card-text"></p><a href="{{url_for('search_by_time', limit=12, offset=0)}}"><i class="fas fa-clock"></i> {{
-						recipe.readyInMinutes }} min</a>
+					<p class="card-text"></p><a href="{{url_for('search_by_time', limit=12, offset=0)}}"><i class="fas fa-clock"></i>
+						{{ recipe.readyInMinutes }} min</a>
 					</p>
 					<ul class="list-group list-group-flush">
 						{% for ingredient in recipe.extendedIngredients %}

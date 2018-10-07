@@ -83,6 +83,10 @@
 - Added Pagination to recipes and search
 - Search class has now option to search without limiting the results
 
+#### 1.9
+
+- Added Voting system  for recipes
+
 
 ## Testing and improvements
 

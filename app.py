@@ -93,7 +93,10 @@ def sign_up():
             return render_template("sign-up.html", page_title="Sign up", forms=forms)
         hashed_pass = generate_password_hash(request.form['user_password'])
         users_collection.insert_one(
-            {'username': request.form['username'], 'password': hashed_pass, 'recipes': []})
+            {'username': request.form['username'],
+             'password': hashed_pass,
+             'recipes': [],
+             'votes': []})
         user_in_db = users_collection.find_one(
             {"username": request.form['username']})
         session['user'] = request.form['username']
@@ -177,7 +180,7 @@ def add_recipe(user_id):
         recipe_id = str(new_recipe)
         recipe = data["recipe"]
         users_collection.update({"username": session['user']}, {
-            '$push': {'recipes': recipe_id}})
+                                '$push': {'recipes': recipe_id}})
         user_in_db = users_collection.find_one({"username": session['user']})
 
         flash("Recipe added. Thank you!")
@@ -212,6 +215,52 @@ def edit_recipe(recipe_id, user_id):
                     return render_template("edit-recipe.html", page_title="Edit recipe", recipe_id=recipe_id, recipes=recipe, forms=forms,  user_in_db=user_in_db, user_id=user_in_db['_id'])
     return redirect(url_for('index'))
 
+# Voting system
+
+
+@app.route('/vote_up/<recipe_id>/<user_id>', methods=['GET'])
+def vote_up(recipe_id, user_id):
+    try:
+        user_in_db = Search(users_collection).find_one_by_id(user_id)
+    except:
+        flash("Sorry you are not allowed to vote")
+        return redirect(url_for('index'))
+    if recipe_id in user_in_db["votes"]:
+        flash("Sorry you are not allowed to vote")
+        return redirect(url_for('index'))
+    elif recipe_id in user_in_db["recipes"]:
+        flash("Sorry you are not allowed to vote")
+        return redirect(url_for('index'))
+    else:
+        votes = Search(recipes_collection).find_one_by_id(recipe_id)
+        votes = votes["aggregateLikes"] + 1
+        recipes_collection.update({'_id': ObjectId(recipe_id)}, {"$set": {"aggregateLikes": votes}})
+        users_collection.update({'_id': ObjectId(user_id)}, {'$push': {'votes': recipe_id}})
+        flash("Thank you for your vote!")
+        return redirect(request.referrer)
+
+
+@app.route('/vote_down/<recipe_id>/<user_id>', methods=['GET'])
+def vote_down(recipe_id, user_id):
+    try:
+        user_in_db = Search(users_collection).find_one_by_id(user_id)
+    except:
+        flash("Sorry you are not allowed to vote")
+        return redirect(url_for('index'))
+    if recipe_id in user_in_db["votes"]:
+        flash("Sorry you are not allowed to vote")
+        return redirect(url_for('index'))
+    elif recipe_id in user_in_db["recipes"]:
+        flash("Sorry you are not allowed to vote")
+        return redirect(url_for('index'))
+    else:
+        votes = Search(recipes_collection).find_one_by_id(recipe_id)
+        votes = votes["aggregateLikes"] - 1
+        recipes_collection.update({'_id': ObjectId(recipe_id)}, {"$set": {"aggregateLikes": votes}})
+        users_collection.update({'_id': ObjectId(user_id)}, {'$push': {'votes': recipe_id}})
+        flash("Thank you for your vote!")
+        return redirect(request.referrer)
+
 
 """
 
@@ -232,6 +281,8 @@ def mobile_search():
 
 
 # Search via form input
+
+
 @app.route('/input_form_search', methods=['GET', 'POST'])
 def input_form_search():
     forms = forms_collection.find()
@@ -239,6 +290,7 @@ def input_form_search():
     pagination_offset = int(request.args["offset"])
     if request.method == "POST":
         form_data = request.form.to_dict()
+        session["search"] = form_data
         recipes = SearchForm(
             form_data, pagination_base="input_form_search").search_by_input()
         if recipes["num_of_results"] == 0:
@@ -252,21 +304,25 @@ def input_form_search():
                 f"&input={form_data['search_input']}"
             return render_template("recipes.html", recipes=recipes["result"], next_url=recipes["next_url"], previous_url=recipes["previous_url"], num_of_results=recipes["num_of_results"],  limit=pagination_limit, offset=pagination_offset, forms=forms)
     else:
-        form_data = {
-            'search_input': str(request.args["input"]),
-            'limit': pagination_limit}
-        recipes = SearchForm(
-            form_data, pagination_base="input_form_search", offset=pagination_offset).search_by_input()
-        if recipes["num_of_results"] == 0:
-            flash("Sorry did not find any recipes!")
-            return_url = request.referrer
-            return redirect(return_url)
+        if session["search"]:
+            form_data = session["search"]
+            form_data["limit"] = pagination_limit
+            form_data["search_input"] = ""
+            recipes = SearchForm(
+                form_data, pagination_base="input_form_search", offset=pagination_offset).search_by_input()
+            if recipes["num_of_results"] == 0:
+                flash("Sorry did not find any recipes!")
+                return_url = request.referrer
+                return redirect(return_url)
+            else:
+                recipes['next_url'] = recipes['next_url'] + \
+                    f"&input={form_data['search_input']}"
+                recipes['previous_url'] = recipes['previous_url'] + \
+                    f"&input={form_data['search_input']}"
+                return render_template("recipes.html", recipes=recipes["result"], next_url=recipes["next_url"], previous_url=recipes["previous_url"], num_of_results=recipes["num_of_results"],  limit=pagination_limit, offset=pagination_offset, forms=forms)
         else:
-            recipes['next_url'] = recipes['next_url'] + \
-                f"&input={form_data['search_input']}"
-            recipes['previous_url'] = recipes['previous_url'] + \
-                f"&input={form_data['search_input']}"
-            return render_template("recipes.html", recipes=recipes["result"], next_url=recipes["next_url"], previous_url=recipes["previous_url"], num_of_results=recipes["num_of_results"],  limit=pagination_limit, offset=pagination_offset, forms=forms)
+            flash("Sorry did not find any recipes!")
+            return redirect("/")
 
 # Get how many recipes match the input
 
@@ -280,46 +336,46 @@ def num_of_input_results():
 
 # Search via form tags
 
+
 @app.route('/tags_form_search', methods=['GET', 'POST'])
 def tags_form_search():
-	forms = forms_collection.find()
-	pagination_limit = int(request.args["limit"])
-	pagination_offset = int(request.args["offset"])
-	if request.method == "POST":
-		form_data = request.form.to_dict()
-		session["search"] = form_data
-		recipes = SearchForm(
-			form_data, pagination_base="tags_form_search").search_by_tags()
-		if recipes["result"] == 0:
-			flash("Sorry did not find any recipes!")
-			return_url = request.referrer
-			return redirect(return_url)
-		else:
-			recipes['next_url'] = recipes['next_url'] + \
-				f"&input={form_data}"
-			recipes['previous_url'] = recipes['previous_url'] + \
-				f"&input={form_data}"
-			return render_template("recipes.html", recipes=recipes["result"], next_url=recipes["next_url"], previous_url=recipes["previous_url"], num_of_results=recipes["num_of_results"], limit=pagination_limit, offset=pagination_offset, forms=forms)
-	else:
-		if session["search"]:
-			form_data = session["search"]
-			form_data["limit"] = pagination_limit
-			form_data["search_input"] = ""
-			recipes = SearchForm(
-				form_data, pagination_base="tags_form_search", offset=pagination_offset).search_by_tags()
-			if recipes["num_of_results"] == 0:
-				flash("Sorry did not find any recipes!")
-				return redirect("/")
-			else:
-				recipes['next_url'] = recipes['next_url'] + \
-					f"&input={form_data}"
-				recipes['previous_url'] = recipes['previous_url'] + \
-					f"&input={form_data}"
-				return render_template("recipes.html", recipes=recipes["result"], next_url=recipes["next_url"], previous_url=recipes["previous_url"], num_of_results=recipes["num_of_results"], limit=pagination_limit, offset=pagination_offset, forms=forms)
-		else:
-			flash("Sorry did not find any recipes!")
-			return redirect("/")
-
+    forms = forms_collection.find()
+    pagination_limit = int(request.args["limit"])
+    pagination_offset = int(request.args["offset"])
+    if request.method == "POST":
+        form_data = request.form.to_dict()
+        session["search"] = form_data
+        recipes = SearchForm(
+            form_data, pagination_base="tags_form_search").search_by_tags()
+        if recipes["result"] == 0:
+            flash("Sorry did not find any recipes!")
+            return_url = request.referrer
+            return redirect(return_url)
+        else:
+            recipes['next_url'] = recipes['next_url'] + \
+                f"&input={form_data}"
+            recipes['previous_url'] = recipes['previous_url'] + \
+                f"&input={form_data}"
+            return render_template("recipes.html", recipes=recipes["result"], next_url=recipes["next_url"], previous_url=recipes["previous_url"], num_of_results=recipes["num_of_results"], limit=pagination_limit, offset=pagination_offset, forms=forms)
+    else:
+        if session["search"]:
+            form_data = session["search"]
+            form_data["limit"] = pagination_limit
+            form_data["search_input"] = ""
+            recipes = SearchForm(
+                form_data, pagination_base="tags_form_search", offset=pagination_offset).search_by_tags()
+            if recipes["num_of_results"] == 0:
+                flash("Sorry did not find any recipes!")
+                return redirect("/")
+            else:
+                recipes['next_url'] = recipes['next_url'] + \
+                    f"&input={form_data}"
+                recipes['previous_url'] = recipes['previous_url'] + \
+                    f"&input={form_data}"
+                return render_template("recipes.html", recipes=recipes["result"], next_url=recipes["next_url"], previous_url=recipes["previous_url"], num_of_results=recipes["num_of_results"], limit=pagination_limit, offset=pagination_offset, forms=forms)
+        else:
+            flash("Sorry did not find any recipes!")
+            return redirect("/")
 
 
 # Get how many recipes match the tags
