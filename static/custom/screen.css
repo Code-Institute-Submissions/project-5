@@ -7,7 +7,7 @@
 
 @media (min-width: 768px) {
 	.search-overlay {
-		position: fixed;
+		background-attachment: scroll;
 	}
 	.btn-outline-success,
 	.navbar .btn-outline-warning {
