@@ -112,7 +112,7 @@ function checked_checkboxes() {
 Search Form
 */
 
-$("#search-btn").bind("click touchstart", function() {
+$("#search-btn").on("click", function() {
 	if ($(window).width() <= 1400) {
 		window.location.replace("/mobile_search");
 	} else {
