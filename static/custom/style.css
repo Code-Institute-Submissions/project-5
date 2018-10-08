@@ -3,133 +3,135 @@ General
 */
 
 .vh100 {
-	min-height: 100vh;
+    min-height: 100vh;
 }
 
 section {
-	padding: 100px 0px;
+    padding: 100px 0px;
 }
 
 h2,
 h3 {
-	font-family: "Kaushan Script", cursive;
+    font-family: "Kaushan Script", cursive;
 }
 
 h5 {
-	margin: 10px 0px;
+    margin: 10px 0px;
 }
 
 a,
 a:hover {
-	color: #000000;
-	text-decoration: none;
+    color: #000000;
+    text-decoration: none;
 }
 
 .tags,
 .tags:hover {
-	text-decoration: none;
-	color: #ffffff;
-	background-color: rgba(0, 0, 0, 0.6);
-	padding: 7px;
-	border-radius: 15px;
-	font-size: x-small;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 7px;
+    border-radius: 15px;
+    font-size: x-small;
 }
 
 .list-inline-item:not(:last-child) {
-	margin-right: 0px;
+    margin-right: 0px;
 }
 
 .list-inline-item {
-	margin: 5px 0px;
+    margin: 5px 0px;
 }
 
 .fa-star {
-	color: gold;
+    color: gold;
 }
 
 .card {
-	margin-bottom: 15px;
-	padding: 15px 15px;
-	border: 0;
+    margin-bottom: 15px;
+    padding: 15px 15px;
+    border: 0;
 }
 
 .card-img-top {
-	border-radius: 15px;
+    border-radius: 15px;
 }
 
 .card-text-bold {
-	font-weight: 600;
+    font-weight: 600;
 }
 
 .fa-6x {
-	font-size: 5em;
+    font-size: 5em;
 }
+
 /*
 Overlay
 */
 
 .search-overlay {
-	display: none;
-	position: absolute;
-	width: 100%;
-	height: min-content;
-	padding-top: 3%;
-	z-index: 998;
-	background: url("/static/img/search-bg.jpg") no-repeat center;
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: min-content;
+    padding-top: 3%;
+    z-index: 998;
+    background: url("/static/img/search-bg.jpg") no-repeat center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 .content-wrapper {
-	background: rgba(0, 0, 0, 0.5);
-	height: 100%;
-	padding-top: 100px;
+    background: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    padding-top: 100px;
 }
 
 .search-overlay h2 {
-	margin: 30px 0px;
+    margin: 30px 0px;
 }
 
 .search-overlay .form-check,
 .search-overlay .form-h6 {
-	color: #ffffff;
+    color: #ffffff;
 }
 
 .form-check-imput {
-	padding: 0 15px;
+    padding: 0 15px;
 }
 
 .form-check hr {
-	border: 0.5px solid #ffffff;
+    border: 0.5px solid #ffffff;
 }
 
 .form-h6 {
-	margin: 15px 0 20px;
+    margin: 15px 0 20px;
 }
 
 #form_search_btn {
-	margin-top: 50px;
+    margin-top: 50px;
 }
 
 #search-btn {
-	padding: 5px 20px;
+    padding: 5px 20px;
+    cursor: pointer;
 }
 
 #alerts {
-	position: absolute;
-	display: none;
-	min-height: 50px;
-	top: 95%;
-	left: 0;
-	z-index: 999;
-	background-color: rgba(0, 0, 0, 0.7);
-	color: #ffffff;
+    position: absolute;
+    display: none;
+    min-height: 50px;
+    top: 95%;
+    left: 0;
+    z-index: 999;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #ffffff;
 }
 
 #alerts p {
-	margin: 10px 0px;
+    margin: 10px 0px;
 }
 
 /*
@@ -137,7 +139,7 @@ Nav
 */
 
 .navbar {
-	background-color: #fefefe;
+    background-color: #fefefe;
 }
 
 /*
@@ -145,11 +147,11 @@ index.html
 */
 
 #index-welcome {
-	background: url("/static/img/index-background.jpg") no-repeat center;
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
+    background: url("/static/img/index-background.jpg") no-repeat center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 /*
@@ -157,21 +159,21 @@ Main section
 */
 
 #index-main {
-	position: relative;
-	background-color: #fefefe;
+    position: relative;
+    background-color: #fefefe;
 }
 
 #index-recipes .card {
-	border: none;
+    border: none;
 }
 
 #index-recipes img {
-	width: 100%;
-	padding: 15px 0px;
+    width: 100%;
+    padding: 15px 0px;
 }
 
 #trivia {
-	padding-top: 130px;
+    padding-top: 130px;
 }
 
 /*
@@ -179,14 +181,15 @@ footer
 */
 
 #footer {
-	background-color: #000000;
+    background-color: #000000;
 }
 
 #footer a {
-	margin: 0px 15px;
-	color: #ffffff;
+    margin: 0px 15px;
+    color: #ffffff;
 }
+
 #footer hr {
-	width: 75%;
-	border-top: 1px solid #ffffff;
+    width: 75%;
+    border-top: 1px solid #ffffff;
 }
