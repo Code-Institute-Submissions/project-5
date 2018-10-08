@@ -1,4 +1,24 @@
 /*
+Event handlers and ducument ready functions
+*/
+
+$(document).ready(function () {
+	if ($(window).width() >= 1400) {
+		$("#search-form-toggle").html(`
+			<button type="button" id="search-btn" class="btn btn-outline-info">
+				<i class="fas fa-search"></i>
+			</button>
+		`);
+		
+	}
+	$("#search-btn").on("click", function () {
+		$(".search-overlay").slideToggle();
+	});
+	flashed_messages();
+});
+
+
+/*
 Alerts modal
 */
 
@@ -112,14 +132,6 @@ function checked_checkboxes() {
 Search Form
 */
 
-$("#search-btn").bind("click touchend", function() {
-	if ($(window).width() <= 1400) {
-		window.location.replace("/mobile_search");
-	} else {
-		$(".search-overlay").slideToggle();
-	}
-});
-
 $(".search-overlay input[name=search_input]").on("input", function() {
 	let input = $(".search-overlay input[name=search_input]").val();
 	if (input.length >= 5 && input.trim() != "") {
@@ -157,10 +169,3 @@ $(".search-overlay input[name=search_input]").on("input", function() {
 	}
 });
 
-/*
-Event handlers and ducument ready functions
-*/
-
-$(document).ready(function() {
-	flashed_messages();
-});
