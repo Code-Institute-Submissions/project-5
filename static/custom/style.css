@@ -71,7 +71,7 @@ Overlay
 .search-overlay {
 	display: none;
 	position: absolute;
-	width: 100vw;
+	width: 100%;
 	height: min-content;
 	padding-top: 3%;
 	z-index: 998;
