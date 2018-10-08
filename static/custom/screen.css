@@ -1,26 +1,23 @@
 /* Landscape SmartPhones */
 
-@media (min-width: 640px) and (orientation: landscape) {
-}
+@media (min-width: 640px) and (orientation: landscape) {}
 
 /* md Screens */
 
-@media (min-width: 768px) {
-	.search-overlay {
-		position: fixed;
-	}
-	.btn-outline-success,
-	.navbar .btn-outline-warning {
-		margin-left: 10px;
-	}
-}
+@media (min-width: 768px) {}
 
 /* lg Screens */
 
-@media (min-width: 968px) {
-}
+@media (min-width: 968px) {}
 
 /* xl Screens */
 
 @media (min-width: 1400px) {
+    .search-overlay {
+        position: fixed;
+    }
+    .btn-outline-success,
+    .navbar .btn-outline-warning {
+        margin-left: 10px;
+    }
 }

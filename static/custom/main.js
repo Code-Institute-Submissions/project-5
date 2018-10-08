@@ -112,9 +112,7 @@ function checked_checkboxes() {
 Search Form
 */
 
-$("#search-btn").css("cursor", "pointer");
-$(document).on("click", "#search-btn", function() {
-	event.preventDefault();
+$("#search-btn").on("click", function() {
 	if ($(window).width() <= 1400) {
 		window.location.replace("/mobile_search");
 	} else {
