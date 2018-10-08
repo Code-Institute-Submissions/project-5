@@ -4,7 +4,12 @@
 
 /* md Screens */
 
-@media (min-width: 768px) {}
+@media (min-width: 768px) {
+    .btn-outline-success,
+    .navbar .btn-outline-warning {
+        margin-left: 10px;
+    }
+}
 
 /* lg Screens */
 
@@ -15,9 +20,5 @@
 @media (min-width: 1400px) {
     .search-overlay {
         position: fixed;
-    }
-    .btn-outline-success,
-    .navbar .btn-outline-warning {
-        margin-left: 10px;
     }
 }
