@@ -166,7 +166,13 @@ def recipe(recipe_id):
             return render_template("recipe.html", page_title=recipe['title'], recipe_id=recipe_id, recipe=recipe, forms=forms,  user_in_db=user_in_db, user_id=user_in_db['_id'])
         else:
             return render_template("recipe.html", page_title=recipe['title'], recipe_id=recipe_id, recipe=recipe, forms=forms)
-    return render_template("recipe.html", page_title=recipe['title'], recipe_id=recipe_id, recipe=recipe, forms=forms)
+    else:
+        if 'user' in session:
+            user_in_db = users_collection.find_one(
+                {"username": session['user']})
+            return render_template("recipe.html", page_title=recipe['title'], recipe_id=recipe_id, recipe=recipe, forms=forms,  user_in_db=user_in_db, user_id=user_in_db['_id'])
+        else:
+            return render_template("recipe.html", page_title=recipe['title'], recipe_id=recipe_id, recipe=recipe, forms=forms)
 
 # Add Recipe
 
@@ -181,13 +187,12 @@ def add_recipe(user_id):
         data = data.__dict__
         new_recipe = recipes_collection.insert(data["recipe"])
         recipe_id = str(new_recipe)
-        recipe = data["recipe"]
         users_collection.update({"username": session['user']}, {
                                 '$push': {'recipes': recipe_id}})
         user_in_db = users_collection.find_one({"username": session['user']})
 
         flash("Recipe added. Thank you!")
-        return redirect(url_for("recipe", recipe_id=recipe_id, recipe=recipe, forms=forms, user_in_db=user_in_db, user_id=user_in_db['_id'], page_title=recipe['title']))
+        return redirect(url_for("recipe", recipe_id=recipe_id))
     if 'user' in session:
         user_in_db = users_collection.find_one({"username": session['user']})
         return render_template("add-recipe.html", page_title="Add recipe", user_in_db=user_in_db, user_id=user_in_db['_id'], forms=forms, recipe_schema=recipe_schema)
@@ -481,10 +486,7 @@ def search_by_cuisines(cuisine):
 @app.route('/admin_dashboard')
 def dashboard():
     """ if request.method == "GET":
-
-
-            hidden_recipes = recipes_collection.delete_many({"visibility": False}) """
-
+        hidden_recipes = recipes_collection.delete_many({"visibility": False}) """
     if 'user' in session:
         user_in_db = users_collection.find_one({"username": session['user']})
         users = users_collection.find()

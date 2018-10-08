@@ -50,14 +50,20 @@
 							<hr>
 						</div>
 						{% if session.user %}
-						<div class="col-12">							
-							{% if recipe_id in user_in_db.votes %}
-							<div class="row justify-content-center">
-								<p class="font-weight-bold">You already voted or you are owner of the recipe</p>								
-							</div>
-							<div class="row justify-content-center">
-								<p><i class="fas fa-star fa-lg"></i> {{ recipe.aggregateLikes }}</p>
-							</div>
+						<div class="col-12">												
+							{% if recipe_id in user_in_db.recipes or user_in_db.votes %}
+								{% if recipe_id in user_in_db.recipes %}
+								<div class="row justify-content-center">
+									<p class="font-weight-bold">You can not vote for your own recipes.</p>
+								</div>								  
+								{% else %}
+								<div class="row justify-content-center">
+									<p class="font-weight-bold">You already voted for this recipe.</p>
+								</div>
+								{% endif %}								
+								<div class="row justify-content-center">
+									<p><i class="fas fa-star fa-lg"></i> {{ recipe.aggregateLikes }}</p>
+								</div>
 							{% else %}
 							<div class="row justify-content-around">
 								<a href="/vote_up/{{recipe._id}}/{{user_in_db._id}}" class="btn btn-outline-success"><i class="fas fa-thumbs-up"></i></a>
@@ -123,8 +129,9 @@
 	{% if user_in_db %}
 	{% for id in user_in_db.recipes %}
 	{% if id == recipe_id %}
+	<hr>
 	<div class="row justify-content-center">
-		<a class="color-red" href="{{url_for('edit_recipe', recipe_id=recipe_id, user_id=user_in_db._id)}}">Edit recipe</a>
+		<a class="btn btn-outline-warning" href="{{url_for('edit_recipe', recipe_id=recipe_id, user_id=user_in_db._id)}}">Edit recipe</a>
 	</div>
 	{% endif %}
 	{% endfor %}
