@@ -112,7 +112,7 @@ function checked_checkboxes() {
 Search Form
 */
 
-$("#search-btn").on("click", function() {
+$("#search-btn").bind("click touchend", function() {
 	if ($(window).width() <= 1400) {
 		window.location.replace("/mobile_search");
 	} else {
