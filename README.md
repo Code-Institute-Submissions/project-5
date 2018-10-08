@@ -98,6 +98,7 @@
 - At least one tag must be selected to use the for for searching recipes
 - Fixed bug where user will not be redirected to mobile search on tablets like screens (medium size resolutions)
 - Fixed 500 error when trying to print recipe while loged out
+- Fixed bug where user could vote for his own recipe.
 
 
 ### What could be done better
