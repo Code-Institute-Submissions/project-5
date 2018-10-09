@@ -19,10 +19,12 @@ body {
 #footer {
 	background-color: transparent;
 }
+
+.navbar {
+	background-color: rgba(0, 0, 0, 0.5)
+}
 .btn {
 	background-color: transparent;
-	color: aquamarine;
-	border: 2px solid aquamarine;
 }
 .card-body label,
 .card-body p {

@@ -86,6 +86,8 @@
 #### 1.9
 
 - Added Voting system  for recipes
+- Fixed issue where user was unable to acess the search on iOS tablets
+- Changed the styles of sign-up.html
 
 
 ## Testing and improvements
@@ -99,6 +101,12 @@
 - Fixed bug where user will not be redirected to mobile search on tablets like screens (medium size resolutions)
 - Fixed 500 error when trying to print recipe while loged out
 - Fixed bug where user could vote for his own recipe.
+
+#### BS4 Flex-box iOS 
+
+Encountered many glitches with Flexbox and iOS (tablets). Where some of them are still present and therefore the app is not fully responsive with older versions of Safari.
+
+- Fixed issue where user was unable to acess the search on iOS tablets. Was forced to use JS at the end to change the `a` to `button` on lg and xl screens.
 
 
 ### What could be done better

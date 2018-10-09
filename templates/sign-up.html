@@ -10,7 +10,7 @@
 {% endblock log_in_out_btn %}
 
 {% block main_content %}
-	<section id="sign-up" class="vh100">
+	<section id="sign-up" class="container-fluid">
 		<div class="row">
 			<div class="card mx-auto">
 				<div class="card-header">Sign up</div>
@@ -33,10 +33,18 @@
 								*Required field
 							</p>
 						</div>
-						<button class="btn btn-lg btn-block" type="submit">Sign Up</button>
+						<button class="btn btn-outline-success btn-lg btn-block" type="submit">Sign Up</button>
 					</form>
 				</div>
 			</div>
 		</div>
 	</section>
 {% endblock main_content %}
+
+{% block scripts %}
+  <script>
+	  (function () {
+			$('.navbar').removeClass("navbar-light").addClass("navbar-dark")
+		})();
+  </script>
+{% endblock scripts %}
