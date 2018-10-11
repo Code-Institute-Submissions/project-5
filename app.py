@@ -306,7 +306,7 @@ def input_form_search():
         session["search"] = form_data
         recipes = SearchForm(
             form_data, pagination_base="input_form_search").search_by_input()
-        if recipes["num_of_results"] == 0:
+        if recipes == None or recipes == None or recipes["num_of_results"] == 0:
             flash("Sorry did not find any recipes!")
             return_url = request.referrer
             return redirect(return_url)
@@ -326,7 +326,7 @@ def input_form_search():
             form_data["limit"] = pagination_limit
             recipes = SearchForm(
                 form_data, pagination_base="input_form_search", offset=pagination_offset).search_by_input()
-            if recipes["num_of_results"] == 0:
+            if recipes == None or recipes["num_of_results"] == 0:
                 flash("Sorry did not find any recipes!")
                 return_url = request.referrer
                 return redirect(return_url)
@@ -368,7 +368,7 @@ def tags_form_search():
         session["search"] = form_data
         recipes = SearchForm(
             form_data, pagination_base="tags_form_search").search_by_tags()
-        if recipes["result"] == 0:
+        if recipes == None or recipes["num_of_results"] == 0:
             flash("Sorry did not find any recipes!")
             return_url = request.referrer
             return redirect(return_url)
@@ -389,7 +389,7 @@ def tags_form_search():
             form_data["search_input"] = ""
             recipes = SearchForm(
                 form_data, pagination_base="tags_form_search", offset=pagination_offset).search_by_tags()
-            if recipes["num_of_results"] == 0:
+            if recipes == None or recipes["num_of_results"] == 0:
                 flash("Sorry did not find any recipes!")
                 return redirect("/")
             else:

@@ -7,12 +7,17 @@
 	}
 
 	#trivia {
-		position: absolute;		
+		position: absolute;
 		width: 100%;
 		bottom: 10%;
 	}
+
 	#trivia hr {
 		background-color: #000000;
+	}
+
+	.card-img-top {
+		border-radius: 33px;
 	}
 </style>
 {% endblock css %}
@@ -32,15 +37,13 @@
 </section>
 
 <section id="index-recipes" class="container">
-
-
 	<div class="col-xs-12">
 		<h3 class="text-center col-xs-12 col-md-8 offset-md-2">{{main_recipe.title}}</h3>
 		<hr>
 		<div class="row card-deck">
 			<div class=" card col-xs-12 col-md-6 offset-md-1">
-				<a class="card-img-top" href="{{url_for('recipe', recipe_id=main_recipe._id)}}">
-					<img src="{{ main_recipe.image }}" alt="{{main_recipe.title}}">
+				<a href="{{url_for('recipe', recipe_id=main_recipe._id)}}">
+					<img class="card-img-top" src="{{ main_recipe.image }}" alt="{{main_recipe.title}}">
 				</a>
 			</div>
 			<div class="card col-xs-12 col-md-4">
@@ -53,7 +56,7 @@
 					{% for recipe in side_recipes %}
 					<div class="col-xs-12 col-md-4">
 						<a href="{{url_for('recipe', recipe_id=recipe._id)}}">
-							<img src="{{ recipe.image }}" alt="{{recipe.title}}">
+							<img class="card-img-top" src="{{ recipe.image }}" alt="{{recipe.title}}">
 						</a>
 					</div>
 					{% endfor %}
