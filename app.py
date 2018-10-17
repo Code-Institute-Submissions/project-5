@@ -223,6 +223,27 @@ def edit_recipe(recipe_id, user_id):
                     return render_template("edit-recipe.html", page_title="Edit recipe", recipe_id=recipe_id, recipes=recipe, forms=forms,  user_in_db=user_in_db, user_id=user_in_db['_id'])
     return redirect(url_for('index'))
 
+
+# Delete Recipe
+
+
+@app.route('/delete_recipe/<recipe_id>/<user_id>', methods=['GET'])
+def delete_recipe(recipe_id, user_id):
+    user_in_db = Search(users_collection).find_one_by_id(user_id)
+    logged_in_user = session.get('user')
+    if request.method == "GET":
+        if logged_in_user == user_in_db['username']:
+            recipes_collection.remove({'_id': ObjectId(recipe_id)})
+            users_collection.update({'_id': ObjectId(user_id)}, {
+                                    "$pull": {"recipes": recipe_id}})
+            flash("Your recipe has been delated")
+            return redirect(url_for('index'))
+        else:
+            flash("Your are NOT allowed to delete this recipe!")
+            return redirect(url_for('index'))
+    return redirect(url_for('index'))
+
+
 # Vote up for a recipe
 
 

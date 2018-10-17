@@ -64,7 +64,9 @@ a:hover {
 .fa-6x {
     font-size: 5em;
 }
-
+.btn-primary {
+	color: #000000;
+}
 /*
 Overlay
 */
@@ -125,7 +127,7 @@ Overlay
     top: 95%;
     left: 0;
     z-index: 999;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.5);
     color: #ffffff;
 }
 
