@@ -1,23 +1,134 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
+
+{% block css %}
+<style>
+	body {
+		background: url("/static/img/slider-image1.jpg") no-repeat center;
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+	}
+	.navbar,
+	.card,
+	.card-body,
+	.list-group-item {
+		background-color: rgba(0, 0, 0, 0.5)
+	}
+	.card,
+	.card-body {
+		color: #dddddd;
+	}
+  </style>
+{% endblock css %}
 
 {% block log_in_out_btn %}
 
-<button class="btn btn-outline-success my-2 my-sm-0" type="button" data-toggle="modal" data-target="#log-out-modal">Log out</button>
+<button class="btn btn-outline-success my-2 my-sm-0" type="button" data-toggle="modal" data-target="#log-out-modal">Log
+	out</button>
 
-{% endblock log_in_out_btn %} 
+{% endblock log_in_out_btn %}
 
 {% block main_content %}
 <section class="container vh100">
 	<div class="row">
-		<div class="card">
-			<div class="card-header">Logged in as {{user_in_db.username}}</div>
+		<div class="card col-12">
+			<h2 class="card-title text-center">Wellcome back {{ user_in_db.username|title }}</h2>
 			<div class="card-body">
-				{{user_in_db}}
+				<div class="row">
+					<div class="col-xs-12 col-md-6">
+						<img class="card-img-top" src="{{url_for('static', filename='img/profile-picture-default.png')}}" alt="Profile  picture">
+					</div>
+					<div class="col-xs-12 col-md-6">
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item text-center">
+								<span class="font-weight-bold">Profile name:</span> {{ user_in_db.username|title }}
+							</li>
+							{% if user_in_db.email %}
+							<li class="list-group-item text-center">
+								<span class="font-weight-bold">Your email:</span> {{ user_in_db.email }}
+							</li>
+							{% else %}
+							<li class="list-group-item text-center">
+								<span class="font-weight-bold">Profile email:</span> You did not provide your email address.
+							</li>
+							{% endif %}
+						</ul>
+					</div>
+				</div>
 			</div>
+		</div>
+	</div>
+	<hr>
+	<div class="row">
+		<div class="card col-12">
+			{% if user_in_db.recipes %}
+			<h4 class="card-title text-center">Your recipes</h4>
+			<div class="card-body">
+				<div class="row">
+					{% for recipe in recipes %}
+					{% if recipes|length == 1 %}
+					<div class="card col-12">
+						<h5 class="card-title text-center">{{ recipe.title|title }}</h5>
+						<div class="row justify-content-center">
+							<p><i class="fas fa-star fa-lg"></i> {{ recipe.aggregateLikes }}</p>
+						</div>
+						<div class="row justify-content-around">
+							<a class="btn btn-outline-warning" href="{{url_for('edit_recipe', recipe_id=recipe._id, user_id=user_in_db._id)}}">Edit
+								recipe</a>
+							<a class="btn btn-outline-success" href="{{url_for('recipe', recipe_id=recipe._id)}}">View recipe</a>
+						</div>
+					</div>
+					{% endif %}
+					{% if recipes|length == 2 %}
+					<div class="card col-xs-12 col-md-6">
+						<h5 class="card-title text-center">{{ recipe.title|title }}</h5>
+						<div class="row justify-content-center">
+							<p><i class="fas fa-star fa-lg"></i> {{ recipe.aggregateLikes }}</p>
+						</div>
+						<div class="row justify-content-around">
+							<a class="btn btn-outline-warning" href="{{url_for('edit_recipe', recipe_id=recipe._id, user_id=user_in_db._id)}}">Edit
+								recipe</a>
+							<a class="btn btn-outline-success" href="{{url_for('recipe', recipe_id=recipe._id)}}">View recipe</a>
+						</div>
+					</div>
+					{% endif %}
+					{% if recipes|length > 2 %}
+					<div class="card col-xs-12 col-md-4">
+						<h5 class="card-title text-center">{{ recipe.title|title }}</h5>
+						<div class="row justify-content-center">
+							<p><i class="fas fa-star fa-lg"></i> {{ recipe.aggregateLikes }}</p>
+						</div>
+						<div class="row justify-content-around">
+							<a class="btn btn-outline-warning" href="{{url_for('edit_recipe', recipe_id=recipe._id, user_id=user_in_db._id)}}">Edit
+								recipe</a>
+							<a class="btn btn-outline-success" href="{{url_for('recipe', recipe_id=recipe._id)}}">View recipe</a>
+						</div>
+					</div>
+					{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+			{% else %}
+			<h5 class="card-title text-center">You did not add any recipe yet.</h5>
+			<p class="text-center">
+				<a href="/add_recipe/{{ user_id }}" class="text-success card-link">
+					Add one now!
+				</a>
+			</p>
+			{% endif %}
 		</div>
 	</div>
 </section>
 {% endblock main_content %}
+
+{% block scripts %}
+<script>
+	(function () {
+		$('.navbar').removeClass("navbar-light").addClass("navbar-dark")
+	})();
+</script>
+{% endblock scripts %}
 
 {% block log_in_modal %}
 

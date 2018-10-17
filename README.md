@@ -89,6 +89,9 @@
 - Changed the styles of sign-up.html
 - Added option to delete recipe
 
+#### 2.0
+
+- Finished Profile page
 
 ## Testing and improvements
 

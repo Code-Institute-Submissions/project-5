@@ -123,10 +123,10 @@ def logout():
 def profile(user_id):
     forms = forms_collection.find()
     if 'user' in session:
-        user_in_db = users_collection.find_one(
-            {"username": session['user']})
-        return render_template("profile.html", page_title="profile", user_in_db=user_in_db, user_id=user_in_db['_id'],  forms=forms)
-
+        user_in_db = users_collection.find_one({"username": session['user']})
+        recipes = recipes_collection.find({"creditsText": session['user']})
+        return render_template("profile.html", page_title="profile", user_in_db=user_in_db, user_id=user_in_db['_id'], recipes=[x for x in recipes], forms=forms)
+    flash("Please log in first")
     return redirect(url_for('index', forms=forms))
 
 
@@ -192,6 +192,8 @@ def add_recipe(user_id):
         user_in_db = users_collection.find_one({"username": session['user']})
 
         flash("Recipe added. Thank you!")
+        flash("Please note that your recipe must be approved by admin to be view in the site!")
+        flash("However you can still view your recipe trought profile page.")
         return redirect(url_for("recipe", recipe_id=recipe_id))
     if 'user' in session:
         user_in_db = users_collection.find_one({"username": session['user']})
@@ -555,7 +557,6 @@ Temporary notes
 """
 
 
-# edit recipes
-# search by user names
-# profile page
+# fix issue with time of 0 on recipes
+# create adding new tags ... 
 # edit profile
