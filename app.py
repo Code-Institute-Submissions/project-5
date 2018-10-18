@@ -161,16 +161,16 @@ def recipe(recipe_id):
     forms = forms_collection.find()
     if request.method == "POST":
         if 'user' in session:
-            user_in_db = users_collection.find_one(
-                {"username": session['user']})
+            user_in_db = users_collection.find_one({"username": session['user']})
             return render_template("recipe.html", page_title=recipe['title'], recipe_id=recipe_id, recipe=recipe, forms=forms,  user_in_db=user_in_db, user_id=user_in_db['_id'])
         else:
             return render_template("recipe.html", page_title=recipe['title'], recipe_id=recipe_id, recipe=recipe, forms=forms)
     else:
         if 'user' in session:
-            user_in_db = users_collection.find_one(
-                {"username": session['user']})
-            return render_template("recipe.html", page_title=recipe['title'], recipe_id=recipe_id, recipe=recipe, forms=forms,  user_in_db=user_in_db, user_id=user_in_db['_id'])
+            user_in_db = users_collection.find_one({"username": session['user']})
+            user_recipe = [x for x in user_in_db['recipes'] if x == recipe_id]
+            voted_recipes = [x for x in user_in_db['votes'] if x == recipe_id]
+            return render_template("recipe.html", page_title=recipe['title'], recipe_id=recipe_id, recipe=recipe, user_recipe=user_recipe, voted_recipes=voted_recipes, forms=forms,  user_in_db=user_in_db, user_id=user_in_db['_id'])
         else:
             return render_template("recipe.html", page_title=recipe['title'], recipe_id=recipe_id, recipe=recipe, forms=forms)
 

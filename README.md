@@ -77,8 +77,7 @@
 - Send out the app to users for testing
 - Added links to Footer
 
-
-#### 1.8 
+#### 1.8
 
 - Added Pagination to recipes and search
 - Search class has now option to search without limiting the results
@@ -93,6 +92,11 @@
 
 - Finished Profile page
 
+#### 2.1
+
+- Fixed voting system
+- Added few improvments from users stories
+
 ## Testing and improvements
 
 - xk lines of manual testing which I never documented :(
@@ -102,17 +106,35 @@
 - Decided to use the mobile search for tablets as well
 - At least one tag must be selected to use the for for searching recipes
 - Fixed bug where user will not be redirected to mobile search on tablets like screens (medium size resolutions)
-- Fixed 500 error when trying to print recipe while loged out
+- Fixed 500 error when trying to print recipe while logged out
 - Fixed bug where user could vote for his own recipe.
 - Added statment to check if cursor is `None` which occurs when empty form is submited for example.
+- Fixed major glitch. As sson as user voted for one recipe he could not vote for any other recipes as the app said "You already voted for this recipe"
 
-#### BS4 Flex-box iOS 
+### Some user feedbacks
+
+- Fixed many typos
+- Changed the "Welcome" message in profile page
+- Increased `setTimeout()` from 5s to 7s in `flashed_messages()` as some of the messages was hard to read all before disappearing
+- If not loged in user can now click on "You must be loged in to vote / edit recipe" to bring the log in modal
+- Made "Register an Acount" to looks like a btn for better visibility
+
+### Need to fix
+
+- somehow add partial search in the form
+- add second field for cross check the password in register form
+- maybe add email as required field and / or allow users to login via email
+- disable drop-down with user stories in add / edit recipe
+- check-boxes needs to align better on mobile view
+- add more custom CSS
+- need to add more JS for better user xp
+
+#### BS4 Flex-box iOS
 
 Encountered many glitches with Flexbox and iOS (especially tablets). Where some of them are still present and therefore the app is not fully responsive with older versions of Safari.
 
 - Fixed issue where user was unable to acess the search on iOS tablets. Was forced to use JS at the end to change the `a` to `button` on lg and xl screens.
-- Found workaround with search form will not trigger event on checkbox change and / or input change. Using JS to check if user using Safari on tablet / mobile view and if so the attr `disabled` is removed so user can use the form. 
-
+- Found workaround with search form will not trigger event on checkbox change and / or input change. Using JS to check if user using Safari on tablet / mobile view and if so the attr `disabled` is removed so user can use the form.
 
 ### What could be done better
 

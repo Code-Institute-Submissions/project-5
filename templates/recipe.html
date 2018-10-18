@@ -51,19 +51,20 @@
 						</div>
 						{% if session.user %}
 						<div class="col-12">
-							{% if recipe_id in user_in_db.recipes or user_in_db.votes %}
-								{% if recipe_id in user_in_db.recipes %}
-								<div class="row justify-content-center">
-									<p class="font-weight-bold">You can not vote for your own recipes.</p>
-								</div>								  
-								{% else %}
-								<div class="row justify-content-center">
-									<p class="font-weight-bold">You already voted for this recipe.</p>
-								</div>
-								{% endif %}								
-								<div class="row justify-content-center">
-									<p><i class="fas fa-star fa-lg"></i> {{ recipe.aggregateLikes }}</p>
-								</div>
+							{% if user_recipe %}
+							<div class="row justify-content-center">
+								<p class="font-weight-bold">You can not vote for your own recipes.</p>
+							</div>
+							<div class="row justify-content-center">
+								<p><i class="fas fa-star fa-lg"></i> {{ recipe.aggregateLikes }}</p>
+							</div>
+							{% elif voted_recipes %}
+							<div class="row justify-content-center">
+								<p class="font-weight-bold">You already voted for this recipe.</p>
+							</div>
+							<div class="row justify-content-center">
+								<p><i class="fas fa-star fa-lg"></i> {{ recipe.aggregateLikes }}</p>
+							</div>
 							{% else %}
 							<div class="row justify-content-around">
 								<a href="/vote_up/{{recipe._id}}/{{user_in_db._id}}" class="btn btn-outline-success"><i class="fas fa-thumbs-up"></i></a>
@@ -74,7 +75,7 @@
 						</div>
 						{% else %}
 						<div class="col-12 text-center">
-							<p class="font-weight-bold">You must be loged in to vote / edit recipe</p>
+							<p class="font-weight-bold"><a href="#" data-toggle="modal" data-target="#log-in-modal">You must be loged in to vote / edit recipe</a></p>
 							<p><i class="fas fa-star fa-lg"></i> {{ recipe.aggregateLikes }}</p>
 						</div>
 						{% endif %}

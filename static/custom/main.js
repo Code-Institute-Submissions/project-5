@@ -36,7 +36,7 @@ function flashed_messages() {
 		$("#alerts").slideDown(1500);
 		setTimeout(() => {
 			$("#alerts").slideUp(1500);
-		}, 5000);
+		}, 7000);
 	}
 }
 
