@@ -96,6 +96,7 @@
 
 - Fixed voting system
 - Added few improvments from users stories
+- Fixed issue where email address was not storing in database
 
 ## Testing and improvements
 

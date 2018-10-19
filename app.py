@@ -94,6 +94,7 @@ def sign_up():
         hashed_pass = generate_password_hash(request.form['user_password'])
         users_collection.insert_one(
             {'username': request.form['username'],
+             'email': request.form['email'],
              'password': hashed_pass,
              'recipes': [],
              'votes': []})
