@@ -134,7 +134,7 @@ Search Form
 
 $(".search-overlay input[name=search_input]").on("input", function() {
 	let input = $(".search-overlay input[name=search_input]").val();
-	if (input.length >= 5 && input.trim() != "") {
+	if (input.length >= 4 && input.trim() != "") {
 		$("#input_search_btn")
 			.prop("disabled", false)
 			.html("Search!");
