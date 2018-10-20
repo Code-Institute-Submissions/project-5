@@ -119,6 +119,7 @@
 - Increased `setTimeout()` from 5s to 7s in `flashed_messages()` as some of the messages was hard to read all before disappearing
 - If not loged in user can now click on "You must be loged in to vote / edit recipe" to bring the log in modal
 - Made "Register an Acount" to looks like a btn for better visibility
+- Reduced input search `minlength` from 5 to 4 for words like a "Fish" for example
 
 ### Need to fix
 
