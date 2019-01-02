@@ -9,7 +9,7 @@ from classes import Search, SearchForm, Database, Recipe
 
 app = Flask(__name__)
 # mongoDB config
-app.config['MONGO_DBNAME'] = os.environ.get("MONGO_DBNAME")
+#app.config['MONGO_DBNAME'] = os.environ.get("MONGO_DBNAME")
 app.config['MONGO_URI'] = os.environ.get("MONGO_URI")
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 
@@ -104,7 +104,6 @@ def sign_up():
         return redirect(url_for('profile', user_id=user_in_db['_id'], forms=forms))
     if 'user' in session:
         return render_template("sign-up.html", page_title="Sign up", username=session['user'], forms=forms)
-
     return render_template("sign-up.html", page_title="Sign up", forms=forms)
 
 # Log out

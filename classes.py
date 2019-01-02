@@ -1,6 +1,6 @@
 
 import os
-from flask import Flask, redirect, request, url_for
+from flask import Flask, request, url_for
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 
