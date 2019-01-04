@@ -4,10 +4,13 @@
 - [**The Cookbook**](#the-cookbook)
 	- [**CI Brief**](#ci-brief)
 	- [**UX**](#ux)
-		- [General Design](#general-design)
-		- [Requirements](#requirements)
-		- [Wireframes](#wireframes)
-		- [Template](#template)
+		- [**Requirements**](#requirements)
+			- [Database](#database)
+			- [Users](#users)
+			- [Pages](#pages)
+		- [**General Design**](#general-design)
+		- [**Wireframes**](#wireframes)
+		- [**Template**](#template)
 	- [**Features**](#features)
 		- [Existing features](#existing-features)
 		- [Features left to implement](#features-left-to-implement)
@@ -47,7 +50,11 @@
 # **The Cookbook**
 
 Hello there,  
-and welcome to my fourth [Code Institute (CI)](https://courses.codeinstitute.net/) school project.  
+and welcome to my fourth [Code Institute (CI)](https://courses.codeinstitute.net/) school project.
+
+In this project I should be able to show that I can create a web aplication using [Python 3](https://www.python.org/downloads/) and [Flask]( http://flask.pocoo.org/) which works with cloud **SQL** / **NoSQL** databes.
+
+I decided to follow the given example from CI for this project.
 
 <hr />
 
@@ -71,20 +78,94 @@ and welcome to my fourth [Code Institute (CI)](https://courses.codeinstitute.net
 
 ## **UX**
 
-### General Design
+### **Requirements**
 
+*Based on the above I created requirements for this project.*
 
-**The project general idea is for entertainment purpose only.**
+#### Database
 
+- Create schema based on structure of the recipe/s found
+- Create schema for user
+- Create different collections for all above
 
-### Requirements
+#### Users
 
-- **Welcome page**
+Use [Flask Sessions](http://flask.pocoo.org/docs/1.0/quickstart/) for easier account management.
 
-### Wireframes
+Role | View Recipe/s | Add / Edit / Delete Recipe | Access admin area
+--- | --- | --- | ---
+Anonymous | Yes | No | No |
+Logged in | Yes | Yes* | No |
+Logged in as Admin | Yes | Yes** | Yes |
+Logged in as CI | Yes | Yes** | Yes |
 
-### Template
+**User should be able to edit / delete only his own recipe/s.*
 
+***Admin and CI should be able to delete any (user recipes).*
+
+#### Pages
+
+Create 6 - 7 pages for the project.
+
+- **Any page**
+  - **Navigation**
+    - Logo should lead the user to "home" page
+    - Create functionality for user to access **All recipes**
+    - Create functionality for user to search for existing recipes
+    - **Anonymous**
+      - Create functionality for user to be able to create new account.  
+        ***(The general idea is that only registered users can add / edit / delete recipe in the database.)***  
+      - Create functionality for user to be able to log-in to existing account.
+    - **Logged in**
+      - Create functionality for user to be able log out from current session
+      - Create functionality for user to access **Add new recipe**
+      - Create functionality for user to access **Profile page**
+  - **Footer**
+    - **Logged in as Admin / CI**
+      - Create functionality for user to access **Admin page**
+- **Landing page (index.html)**
+  - Welcome new or existing user  
+- **All recipes**
+  - Show user available recipes (if any)
+    - Show base information about each of them
+  - Sort the recipes based on popularity by default
+  - Add pagination (if too many recipes to display)
+- **Single recipe**
+  - Show user detail information’s about targeted recipe
+    - Title
+    - Author
+    - Picture (if any)
+    - Indegrees
+    - Step by step instructions
+    - Dish type (if any)
+    - Allergies (if any)
+    - Time required for preparation
+- **Add recipe**
+  - Allow logged in user to add new recipe to database
+- **Edit recipe**
+  - Allow logged in user to edit his own recipe
+- **Profile page**
+  - Show user avatar (if any)
+  - Show recipes added by user
+  - Show overall popularity of the user recipes
+  - Let user to edit his profile
+- **Admin area**
+  - Show registered users and they information
+  - Show recipes by users
+    - Create functionality for the user to delete recipe from database on this page
+  
+
+### **General Design**
+
+Design | Importance | Comments
+--- | --- | ---
+Functionality | 7 |
+User experiences | 6 |
+HTML / CSS | 5 | Create modern clean look
+
+### **Wireframes**
+
+### **Template**
 
 [**To top**](#Table-of-Contents)
 
@@ -165,9 +246,9 @@ and welcome to my fourth [Code Institute (CI)](https://courses.codeinstitute.net
 
 *[Git](https://git-scm.com/) has been used for version control.*
 
-- There are 7 different branches:
+- There are xxxxx different branches:
 
-  - [master branch](https://github.com/MiroslavSvec/project-4/tree/master) Used in production.  
+  - [master branch](https://github.com/MiroslavSvec/project-4/tree/master) used in production.  
     - *The application is built from this branch on **Heroku***
 
   - *6 other branches has been created for development purpose only. Where each branch represent different version of the application.*
@@ -275,6 +356,7 @@ and welcome to my fourth [Code Institute (CI)](https://courses.codeinstitute.net
 - **Fixes**  
   - [add-edit-template.html](/templates/add-edit-template.html)
     - Added `autocomplete="off"` to inputs to hide the user stories
+  - Reduced input search `minlength` from 4 to 3 for words like a "Egg" for example
 
 
 ### **Testing and improvements**

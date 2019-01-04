@@ -98,7 +98,6 @@
 				</div>
 			</div>
 		</div>
-
 	</nav>
 
 	{% block search_form_modal %}
@@ -210,6 +209,7 @@
 		</div>
 	</div>
 	{% endblock log_out_modal %}
+
 	<!-- Bootstrap core JavaScript-->
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
 	 crossorigin="anonymous"></script>
@@ -220,9 +220,7 @@
 	<!-- Main JS-->
 	<script src="{{ url_for('static', filename='custom/main.js') }}"></script>
 
-	{% block scripts %}
-
-	{% endblock scripts %}
+	{% block scripts %}{% endblock scripts %}
 
 </body>
 
