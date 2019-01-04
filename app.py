@@ -8,8 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from classes import Search, SearchForm, Database, Recipe
 
 app = Flask(__name__)
-# mongoDB config
-#app.config['MONGO_DBNAME'] = os.environ.get("MONGO_DBNAME")
+
 app.config['MONGO_URI'] = os.environ.get("MONGO_URI")
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 
@@ -23,14 +22,12 @@ trivia_collection = mongo.db.trivia
 
 recipe_schema_id = "5ba2ded543277a316cbf0ef9"
 
-""" testing """
 
-testing_collection = mongo.db.testing
+""" 
 
-"""  """
+index.html
 
-# Index
-
+"""
 
 @app.route('/')
 @app.route('/index')
@@ -531,12 +528,27 @@ def update_db():
         return render_template("dashboard.html", page_title="dashboard", users=users, forms=forms)
 
 
-# Error page
+""" 
+
+Error Pages
+
+"""
+
+# 404
 
 
-@app.route('/error')
-def error():
-    return render_template("error.html")
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+# 500
+
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    session.clear()
+    return render_template('500.html'), 500
+
 
 
 if __name__ == '__main__':

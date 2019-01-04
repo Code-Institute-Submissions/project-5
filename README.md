@@ -78,9 +78,15 @@ I decided to follow the given example from CI for this project.
 
 ## **UX**
 
+*I personally hate to cook and as I almost never visit those kind of websites, I search around the web first to get a general idea of the design and data required for this project.*
+
+*I visited many websites and the only thing I didn’t like was that they all looks a bit "outdated" in design and sometimes "too busy".*
+
+*Therefore, I decided to create a cooking website which will have a "modern" look while keeping clean design.*
+
 ### **Requirements**
 
-*Based on the above I created requirements for this project.*
+*Based on my research and brief given by CI, I created the below requirements for this project.*
 
 #### Database
 
@@ -157,11 +163,11 @@ Create 6 - 7 pages for the project.
 
 ### **General Design**
 
-Design | Importance | Comments
---- | --- | ---
+Design | Importance
+--- | ---
 Functionality | 7 |
 User experiences | 6 |
-HTML / CSS | 5 | Create modern clean look
+HTML / CSS | 5 |
 
 ### **Wireframes**
 
@@ -352,7 +358,10 @@ HTML / CSS | 5 | Create modern clean look
 #### 2.2
 
 - **Changelog**
-  - Added README template and change it to suits the project
+  - Added README template and changed it to suits the project
+    - Added [**Requirements**](#requirements) section to README
+  - Added [404.html](/templates/404.html) template and errorhandler
+  - Added [500.html](/templates/500.html) template and errorhandler
 - **Fixes**  
   - [add-edit-template.html](/templates/add-edit-template.html)
     - Added `autocomplete="off"` to inputs to hide the user stories

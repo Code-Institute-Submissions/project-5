@@ -1,0 +1,29 @@
+body {
+	height: 100vh;
+	background: url("/static/img/error.jpg") no-repeat center;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+.container-fluid {
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+h1 {
+	font-size: 9.5rem;
+}
+
+a,
+a:hover {
+	font-size: 2rem;
+	color: #02f73a;
+	opacity: 0.7;
+}
+
+a:hover {
+	text-decoration: none;
+	opacity: 1;
+}
