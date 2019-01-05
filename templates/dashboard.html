@@ -13,6 +13,22 @@
 
 {% block main_content %}
 <section class="container vh100">
+	<div class="row" id="pei"></div>
+	<div class="row">
+		<div class="card col-12">
+			<div class="card-header">Users recipes</div>
+			<div class="card-body">
+				{% if users_recipes %}
+				{% for recipe in users_recipes %}
+				<div class="card">
+					<a href="{{url_for('recipe', recipe_id=recipe._id)}}" target="_blank">{{recipe._id}} <i class="fas fa-external-link-alt"></i></a>
+				</div>
+				{% endfor %}
+				{% else %}
+				{% endif %}
+			</div>
+		</div>
+	</div>
 	<div class="row">
 		<div class="card col-12">
 			<div class="card-header">Hidden recipes</div>
@@ -94,6 +110,13 @@
 				console.log(error);
 			});
 
+		});
+		$.get(`/pie`, function () {
+			
+		}).fail(function (xhr, status, error) {
+			console.log(xhr);
+			console.log(status);
+			console.log(error);
 		});
 
 	});

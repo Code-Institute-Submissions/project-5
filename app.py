@@ -1,5 +1,5 @@
 import os
-import pprint
+import matplotlib.pyplot as plt
 from flask import Flask, render_template, redirect, request, url_for, session, flash
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
@@ -23,11 +23,12 @@ trivia_collection = mongo.db.trivia
 recipe_schema_id = "5ba2ded543277a316cbf0ef9"
 
 
-""" 
+"""
 
 index.html
 
 """
+
 
 @app.route('/')
 @app.route('/index')
@@ -158,13 +159,15 @@ def recipe(recipe_id):
     forms = forms_collection.find()
     if request.method == "POST":
         if 'user' in session:
-            user_in_db = users_collection.find_one({"username": session['user']})
+            user_in_db = users_collection.find_one(
+                {"username": session['user']})
             return render_template("recipe.html", page_title=recipe['title'], recipe_id=recipe_id, recipe=recipe, forms=forms,  user_in_db=user_in_db, user_id=user_in_db['_id'])
         else:
             return render_template("recipe.html", page_title=recipe['title'], recipe_id=recipe_id, recipe=recipe, forms=forms)
     else:
         if 'user' in session:
-            user_in_db = users_collection.find_one({"username": session['user']})
+            user_in_db = users_collection.find_one(
+                {"username": session['user']})
             user_recipe = [x for x in user_in_db['recipes'] if x == recipe_id]
             voted_recipes = [x for x in user_in_db['votes'] if x == recipe_id]
             return render_template("recipe.html", page_title=recipe['title'], recipe_id=recipe_id, recipe=recipe, user_recipe=user_recipe, voted_recipes=voted_recipes, forms=forms,  user_in_db=user_in_db, user_id=user_in_db['_id'])
@@ -189,7 +192,8 @@ def add_recipe(user_id):
         user_in_db = users_collection.find_one({"username": session['user']})
 
         flash("Recipe added. Thank you!")
-        flash("Please note that your recipe must be approved by admin to be view in the site!")
+        flash(
+            "Please note that your recipe must be approved by admin to be view in the site!")
         flash("However you can still view your recipe trought profile page.")
         return redirect(url_for("recipe", recipe_id=recipe_id))
     if 'user' in session:
@@ -511,10 +515,33 @@ def dashboard():
         user_in_db = users_collection.find_one({"username": session['user']})
         users = users_collection.find()
         forms = forms_collection.find()
+        all_users_recipes = recipes_collection.find({"user_recipe": True})
         hidden_recipes = recipes_collection.find({"visibility": False})
-        return render_template("dashboard.html", page_title="dashboard", users=users, forms=forms, hidden_recipes=hidden_recipes, user_id=user_in_db['_id'])
+        return render_template("dashboard.html", page_title="dashboard", users=users, forms=forms, users_recipes=all_users_recipes, hidden_recipes=hidden_recipes, user_id=user_in_db['_id'])
     return redirect(url_for('index'))
 
+
+@app.route('/pie')
+def pie():    
+    labels = 'Users', 'Database'
+    all_recipes = len(Search(collection=recipes_collection))
+    users_recipes = len(
+        [x for x in recipes_collection.find({"user_recipe": True})])
+    sizes = [users_recipes, all_recipes - users_recipes]
+    explode = (0, 0.1)
+    fig1, ax1 = plt.subplots()
+    ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',
+            shadow=True, startangle=90)
+    ax1.axis('equal')
+    plt.show()
+    if 'user' in session:
+        user_in_db = users_collection.find_one({"username": session['user']})
+        users = users_collection.find()
+        forms = forms_collection.find()
+        all_users_recipes = recipes_collection.find({"user_recipe": True})
+        hidden_recipes = recipes_collection.find({"visibility": False})
+        return render_template("dashboard.html", page_title="dashboard", users=users, forms=forms, users_recipes=all_users_recipes, hidden_recipes=hidden_recipes, user_id=user_in_db['_id'])
+    return redirect(url_for('index'))
 
 # Update db
 
