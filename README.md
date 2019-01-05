@@ -362,6 +362,7 @@ HTML / CSS | 5 |
     - Added [**Requirements**](#requirements) section to README
   - Added [404.html](/templates/404.html) template and errorhandler
   - Added [500.html](/templates/500.html) template and errorhandler
+  - Added access to [Admin area](/templates/dashboard.html) for **admin** and **CI** user
 - **Fixes**  
   - [add-edit-template.html](/templates/add-edit-template.html)
     - Added `autocomplete="off"` to inputs to hide the user stories
