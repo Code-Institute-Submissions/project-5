@@ -4,7 +4,7 @@
 	<div class="row">
 		<div class="form-group col-12">
 			<h3 class="col-12 text-center">Recipe name</h3>
-			<input name="title" value="{{ recipes.title }}" type="text" class="form-control text-center font-weight-bold"
+			<input autocomplete="off" name="title" value="{{ recipes.title }}" type="text" class="form-control text-center font-weight-bold"
 			 placeholder="{{ recipes.title or 'My lovely recipe' }}" minlength="5" maxlength="45" required>
 		</div>
 	</div>
@@ -34,7 +34,7 @@
 						<button onclick="add_indegrient(this)" class="add-element btn btn-success" type="button"><i class="fas fa-plus"></i></button>
 						<button onclick="remove_indegrient(this)" class="add-element btn btn-danger" type="button"><i class="fas fa-trash-alt"></i></button>
 					</div>
-					<input name="ingredient-{{loop.index}}" value="{{ingredient.original}}" type="text" class="col-8 form-control"
+					<input autocomplete="off" name="ingredient-{{loop.index}}" value="{{ingredient.original}}" type="text" class="col-8 form-control"
 					 placeholder="{{ingredient.original|title or '2 cups all purpose flour'}}" minlength="3" maxlength="30" required>
 				</li>
 				{% endfor %}
@@ -53,7 +53,7 @@
 						<button onclick="add_step(this)" class="add-element btn btn-success" type="button"><i class="fas fa-plus"></i></button>
 						<button onclick="remove_step(this)" class="add-element btn btn-danger" type="button"><i class="fas fa-trash-alt"></i></button>
 					</div>
-					<input name="step-{{loop.index}}" type="text" value="{{dic.step}}" class=" col-8 col-lg-10 form-control"
+					<input autocomplete="off" name="step-{{loop.index}}" type="text" value="{{dic.step}}" class=" col-8 col-lg-10 form-control"
 					 placeholder="{{dic.step or 'In a medium bowl mix the sugar, yeast, and water'}}" minlength="10" maxlength="150"
 					 required>
 				</li>

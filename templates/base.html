@@ -55,7 +55,7 @@
 					<li class="nav-item">
 						<a class="nav-link" href="/add_recipe/{{ user_id }}">Add Recipe</a>
 					</li>
-					{% endif %}
+					{% endif %}					
 					<br>
 					{% block search_form_btn %}
 					<li id="search-form-toggle" class="nav-item">
@@ -83,7 +83,16 @@
 
 			</div>
 		</div>
-
+		<!-- Admin access nav -->
+		{% block admin_nav %}
+		{% if session.user == "admin" or session.user == "CI" %}
+		<div class="navbar-nav">
+			<li class="nav-item">
+				<a class="btn btn-outline-danger" href="{{url_for('dashboard', user_id=user_id)}}">Admin <i class="fas fa-user-secret"></i></a>
+			</li>
+		</div>
+		{% endif %}
+		{% endblock admin_nav %}	
 		<!-- Alerts modal -->
 		<div id="alerts" class="container-fluid">
 			<div class="row justify-content-around">
@@ -98,7 +107,6 @@
 				</div>
 			</div>
 		</div>
-
 	</nav>
 
 	{% block search_form_modal %}
@@ -210,6 +218,7 @@
 		</div>
 	</div>
 	{% endblock log_out_modal %}
+
 	<!-- Bootstrap core JavaScript-->
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
 	 crossorigin="anonymous"></script>
@@ -220,9 +229,7 @@
 	<!-- Main JS-->
 	<script src="{{ url_for('static', filename='custom/main.js') }}"></script>
 
-	{% block scripts %}
-
-	{% endblock scripts %}
+	{% block scripts %}{% endblock scripts %}
 
 </body>
 
