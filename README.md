@@ -35,6 +35,7 @@
 			- [2.0](#20)
 			- [2.1](#21)
 			- [2.2](#22)
+			- [2.3](#23)
 		- [**Testing and improvements**](#testing-and-improvements)
 		- [**Some user feedbacks**](#some-user-feedbacks)
 		- [**Need to fix**](#need-to-fix)
@@ -367,6 +368,13 @@ HTML / CSS | 5 |
   - [add-edit-template.html](/templates/add-edit-template.html)
     - Added `autocomplete="off"` to inputs to hide the user stories
   - Reduced input search `minlength` from 4 to 3 for words like a "Egg" for example
+
+#### 2.3
+
+- **Changelog**
+- **Fixes**
+  - [classes.py](/classes.py)
+    - Added `sort()` to **Search** class `text()` method as it was missing and therefore, this search did not sort the results by `aggregateLikes`.
 
 
 ### **Testing and improvements**

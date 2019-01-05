@@ -59,10 +59,10 @@ class Search:
         self.collection.create_index([("$**", 'text')])
         if self.no_pagination:
             return self.collection.find({"$and": [{"visibility": True}, {
-                "$text": {"$search": str(value)}}]}).skip(self.offset)
+                "$text": {"$search": str(value)}}]}).skip(self.offset).sort([(f'{self.sort}', self.order)])
         else:
             results = self.collection.find({"$and": [{"visibility": True}, {
-                "$text": {"$search": str(value)}}]}).skip(self.offset).limit(self.limit)
+                "$text": {"$search": str(value)}}]}).skip(self.offset).limit(self.limit).sort([(f'{self.sort}', self.order)])
             num_of_results = results.count()
             return self.pagination(results.limit(self.limit), num_of_results)
 
@@ -268,5 +268,6 @@ class Recipe(dict):
 			},
 			"analyzedInstructions": self.get_steps(form),
 			"creditsText": form["creditsText"][0],
+			"user_recipe": True,
 			"visibility": False
 		}
