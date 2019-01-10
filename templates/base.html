@@ -64,7 +64,7 @@
 						</a>
 					</li>
 					{% endblock search_form_btn %}
-					<br>
+					<br>					
 					{% if session.user %}
 					<li class="nav-item text-right">
 						<button class="btn btn-outline-warning my-2 my-sm-0" type="button" data-toggle="modal" data-target="#log-out-modal"><i
@@ -78,7 +78,12 @@
 						</button>
 					</li>
 					{% endif %}
-
+					<li class="nav-item">
+						<a class="btn btn-outline-success" href="/graphs">
+							<i class="fas fa-chart-area"></i>
+						</a>
+					</li>
+					<br>
 				</ul>
 
 			</div>

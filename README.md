@@ -375,6 +375,9 @@ HTML / CSS | 5 |
 - **Fixes**
   - [classes.py](/classes.py)
     - Added `sort()` to **Search** class `text()` method as it was missing and therefore, this search did not sort the results by `aggregateLikes`.
+    - Added `Charts` class to keep the code clean.
+      - `users_vs_db()` get figure of total user recipes vs database recipes
+  - Added [graphs.html](/templates/graphs.html) template to render the graphs
 
 
 ### **Testing and improvements**

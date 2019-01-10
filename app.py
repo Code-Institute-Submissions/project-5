@@ -1,11 +1,11 @@
 import os
-import matplotlib.pyplot as plt
+import pygal
 from flask import Flask, render_template, redirect, request, url_for, session, flash
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from classes import Search, SearchForm, Database, Recipe
+from classes import Search, SearchForm, Database, Recipe, Charts
 
 app = Flask(__name__)
 
@@ -520,28 +520,15 @@ def dashboard():
         return render_template("dashboard.html", page_title="dashboard", users=users, forms=forms, users_recipes=all_users_recipes, hidden_recipes=hidden_recipes, user_id=user_in_db['_id'])
     return redirect(url_for('index'))
 
-
-@app.route('/pie')
-def pie():    
-    labels = 'Users', 'Database'
-    all_recipes = len(Search(collection=recipes_collection))
-    users_recipes = len(
-        [x for x in recipes_collection.find({"user_recipe": True})])
-    sizes = [users_recipes, all_recipes - users_recipes]
-    explode = (0, 0.1)
-    fig1, ax1 = plt.subplots()
-    ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',
-            shadow=True, startangle=90)
-    ax1.axis('equal')
-    plt.show()
-    if 'user' in session:
-        user_in_db = users_collection.find_one({"username": session['user']})
-        users = users_collection.find()
-        forms = forms_collection.find()
-        all_users_recipes = recipes_collection.find({"user_recipe": True})
-        hidden_recipes = recipes_collection.find({"visibility": False})
-        return render_template("dashboard.html", page_title="dashboard", users=users, forms=forms, users_recipes=all_users_recipes, hidden_recipes=hidden_recipes, user_id=user_in_db['_id'])
-    return redirect(url_for('index'))
+@app.route('/graphs')
+def graphs():
+	forms = forms_collection.find()
+	users_vs_db = Charts().users_vs_db()
+	if 'user' in session:
+		user_in_db = users_collection.find_one(
+			{"username": session['user']})
+		return render_template("graphs.html", page_title="Graphs", username=session['user'], user_id=user_in_db['_id'], forms=forms, pie_chart=users_vs_db)
+	return render_template("graphs.html", page_title="Graphs", forms=forms, pie_chart=users_vs_db)
 
 # Update db
 
@@ -577,7 +564,6 @@ def internal_server_error(e):
     return render_template('500.html'), 500
 
 
-
 if __name__ == '__main__':
     if os.environ.get("DEVELOPMENT"):
         app.run(host=os.environ.get('IP'),
@@ -597,5 +583,5 @@ Temporary notes
 
 
 # fix issue with time of 0 on recipes
-# create adding new tags ... 
+# create adding new tags ...
 # edit profile
