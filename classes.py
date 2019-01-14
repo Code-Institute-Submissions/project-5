@@ -279,15 +279,39 @@ Charts
 
 
 class Charts():
-    def __init__(self):
+    def __init__(self, form_key="dishTypes"):
         self.recipes = recipes_collection.find()
+        self.form = forms_collection.find_one()
+        self.form_key = form_key
+        self.form_key_data = self.form[form_key]
 
     def users_vs_db(self):
-        users_recipes = len(
-            [x for x in recipes_collection.find({"user_recipe": True})])
+        users_recipes = len([x for x in recipes_collection.find({"user_recipe": True})])
         pie_chart = pygal.Pie()
-        pie_chart.title = 'User recipes vs Database recipes'
-        pie_chart.add('User', users_recipes)
-        pie_chart.add('Database', len(list(self.recipes)) - users_recipes)
+        pie_chart.title = "User's recipes vs Database recipes"
+        pie_chart.add("User's", users_recipes)
+        pie_chart.add("Database", len(list(self.recipes)) - users_recipes)
         graph_data = pie_chart.render_data_uri()
         return graph_data
+
+    def line_graph(self, graph_type):
+        line_chart = pygal.Bar(x_label_rotation=-20)
+        line_chart.title = f"User's recipes vs Database recipes ({graph_type})"
+        line_chart.x_labels = map(str, self.form_key_data)
+        line_chart.add("User's", self.get_data()['user_data'])
+        line_chart.add("Database",  self.get_data()['db_data'])
+        graph_data = line_chart.render_data_uri()
+        return graph_data
+
+    def get_data(self):
+        data = {
+            'user_data' : [],
+            'db_data' : []
+		}
+        for data_type in self.form_key_data:
+            data_type_search = [x for x in recipes_collection.find({self.form_key: data_type.lower()})]
+            users_recipes = len([x for x in data_type_search if x["user_recipe"] == True])
+            data['user_data'].append(users_recipes)
+            db_recipes = len(data_type_search) - users_recipes
+            data['db_data'].append(db_recipes)
+        return data

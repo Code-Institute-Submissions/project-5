@@ -372,12 +372,14 @@ HTML / CSS | 5 |
 #### 2.3
 
 - **Changelog**
-- **Fixes**
   - [classes.py](/classes.py)
-    - Added `sort()` to **Search** class `text()` method as it was missing and therefore, this search did not sort the results by `aggregateLikes`.
-    - Added `Charts` class to keep the code clean.
+    - Added **Charts** class to keep the code clean.
       - `users_vs_db()` get figure of total user recipes vs database recipes
-  - Added [graphs.html](/templates/graphs.html) template to render the graphs
+      - `line_graph()` `return` graph for `dishTypes`, `cuisines` and `diets`
+  - Added [graphs.html](/templates/graphs.html) as I decided to render the graphs on a separate page
+- **Fixes**
+  - [app.py](app.py)
+    - Added `sort()` to **Search** class `text()` method as it was missing and therefore, this search did not sort the results by `aggregateLikes`.
 
 
 ### **Testing and improvements**

@@ -1,5 +1,4 @@
 import os
-import pygal
 from flask import Flask, render_template, redirect, request, url_for, session, flash
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
@@ -524,11 +523,14 @@ def dashboard():
 def graphs():
 	forms = forms_collection.find()
 	users_vs_db = Charts().users_vs_db()
+	dishTypes_graph = Charts(form_key="dishTypes").line_graph(graph_type="Dish Types")
+	cuisines_graph = Charts(form_key="cuisines").line_graph(graph_type="Cuisines")
+	diets_graph = Charts(form_key="diets").line_graph(graph_type="Diets")
 	if 'user' in session:
 		user_in_db = users_collection.find_one(
 			{"username": session['user']})
-		return render_template("graphs.html", page_title="Graphs", username=session['user'], user_id=user_in_db['_id'], forms=forms, pie_chart=users_vs_db)
-	return render_template("graphs.html", page_title="Graphs", forms=forms, pie_chart=users_vs_db)
+		return render_template("graphs.html", page_title="Graphs", username=session['user'], user_id=user_in_db['_id'], forms=forms, pie_chart=users_vs_db, dishTypes_graph=dishTypes_graph, cuisines_graph=cuisines_graph, diets_graph=diets_graph)
+	return render_template("graphs.html", page_title="Graphs", forms=forms, pie_chart=users_vs_db, dishTypes_graph=dishTypes_graph, cuisines_graph=cuisines_graph, diets_graph=diets_graph)
 
 # Update db
 
