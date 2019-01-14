@@ -6,4 +6,4 @@ test.html
 __pycache__
 tests.ipynb
 .ipynb_checkpoints
-flask-mongoDB
+.venv

@@ -121,9 +121,8 @@ def profile(user_id):
     forms = forms_collection.find()
     if 'user' in session:
         user_in_db = users_collection.find_one({"username": session['user']})
-        recipes = recipes_collection.find({"creditsText": session['user']})
+        recipes = recipes_collection.find({"creditsText": session['user'].lower()})
         return render_template("profile.html", page_title="profile", user_in_db=user_in_db, user_id=user_in_db['_id'], recipes=[x for x in recipes], forms=forms)
-    flash("Please log in first")
     return redirect(url_for('index', forms=forms))
 
 
@@ -508,8 +507,6 @@ def search_by_cuisines(cuisine):
 
 @app.route('/admin_dashboard')
 def dashboard():
-    """ if request.method == "GET":
-        hidden_recipes = recipes_collection.delete_many({"visibility": False}) """
     if 'user' in session:
         user_in_db = users_collection.find_one({"username": session['user']})
         users = users_collection.find()

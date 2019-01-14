@@ -295,7 +295,7 @@ class Charts():
         return graph_data
 
     def line_graph(self, graph_type):
-        line_chart = pygal.Bar(x_label_rotation=-20)
+        line_chart = pygal.Bar(x_label_rotation=20)
         line_chart.title = f"User's recipes vs Database recipes ({graph_type})"
         line_chart.x_labels = map(str, self.form_key_data)
         line_chart.add("User's", self.get_data()['user_data'])

@@ -378,8 +378,10 @@ HTML / CSS | 5 |
       - `line_graph()` `return` graph for `dishTypes`, `cuisines` and `diets`
   - Added [graphs.html](/templates/graphs.html) as I decided to render the graphs on a separate page
 - **Fixes**
-  - [app.py](app.py)
+  - [classes.py](classes.py)
     - Added `sort()` to **Search** class `text()` method as it was missing and therefore, this search did not sort the results by `aggregateLikes`.
+    - [app.py](app.py)
+      - Added `lower()` to `profile()` recipe search as no recipes where find if user use capital letters in his user name.
 
 
 ### **Testing and improvements**
