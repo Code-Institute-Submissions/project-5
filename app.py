@@ -235,6 +235,9 @@ def delete_recipe(recipe_id, user_id):
     if request.method == "GET":
         if logged_in_user == user_in_db['username']:
             recipes_collection.remove({'_id': ObjectId(recipe_id)})
+            if logged_in_user == "CI" or "admin":
+            	user_id = [x for x in users_collection.find() if recipe_id in x["recipes"]]
+            	user_id = user_id[0]["_id"]
             users_collection.update({'_id': ObjectId(user_id)}, {
                                     "$pull": {"recipes": recipe_id}})
             flash("Your recipe has been delated")

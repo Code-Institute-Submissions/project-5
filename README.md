@@ -36,6 +36,7 @@
 			- [2.1](#21)
 			- [2.2](#22)
 			- [2.3](#23)
+			- [2.4](#24)
 		- [**Testing and improvements**](#testing-and-improvements)
 		- [**Some user feedbacks**](#some-user-feedbacks)
 		- [**Need to fix**](#need-to-fix)
@@ -382,6 +383,13 @@ HTML / CSS | 5 |
     - Added `sort()` to **Search** class `text()` method as it was missing and therefore, this search did not sort the results by `aggregateLikes`.
     - [app.py](app.py)
       - Added `lower()` to `profile()` recipe search as no recipes where find if user use capital letters in his user name.
+
+#### 2.4
+
+- **Changelog**
+  - Added functionality to delete any user recipe for **CI** and **admin**users.
+- **Fixes**
+  - 
 
 
 ### **Testing and improvements**
