@@ -121,7 +121,8 @@ def profile(user_id):
     forms = forms_collection.find()
     if 'user' in session:
         user_in_db = users_collection.find_one({"username": session['user']})
-        recipes = recipes_collection.find({"creditsText": session['user'].lower()})
+        recipes = recipes_collection.find(
+            {"creditsText": session['user'].lower()})
         return render_template("profile.html", page_title="profile", user_in_db=user_in_db, user_id=user_in_db['_id'], recipes=[x for x in recipes], forms=forms)
     return redirect(url_for('index', forms=forms))
 
@@ -236,8 +237,9 @@ def delete_recipe(recipe_id, user_id):
         if logged_in_user == user_in_db['username']:
             recipes_collection.remove({'_id': ObjectId(recipe_id)})
             if logged_in_user == "CI" or "admin":
-            	user_id = [x for x in users_collection.find() if recipe_id in x["recipes"]]
-            	user_id = user_id[0]["_id"]
+                user_id = [x for x in users_collection.find()
+                           if recipe_id in x["recipes"]]
+                user_id = user_id[0]["_id"]
             users_collection.update({'_id': ObjectId(user_id)}, {
                                     "$pull": {"recipes": recipe_id}})
             flash("Your recipe has been delated")
@@ -519,20 +521,50 @@ def dashboard():
         return render_template("dashboard.html", page_title="dashboard", users=users, forms=forms, users_recipes=all_users_recipes, hidden_recipes=hidden_recipes, user_id=user_in_db['_id'])
     return redirect(url_for('index'))
 
+
+# Approve recipe
+
+@app.route('/approve_recipe/<recipe_id>')
+def approve_recipe(recipe_id):
+        if session['user'] == "CI" or "admin":
+        	hidden_recipe = recipes_collection.find_one({'_id': ObjectId(recipe_id)})
+        	hidden_recipe['visibility'] = True
+        	recipes_collection.update({'_id': ObjectId(recipe_id)}, hidden_recipe)
+        	return recipe(recipe_id)
+
+# Hide recipe
+
+
+@app.route('/hide_recipe/<recipe_id>')
+def hide_recipe(recipe_id):
+        if session['user'] == "CI" or "admin":
+        	hide_recipe = recipes_collection.find_one(
+        	    {'_id': ObjectId(recipe_id)})
+        	hide_recipe['visibility'] = False
+        	recipes_collection.update({'_id': ObjectId(recipe_id)}, hide_recipe)
+        	return recipe(recipe_id)
+			
+
+# Graphs
+
+
 @app.route('/graphs')
 def graphs():
-	forms = forms_collection.find()
-	users_vs_db = Charts().users_vs_db()
-	dishTypes_graph = Charts(form_key="dishTypes").line_graph(graph_type="Dish Types")
-	cuisines_graph = Charts(form_key="cuisines").line_graph(graph_type="Cuisines")
-	diets_graph = Charts(form_key="diets").line_graph(graph_type="Diets")
-	if 'user' in session:
-		user_in_db = users_collection.find_one(
-			{"username": session['user']})
-		return render_template("graphs.html", page_title="Graphs", username=session['user'], user_id=user_in_db['_id'], forms=forms, pie_chart=users_vs_db, dishTypes_graph=dishTypes_graph, cuisines_graph=cuisines_graph, diets_graph=diets_graph)
-	return render_template("graphs.html", page_title="Graphs", forms=forms, pie_chart=users_vs_db, dishTypes_graph=dishTypes_graph, cuisines_graph=cuisines_graph, diets_graph=diets_graph)
+    forms = forms_collection.find()
+    users_vs_db = Charts().users_vs_db()
+    dishTypes_graph = Charts(form_key="dishTypes").line_graph(
+        graph_type="Dish Types")
+    cuisines_graph = Charts(form_key="cuisines").line_graph(
+        graph_type="Cuisines")
+    diets_graph = Charts(form_key="diets").line_graph(graph_type="Diets")
+    if 'user' in session:
+        user_in_db = users_collection.find_one(
+            {"username": session['user']})
+        return render_template("graphs.html", page_title="Graphs", username=session['user'], user_id=user_in_db['_id'], forms=forms, pie_chart=users_vs_db, dishTypes_graph=dishTypes_graph, cuisines_graph=cuisines_graph, diets_graph=diets_graph)
+    return render_template("graphs.html", page_title="Graphs", forms=forms, pie_chart=users_vs_db, dishTypes_graph=dishTypes_graph, cuisines_graph=cuisines_graph, diets_graph=diets_graph)
 
 # Update db
+
 
 @app.route('/update-db', methods=['POST'])
 def update_db():

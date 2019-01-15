@@ -129,8 +129,13 @@
 	{% include "recipe-template.html" %}
 	{% if user_in_db %}
 	{% if session.user == "CI" and recipe.user_recipe == true or session.user == "admin" and recipe.user_recipe == true %}
-	<div class="row justify-content-around">
+	<div class="row justify-content-around pt-3">
 		<button class="btn btn-outline-danger" type="button" data-toggle="modal" data-target="#delete-recipe">Delete recipe</button>
+		{% if recipe.visibility == false %}
+		<a class="btn btn-outline-success" href="{{url_for('approve_recipe', recipe_id=recipe_id)}}">Approve recipe</a>
+		{% else %}
+		<a class="btn btn-outline-secondary" href="{{url_for('hide_recipe', recipe_id=recipe_id)}}">Hide recipe</a>
+		{% endif %}
 		<a class="btn btn-outline-warning" href="{{url_for('edit_recipe', recipe_id=recipe_id, user_id=user_in_db._id)}}">Edit
 			recipe</a>
 	</div>
