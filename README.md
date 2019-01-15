@@ -389,6 +389,7 @@ HTML / CSS | 5 |
 - **Changelog**
   - Added functionality to delete any user recipe for **CI** and **admin**users.
   - Added functionality to hide / show any user recipe for **CI** and **admin**users.
+  - Added functionality to edit any user recipe for **CI** and **admin**users.
 - **Fixes**
   - 
 

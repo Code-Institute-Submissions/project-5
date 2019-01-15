@@ -220,6 +220,9 @@ def edit_recipe(recipe_id, user_id):
         if 'user' in session:
             recipe = Search(recipes_collection).find_one_by_id(recipe_id)
             user_in_db = Search(users_collection).find_one_by_id(user_id)
+            logged_in_user = session.get('user')
+            if logged_in_user == "CI" or "admin":
+            	return render_template("edit-recipe.html", page_title="Edit recipe", recipe_id=recipe_id, recipes=recipe, forms=forms,  user_in_db=user_in_db, user_id=user_in_db['_id'])
             for x in user_in_db["recipes"]:
                 if x == recipe_id:
                     return render_template("edit-recipe.html", page_title="Edit recipe", recipe_id=recipe_id, recipes=recipe, forms=forms,  user_in_db=user_in_db, user_id=user_in_db['_id'])
@@ -301,6 +304,36 @@ def vote_down(recipe_id, user_id):
                                 '$push': {'votes': recipe_id}})
         flash("Thank you for your vote!")
         return redirect(request.referrer)
+
+
+# Approve recipe
+
+@app.route('/approve_recipe/<recipe_id>')
+def approve_recipe(recipe_id):
+    if 'user' in session:
+        if session['user'] == "CI" or "admin":
+            hidden_recipe = recipes_collection.find_one(
+                {'_id': ObjectId(recipe_id)})
+            hidden_recipe['visibility'] = True
+            recipes_collection.update(
+                {'_id': ObjectId(recipe_id)}, hidden_recipe)
+            return recipe(recipe_id)
+    return redirect(url_for('index'))
+
+# Hide recipe
+
+
+@app.route('/hide_recipe/<recipe_id>')
+def hide_recipe(recipe_id):
+    if 'user' in session:
+        if session['user'] == "CI" or "admin":
+            hide_recipe = recipes_collection.find_one(
+                {'_id': ObjectId(recipe_id)})
+            hide_recipe['visibility'] = False
+            recipes_collection.update(
+                {'_id': ObjectId(recipe_id)}, hide_recipe)
+            return recipe(recipe_id)
+    return redirect(url_for('index'))
 
 
 """
@@ -521,29 +554,6 @@ def dashboard():
         return render_template("dashboard.html", page_title="dashboard", users=users, forms=forms, users_recipes=all_users_recipes, hidden_recipes=hidden_recipes, user_id=user_in_db['_id'])
     return redirect(url_for('index'))
 
-
-# Approve recipe
-
-@app.route('/approve_recipe/<recipe_id>')
-def approve_recipe(recipe_id):
-        if session['user'] == "CI" or "admin":
-        	hidden_recipe = recipes_collection.find_one({'_id': ObjectId(recipe_id)})
-        	hidden_recipe['visibility'] = True
-        	recipes_collection.update({'_id': ObjectId(recipe_id)}, hidden_recipe)
-        	return recipe(recipe_id)
-
-# Hide recipe
-
-
-@app.route('/hide_recipe/<recipe_id>')
-def hide_recipe(recipe_id):
-        if session['user'] == "CI" or "admin":
-        	hide_recipe = recipes_collection.find_one(
-        	    {'_id': ObjectId(recipe_id)})
-        	hide_recipe['visibility'] = False
-        	recipes_collection.update({'_id': ObjectId(recipe_id)}, hide_recipe)
-        	return recipe(recipe_id)
-			
 
 # Graphs
 
