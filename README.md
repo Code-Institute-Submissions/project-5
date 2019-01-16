@@ -390,8 +390,13 @@ HTML / CSS | 5 |
   - Added functionality to delete any user recipe for **CI** and **admin**users.
   - Added functionality to hide / show any user recipe for **CI** and **admin**users.
   - Added functionality to edit any user recipe for **CI** and **admin**users.
+  - [app.py](app.py)
+    - Added functionality to automaticaly add new tags to search form schema in `approve_recipe()`
 - **Fixes**
-  - 
+  - Recipe `visibility` is now always set to `False` everytime the user edit the recipe for security reasons
+  - Changed form search schema to lower cases to prevent duplications and errors in future.
+  - [app.py](app.py)
+    - `login()` both **ci** and **CI** share the same account
 
 
 ### **Testing and improvements**

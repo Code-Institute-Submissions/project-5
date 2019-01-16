@@ -1,43 +1,46 @@
 {
+	"_id": {
+		"$oid": "5b925f1937265c68a832345f"
+	},
 	"dishTypes": [
-		"Main course",
-		"Hor d'oeuvre",
-		"Snack",
-		"Drink",
-		"Dessert",
-		"Side dish",
-		"Starter",
-		"Dinner",
-		"Lunch",
-		"Appetizer",
-		"Fingerfood",
-		"Morning meal",
-		"Antipasti",
-		"Beverage",
-		"Main dish",
-		"Antipasto",
-		"Breakfast",
-		"Brunch"
+		"main course",
+		"hor d'oeuvre",
+		"snack",
+		"drink",
+		"dessert",
+		"side dish",
+		"starter",
+		"dinner",
+		"lunch",
+		"appetizer",
+		"fingerfood",
+		"morning meal",
+		"antipasti",
+		"beverage",
+		"main dish",
+		"antipasto",
+		"breakfast",
+		"brunch"
 	],
 	"cuisines": [
-		"Mediterranean",
-		"Mexican",
-		"European",
-		"American",
-		"Italian"
+		"mediterranean",
+		"mexican",
+		"european",
+		"american",
+		"italian"
 	],
 	"diets": [
-		"Vegan",
-		"Gluten free",
-		"Primal",
-		"Ketogenic",
-		"Paleolithic",
-		"Dairy free",
-		"Lacto ovo vegetarian",
-		"Pescatarian"
+		"vegan",
+		"gluten free",
+		"primal",
+		"ketogenic",
+		"paleolithic",
+		"dairy free",
+		"lacto ovo vegetarian",
+		"pescatarian"
 	],
 	"popularity": [
-		"Ascending",
-		"Decreasing"
+		"ascending",
+		"decreasing"
 	]
 }

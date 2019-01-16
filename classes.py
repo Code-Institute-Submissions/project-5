@@ -208,7 +208,7 @@ class Database:
 
     def update_search_form(self, key=["dishTypes", "cuisines", "diets"]):
         form = self.update_db(key, key)
-        form["popularity"] = ["Ascending", "Decreasing"]
+        form["popularity"] = ["ascending", "decreasing"]
         forms_collection.insert_one(form)
 
 # Main class for add / edit recipe

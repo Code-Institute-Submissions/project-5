@@ -20,6 +20,7 @@ forms_collection = mongo.db.forms
 trivia_collection = mongo.db.trivia
 
 recipe_schema_id = "5ba2ded543277a316cbf0ef9"
+form_schema_id = "5b925f1937265c68a832345f"
 
 
 """
@@ -58,6 +59,8 @@ Users / Log-in / Register
 def login():
     if request.method == "POST":
         username = request.form['username']
+        if username == "ci":
+        	username = "CI"
         password = request.form['user_password']
         try:
             user_in_db = users_collection.find_one({"username": username})
@@ -191,8 +194,7 @@ def add_recipe(user_id):
         user_in_db = users_collection.find_one({"username": session['user']})
 
         flash("Recipe added. Thank you!")
-        flash(
-            "Please note that your recipe must be approved by admin to be view in the site!")
+        flash("Please note that your recipe must be approved by admin to be view in the site!")
         flash("However you can still view your recipe trought profile page.")
         return redirect(url_for("recipe", recipe_id=recipe_id))
     if 'user' in session:
@@ -211,6 +213,7 @@ def edit_recipe(recipe_id, user_id):
         form_data = request.form.to_dict()
         data = Recipe(form_data)
         data = data.__dict__
+        data['visibility'] = False
         recipes_collection.update({'_id': ObjectId(recipe_id)}, data["recipe"])
         recipe = data["recipe"]
         flash("Your recipe has been updated")
@@ -317,6 +320,24 @@ def approve_recipe(recipe_id):
             hidden_recipe['visibility'] = True
             recipes_collection.update(
                 {'_id': ObjectId(recipe_id)}, hidden_recipe)
+            # Update the databse schema for tags
+            tags_schema = list(forms_collection.find())[-1]
+            new_tags = []
+            for k in hidden_recipe:
+            	if k == "dishTypes" or k == "cuisines" or k == "diets":
+            		for v in hidden_recipe[k]:
+            			if v.lower() not in tags_schema[k]:
+            				tags_schema[k].append(v.lower())
+            				new_tags.append(v.lower())
+            new_tags_schema = {
+                "dishTypes": tags_schema["dishTypes"],
+                "cuisines": tags_schema["cuisines"],
+                "diets": tags_schema["diets"],
+                "popularity": ["ascending", "decreasing"],
+			}
+            if len(new_tags) > 0:
+            	forms_collection.update(
+            	    {'_id': ObjectId(form_schema_id)}, new_tags_schema)
             return recipe(recipe_id)
     return redirect(url_for('index'))
 

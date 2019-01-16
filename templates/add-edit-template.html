@@ -90,7 +90,7 @@
 						<input class="form-check-input" name="dishTypes-0{{ loop.index }}" type="checkbox" value="{{x}}">
 						{% endif %}
 						<label class="form-check-label" for="dishTypes-0{{ loop.index }}">
-							{{x}}
+							{{x | title}}
 						</label>
 					</div>
 					{% endfor %}
@@ -104,7 +104,7 @@
 						<input class="form-check-input" name="dishTypes-{{ loop.index }}" type="checkbox" value="{{x}}">
 						{% endif %}
 						<label class="form-check-label" for="dishTypes-{{ loop.index }}">
-							{{x}}
+							{{x | title}}
 						</label>
 					</div>
 					{% endfor %}
@@ -129,7 +129,7 @@
 						<input class="form-check-input" name="cuisines-{{ loop.index }}" type="checkbox" value="{{x}}">
 						{% endif %}
 						<label class="form-check-label" for="cuisines-{{ loop.index }}">
-							{{x}}
+							{{x | title}}
 						</label>
 					</div>
 					{% endfor %}
@@ -153,7 +153,7 @@
 						<input class="form-check-input" name="diets-{{ loop.index }}" type="checkbox" value="{{x}}">
 						{% endif %}
 						<label class="form-check-label" for="diets-{{ loop.index }}">
-							{{x}}
+							{{x | title}}
 						</label>
 					</div>
 					{% endfor %}
