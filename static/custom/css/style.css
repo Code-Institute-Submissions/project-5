@@ -1,5 +1,7 @@
 /*
+
 General
+
 */
 
 .vh100 {
@@ -68,7 +70,9 @@ a:hover {
 	color: #000000;
 }
 /*
+
 Overlay
+
 */
 
 .search-overlay {
@@ -135,7 +139,9 @@ Overlay
 }
 
 /*
+
 Nav
+
 */
 
 .navbar {
@@ -143,41 +149,9 @@ Nav
 }
 
 /*
-index.html
-*/
 
-#index-welcome {
-    background: url("/static/img/index-background.jpg") no-repeat center;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-}
+Footer
 
-/*
-Main section
-*/
-
-#index-main {
-    position: relative;
-    background-color: #fefefe;
-}
-
-#index-recipes .card {
-    border: none;
-}
-
-#index-recipes img {
-    width: 100%;
-    padding: 15px 0px;
-}
-
-#trivia {
-    padding-top: 130px;
-}
-
-/*
-footer
 */
 
 #footer {

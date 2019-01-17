@@ -7,22 +7,37 @@ from bson.objectid import ObjectId
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
-form_schema_id = "5b925f1937265c68a832345f"
+""" 
+
+app config
+
+"""
 
 app = Flask(__name__)
 
-# mongoDB config
+form_schema_id = "5b925f1937265c68a832345f"
+
+# MongoDB config
+
 app.config['MONGO_DBNAME'] = os.environ.get("MONGO_DBNAME")
 app.config['MONGO_URI'] = os.environ.get("MONGO_URI")
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 
 mongo = PyMongo(app)
+
+# Collections
+
 users_collection = mongo.db.users
 recipes_collection = mongo.db.recipes
 forms_collection = mongo.db.forms
 
+""" 
 
-# Search classes
+Search Classes
+
+"""
+
+# Search classes (main class for sending requests to db)
 
 class Search:
     def __init__(self, collection, sort="aggregateLikes", order=int(-1), no_pagination=False, pagination_base="/", limit=12, offset=0):
@@ -96,6 +111,7 @@ class Search:
     def __len__(self):
         return self.collection.find().count()
 
+# SearchForm class (used with search form to get results from db)
 
 class SearchForm(Search):
     def __init__(self, form_data, no_pagination=False, offset=int(), pagination_base=""):
@@ -183,7 +199,14 @@ class SearchForm(Search):
         return self.match(self.form_filters())
 
 
-# DB classes
+""" 
+
+Database classes
+
+"""
+
+# Class for updating tags (for forms) in database (search for empty / new tags)
+
 class Database:
     def update(self, key):
         result = set()
@@ -208,7 +231,6 @@ class Database:
             {'_id': ObjectId(form_schema_id)}, form)
 
 # Main class for add / edit recipe
-
 
 class Recipe(dict):
     def __init__(self, form_data):
@@ -269,10 +291,11 @@ class Recipe(dict):
 
 """ 
 
-Charts
+Charts classes
 
 """
 
+# Main class to construct and return graph data
 
 class Charts():
     def __init__(self, form_key="dishTypes"):

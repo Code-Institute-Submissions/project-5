@@ -1,32 +1,7 @@
 {% extends "base.html" %}
 
 {% block css %}
-<style>
-	hr {
-		margin: 30px 0px;
-	}
-
-	.list-group-item {
-		padding: .35rem 1.25rem;
-	}
-
-	.col-xs-12 {
-		margin: 15px 0px;
-	}
-
-	.btn-outline-danger {
-		color: #dc3545!important;
-	}
-
-	.btn-outline-success {
-		color: #28a745!important;
-	}
-
-	.btn-outline-danger:hover,
-	.btn-outline-success:hover {
-		color: #ffffff!important;
-	}
-</style>
+<link rel="stylesheet" href="{{url_for('static', filename='custom/css/recipe.css')}}" type="text/css" />
 {% endblock css %}
 
 {% block main_content %}

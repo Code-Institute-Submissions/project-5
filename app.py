@@ -5,23 +5,35 @@ from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from classes import Search, SearchForm, Database, Recipe, Charts
+from helper.classes import Search, SearchForm, Database, Recipe, Charts
+
+""" 
+
+app config
+
+"""
 
 app = Flask(__name__)
+
+
+recipe_schema_id = "5ba2ded543277a316cbf0ef9"
+form_schema_id = "5b925f1937265c68a832345f"
+
+
+# MongoDB config
 
 app.config['MONGO_URI'] = os.environ.get("MONGO_URI")
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 
 mongo = PyMongo(app)
 
+# Collections
+
 users_collection = mongo.db.users
 recipes_collection = mongo.db.recipes
 shemas_collection = mongo.db.schemas
 forms_collection = mongo.db.forms
 trivia_collection = mongo.db.trivia
-
-recipe_schema_id = "5ba2ded543277a316cbf0ef9"
-form_schema_id = "5b925f1937265c68a832345f"
 
 
 """
@@ -83,6 +95,7 @@ def login():
 
 
 # Sign up
+
 @app.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
     forms = forms_collection.find()
@@ -585,7 +598,7 @@ def dashboard():
         forms = forms_collection.find()
         all_users_recipes = recipes_collection.find({"user_recipe": True})
         hidden_recipes = recipes_collection.find({"visibility": False})
-        return render_template("dashboard.html", page_title="dashboard", users=users, forms=forms, users_recipes=all_users_recipes, hidden_recipes=hidden_recipes, user_id=user_in_db['_id'])
+        return render_template("admin.html", page_title="dashboard", users=users, forms=forms, users_recipes=all_users_recipes, hidden_recipes=hidden_recipes, user_id=user_in_db['_id'])
     return redirect(url_for('index'))
 
 
@@ -617,7 +630,7 @@ def update_db():
         users = Search(users_collection, "users").sort_find_all()
         forms = forms_collection.find()
 
-        return render_template("dashboard.html", page_title="dashboard", users=users, forms=forms)
+        return render_template("admin.html", page_title="dashboard", users=users, forms=forms)
 
 
 """ 
@@ -652,14 +665,3 @@ if __name__ == '__main__':
                 port=os.environ.get('PORT'),
                 debug=False)
 
-
-""" 
-
-Temporary notes
-
-"""
-
-
-# fix issue with time of 0 on recipes
-# create adding new tags ...
-# edit profile

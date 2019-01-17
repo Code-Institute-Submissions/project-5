@@ -1,5 +1,7 @@
-/*
-Sign up 
+/* 
+
+General
+
 */
 
 body {
@@ -10,7 +12,21 @@ body {
     background-size: cover;
 }
 
+/* 
 
+Nav
+
+*/
+
+.navbar {
+	background-color: rgba(0, 0, 0, 0.5)
+}
+
+/* 
+
+Cards
+
+*/
 
 #sign-up .card{
 	margin-top: 100px;
@@ -20,15 +36,19 @@ body {
 	background-color: transparent;
 }
 
-.navbar {
-	background-color: rgba(0, 0, 0, 0.5)
-}
-.btn {
-	background-color: transparent;
-}
 .card-body label,
 .card-body p {
 	color: #ffffff;
+}
+
+/* 
+
+Buttons
+
+*/
+
+.btn {
+	background-color: transparent;
 }
 
 

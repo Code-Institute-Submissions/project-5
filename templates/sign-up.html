@@ -42,9 +42,6 @@
 {% endblock main_content %}
 
 {% block scripts %}
-  <script>
-	  (function () {
-			$('.navbar').removeClass("navbar-light").addClass("navbar-dark")
-		})();
-  </script>
+<!-- Sharing the same rules -->
+<script src="{{ url_for('static', filename='custom/js/profile.js') }}"></script>
 {% endblock scripts %}

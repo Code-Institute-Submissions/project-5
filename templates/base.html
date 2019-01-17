@@ -21,9 +21,8 @@
 
 	<!-- Custom styles -->
 	<link rel="stylesheet" href="{{url_for('static', filename='custom/css/style.css')}}" type="text/css" />
+	{% block css %}{% endblock css %}
 	<link rel="stylesheet" href="{{url_for('static', filename='custom/css/screen.css')}}" type="text/css" /> 
-	{% block css %}
-	{% endblock	css %}
 
 	<title>{{page_title}}</title>
 

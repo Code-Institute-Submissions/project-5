@@ -1,0 +1,59 @@
+/* 
+
+General
+
+*/
+
+#index-welcome {
+	position: relative;
+}
+
+#index-welcome {
+    background: url("/static/img/index-background.jpg") no-repeat center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+#index-main {
+    position: relative;
+    background-color: #fefefe;
+}
+
+/* 
+
+Trivia
+
+*/
+
+#trivia {
+	position: absolute;
+	padding-top: 130px;
+	width: 100%;
+	bottom: 10%;
+}
+
+#trivia hr {
+	background-color: #000000;
+}
+
+/* 
+
+Cards
+
+*/
+
+.card-img-top {
+	border-radius: 33px;
+}
+
+#index-recipes .card {
+    border: none;
+}
+
+#index-recipes img {
+    width: 100%;
+    padding: 15px 0px;
+}
+

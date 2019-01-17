@@ -393,6 +393,7 @@ HTML / CSS | 5 |
   - [app.py](app.py)
     - Added functionality to automatically add new tags to search form schema in `approve_recipe()`
     - Added functionality for user to have random (from 4) profile picture while creating account in `sign_up()`
+    - Cleaned up the code and andded external files for **CSS** and **JS**
 - **Fixes**
   - Recipe `visibility` is now always set to `False` every time the user edit the recipe for security reasons
   - Changed form search schema to lower cases to prevent duplications and errors in future.

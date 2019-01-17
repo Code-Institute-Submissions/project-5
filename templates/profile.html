@@ -1,25 +1,7 @@
 {% extends "base.html" %}
 
 {% block css %}
-<style>
-	body {
-		background: url("/static/img/profile-bg.jpg") no-repeat center;
-		-webkit-background-size: cover;
-		-moz-background-size: cover;
-		-o-background-size: cover;
-		background-size: cover;
-	}
-	.navbar,
-	.card,
-	.card-body,
-	.list-group-item {
-		background-color: rgba(0, 0, 0, 0.5)
-	}
-	.card,
-	.card-body {
-		color: #dddddd;
-	}
-  </style>
+<link rel="stylesheet" href="{{url_for('static', filename='custom/css/profile.css')}}" type="text/css" />
 {% endblock css %}
 
 {% block log_in_out_btn %}
@@ -123,11 +105,7 @@
 {% endblock main_content %}
 
 {% block scripts %}
-<script>
-	(function () {
-		$('.navbar').removeClass("navbar-light").addClass("navbar-dark")
-	})();
-</script>
+<script src="{{ url_for('static', filename='custom/js/profile.js') }}"></script>
 {% endblock scripts %}
 
 {% block log_in_modal %}

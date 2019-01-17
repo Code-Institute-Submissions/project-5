@@ -2,12 +2,7 @@
 
 
 {% block css %}
-<style>
-	.search-overlay {
-		display: block;
-		position: relative;
-	}
-</style>
+<link rel="stylesheet" href="{{url_for('static', filename='custom/css/search-form-sm.css')}}" type="text/css" />
 {% endblock css %}
 
 {% block search_form_btn %}
@@ -20,21 +15,10 @@
 
 {% block main_content %}
 
-
 {% include 'search-form.html' %}
-
 
 {% endblock main_content %}
 
 {% block scripts %}
-<script>
-	// Enable btns in search form for Safari as the evens will not trigger
-	(function () {
-		let safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-		if (safari) {
-			$("#input_search_btn").removeAttr("disabled");
-			$("#tags_search_btn").removeAttr("disabled");
-		}
-	})();	  
-</script>
+<script src="{{ url_for('static', filename='custom/js/search-form-sm.js') }}"></script>
 {% endblock scripts %}

@@ -1,0 +1,37 @@
+/* 
+
+General
+
+*/
+
+body {
+	background: url("/static/img/profile-bg.jpg") no-repeat center;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+/* 
+
+Nav
+
+*/
+
+.navbar,
+.card,
+.card-body,
+.list-group-item {
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* 
+
+Cards
+
+*/
+
+.card,
+.card-body {
+	color: #dddddd;
+}
