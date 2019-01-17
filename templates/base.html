@@ -20,8 +20,8 @@
 	<link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
 
 	<!-- Custom styles -->
-	<link rel="stylesheet" href="{{url_for('static', filename='custom/style.css')}}" type="text/css" />
-	<link rel="stylesheet" href="{{url_for('static', filename='custom/screen.css')}}" type="text/css" /> 
+	<link rel="stylesheet" href="{{url_for('static', filename='custom/css/style.css')}}" type="text/css" />
+	<link rel="stylesheet" href="{{url_for('static', filename='custom/css/screen.css')}}" type="text/css" /> 
 	{% block css %}
 	{% endblock	css %}
 
@@ -232,7 +232,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 	 crossorigin="anonymous"></script>
 	<!-- Main JS-->
-	<script src="{{ url_for('static', filename='custom/main.js') }}"></script>
+	<script src="{{ url_for('static', filename='custom/js/main.js') }}"></script>
 
 	{% block scripts %}{% endblock scripts %}
 

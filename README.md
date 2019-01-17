@@ -388,10 +388,11 @@ HTML / CSS | 5 |
 
 - **Changelog**
   - Added functionality to delete any user recipe for **CI** and **admin**users.
-  - Added functionality to hide / show any user recipe for **CI** and **admin**users.
+  - Added functionality to hide / show any user recipe for **CI** and **admin** users.
   - Added functionality to edit any user recipe for **CI** and **admin**users.
   - [app.py](app.py)
     - Added functionality to automaticaly add new tags to search form schema in `approve_recipe()`
+    - Added functionality for user to have random (from 4) profile picture while creating account in `sign_up()`
 - **Fixes**
   - Recipe `visibility` is now always set to `False` everytime the user edit the recipe for security reasons
   - Changed form search schema to lower cases to prevent duplications and errors in future.

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block css %}
-<link rel="stylesheet" href="{{url_for('static', filename='custom/sign-up.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{url_for('static', filename='custom/css/sign-up.css')}}" type="text/css" />
 {% endblock css %}
 
 
@@ -10,35 +10,35 @@
 {% endblock log_in_out_btn %}
 
 {% block main_content %}
-	<section id="sign-up" class="container-fluid">
-		<div class="row">
-			<div class="card mx-auto">
-				<div class="card-header">Sign up</div>
-				<div class="card-body">
-					<form class="form-signin" method="POST" action="/sign_up">
-						<div class="form-group">
-							<label for="username">User name*</label>
-							<input name="username" type="text" class="form-control" required>
-						</div>
-						<div class="form-group">
-							<label for="email">Email</label>
-							<input name="email" type="email" class="form-control">
-						</div>
-						<div class="form-group">
-							<label for="user_password">Password*</label>
-							<input class="form-control" name="user_password" type="password" required>
-						</div>
-						<div class="form-group">
-							<p>
-								*Required field
-							</p>
-						</div>
-						<button class="btn btn-outline-success btn-lg btn-block" type="submit">Sign Up</button>
-					</form>
-				</div>
+<section id="sign-up" class="container-fluid">
+	<div class="row">
+		<div class="card mx-auto">
+			<div class="card-header">Sign up</div>
+			<div class="card-body">
+				<form class="form-signin" method="POST" action="/sign_up">
+					<div class="form-group">
+						<label for="username">User name*</label>
+						<input name="username" type="text" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<label for="email">Email</label>
+						<input name="email" type="email" class="form-control">
+					</div>
+					<div class="form-group">
+						<label for="user_password">Password*</label>
+						<input class="form-control" name="user_password" type="password" required>
+					</div>
+					<div class="form-group">
+						<p>
+							*Required field
+						</p>
+					</div>
+					<button class="btn btn-outline-success btn-lg btn-block" type="submit">Sign Up</button>
+				</form>
 			</div>
 		</div>
-	</section>
+	</div>
+</section>
 {% endblock main_content %}
 
 {% block scripts %}

@@ -3,7 +3,7 @@
 {% block css %}
 <style>
 	body {
-		background: url("/static/img/slider-image1.jpg") no-repeat center;
+		background: url("/static/img/profile-bg.jpg") no-repeat center;
 		-webkit-background-size: cover;
 		-moz-background-size: cover;
 		-o-background-size: cover;
@@ -37,7 +37,7 @@
 			<div class="card-body">
 				<div class="row">
 					<div class="col-xs-12 col-md-6">
-						<img class="card-img-top" src="{{url_for('static', filename='img/profile-picture-default.png')}}" alt="Profile  picture">
+						<img class="card-img-top" src="/static/img/{{user_in_db.pic}}" alt="Profile  picture">
 					</div>
 					<div class="col-xs-12 col-md-6">
 						<ul class="list-group list-group-flush">

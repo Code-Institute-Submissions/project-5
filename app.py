@@ -1,4 +1,5 @@
 import os
+from random import randint
 from flask import Flask, render_template, redirect, request, url_for, session, flash
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
@@ -94,6 +95,7 @@ def sign_up():
         hashed_pass = generate_password_hash(request.form['user_password'])
         users_collection.insert_one(
             {'username': request.form['username'],
+             'pic': f"profile-img{randint(1, 4)}.jpg",
              'email': request.form['email'],
              'password': hashed_pass,
              'recipes': [],
