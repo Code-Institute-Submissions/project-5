@@ -236,28 +236,33 @@ def edit_recipe(recipe_id, user_id):
 
 # Delete Recipe
 
-
 @app.route('/delete_recipe/<recipe_id>/<user_id>', methods=['GET'])
 def delete_recipe(recipe_id, user_id):
-    user_in_db = Search(users_collection).find_one_by_id(user_id)
-    logged_in_user = session.get('user')
-    if request.method == "GET":
-        if logged_in_user == user_in_db['username']:
-            recipes_collection.remove({'_id': ObjectId(recipe_id)})
-            if logged_in_user == "CI" or "admin":
-                user_id = [x for x in users_collection.find()
-                           if recipe_id in x["recipes"]]
-                user_id = user_id[0]["_id"]
-            users_collection.update({'_id': ObjectId(user_id)}, {
-                                    "$pull": {"recipes": recipe_id}})
-            # Check if there are any tags with no recipes
-            Database().update_search_form()
-            flash("Your recipe has been delated")
-            return redirect(url_for('index'))
-        else:
-            flash("Your are NOT allowed to delete this recipe!")
-            return redirect(url_for('index'))
-    return redirect(url_for('index'))
+	user_in_db = Search(users_collection).find_one_by_id(user_id)
+	logged_in_user = session.get('user')
+	if request.method == "GET":
+		if logged_in_user == user_in_db['username']:
+			recipes_collection.remove({'_id': ObjectId(recipe_id)})
+			users_collection.update({'_id': ObjectId(user_id)}, {
+									"$pull": {"recipes": recipe_id}})
+			Database().update_search_form()
+			flash("Your recipe has been delated")
+			return redirect(url_for('index'))
+		elif logged_in_user == "CI" or "admin":
+			recipes_collection.remove({'_id': ObjectId(recipe_id)})
+			user_id = [x for x in users_collection.find()
+						if recipe_id in x["recipes"]]
+			if len(user_id) > 0:
+				user_id = user_id[0]["_id"]
+				users_collection.update({'_id': ObjectId(user_id)}, {
+										"$pull": {"recipes": recipe_id}})
+			Database().update_search_form()
+			flash("Your recipe has been delated")
+			return redirect(url_for('index'))
+		else:
+			flash("Your are NOT allowed to delete this recipe!")
+			return redirect(url_for('index'))
+	return redirect(url_for('index'))
 
 
 # Vote up for a recipe
@@ -563,7 +568,11 @@ def search_by_cuisines(cuisine):
     return render_template("recipes.html", page_title=cuisine.capitalize() + "s", recipes=recipes_in_db["result"], next_url=recipes_in_db["next_url"], previous_url=recipes_in_db["previous_url"], num_of_results=recipes_in_db["num_of_results"], limit=pagination_limit, offset=pagination_offset, forms=forms)
 
 
-""" Others """
+""" 
+
+Others 
+
+"""
 
 # Admin Dashboard
 
