@@ -397,6 +397,9 @@ HTML / CSS | 5 |
   - Changed form search schema to lower cases to prevent duplications and errors in future.
   - [app.py](app.py)
     - `login()` both **ci** and **CI** share the same account
+    - `delete_recipe()` will now always check the database for empty tags.
+  - [classes.py](classes.py)
+    - Updated `Database()` methods to match the recipe schema
 
 
 ### **Testing and improvements**

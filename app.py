@@ -248,6 +248,8 @@ def delete_recipe(recipe_id, user_id):
                 user_id = user_id[0]["_id"]
             users_collection.update({'_id': ObjectId(user_id)}, {
                                     "$pull": {"recipes": recipe_id}})
+            # Check if there are any tags with no recipes
+            Database().update_search_form()
             flash("Your recipe has been delated")
             return redirect(url_for('index'))
         else:

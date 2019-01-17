@@ -93,6 +93,40 @@ function add_dishType() {
 
 }
 
+function add_cusine() {
+	let name = $("input[name='new_cusine_type']").val();
+	if (name.length < 5 || name.length > 15) {
+		let message = "Please enter name between 5 and 15 characters"
+		alerts(message)
+		return
+	}
+	if (name != "") {
+		let check_box = $("#cuisines input");
+		for (let i = 0; i < check_box.length; i++) {
+			if (check_box[i].value.toLowerCase() == name.toLowerCase()) {
+				$(check_box[i]).prop("checked", true);
+				let message = "Type already exist and has been checked for you.";
+				alerts(message);
+				return;
+			}
+		}
+
+		let len = parseInt($("#cuisines input").length);
+		$("#cuisines").append(`
+				<div class="form-check">
+					<input class="form-check-input" name="cuisines-0${len + 1}" type="checkbox" value="${name}" checked>
+					<label class="form-check-label" for="cuisines-0${len + 1}" checked>
+						${name}
+					</label>
+				</div>
+		`);
+		let message = "New type created and checked for you.";
+		name.value = ""
+		alerts(message);
+	}
+
+}
+
 function add_step(btn) {
 	let btn_parent = $(btn).parent().parent()
 	let len = parseInt($("#steps input").length);

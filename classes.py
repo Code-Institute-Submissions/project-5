@@ -7,6 +7,8 @@ from bson.objectid import ObjectId
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
+form_schema_id = "5b925f1937265c68a832345f"
+
 app = Flask(__name__)
 
 # mongoDB config
@@ -183,17 +185,10 @@ class SearchForm(Search):
 
 # DB classes
 class Database:
-
-    def users(self):
-        return users_collection.find()
-
-    def forms(self, keys):
-        pass
-
     def update(self, key):
         result = set()
-        for x in Search(recipes_collection, "recipes").sort_find_all():
-            x = x['recipes'][0][f'{key}']
+        for x in list(recipes_collection.find()):
+            x = x[f'{key}']
             for y in x:
                 result.add(y)
         return result
@@ -209,7 +204,8 @@ class Database:
     def update_search_form(self, key=["dishTypes", "cuisines", "diets"]):
         form = self.update_db(key, key)
         form["popularity"] = ["ascending", "decreasing"]
-        forms_collection.insert_one(form)
+        forms_collection.update(
+            {'_id': ObjectId(form_schema_id)}, form)
 
 # Main class for add / edit recipe
 
@@ -295,7 +291,7 @@ class Charts():
         return graph_data
 
     def line_graph(self, graph_type):
-        line_chart = pygal.Bar(x_label_rotation=20)
+        line_chart = pygal.Bar()
         line_chart.title = f"User's recipes vs Database recipes ({graph_type})"
         line_chart.x_labels = map(str, self.form_key_data)
         line_chart.add("User's", self.get_data()['user_data'])

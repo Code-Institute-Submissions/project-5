@@ -80,9 +80,9 @@
 			</div>
 			<input name="new_dish_type" type="text" class="form-control mt-3 mb-3" placeholder="Add Dish type" minlength="5"
 			 maxlength="15">
-			<div class="row justify-content-around">
-				<div id="dishType" class="dish-type col-xs-6">
-					{% for x in forms[0].dishTypes[:10] %}
+			<div class="row ">
+				<div class="dish-type col-6">
+					{% for x in forms[0].dishTypes[:15] %}
 					<div class="form-check">
 						{% if x|lower in recipes.dishTypes %}
 						<input class="form-check-input" name="dishTypes-0{{ loop.index }}" type="checkbox" value="{{x}}" checked>
@@ -95,8 +95,8 @@
 					</div>
 					{% endfor %}
 				</div>
-				<div class="dish-type col-xs-6">
-					{% for x in forms[0].dishTypes[10:] %}
+				<div id="dishType" class="dish-type col-6">
+					{% for x in forms[0].dishTypes[15:] %}
 					<div class="form-check">
 						{% if x|lower in recipes.dishTypes %}
 						<input class="form-check-input" name="dishTypes-{{ loop.index }}" type="checkbox" value="{{x}}" checked>
@@ -114,14 +114,28 @@
 		<div class="form-check col-sm-6 col-md-4 mt-5">
 			<h3>Cuisines</h3>
 			<div class="add-remove-element">
-				<button onclick="add_type('new_cusine_type', 'cuisines')" class="add-element btn btn-success" type="button"><i
+				<button onclick="add_cusine()" class="add-element btn btn-success" type="button"><i
 					 class="fas fa-plus"></i></button>
 			</div>
 			<input name="new_cusine_type" type="text" class="form-control mt-3 mb-3" placeholder="Add Cusine type" minlength="5"
 			 maxlength="15">
 			<div class="row">
-				<div id="cuisines" class="col-12">
-					{% for x in forms[0].cuisines %}
+				<div class="col-6">
+					{% for x in forms[0].cuisines[:15] %}
+					<div class="form-check">
+						{% if x|lower in recipes.cuisines %}
+						<input class="form-check-input" name="cuisines-{{ loop.index }}" type="checkbox" value="{{x}}" checked>
+						{% else %}
+						<input class="form-check-input" name="cuisines-{{ loop.index }}" type="checkbox" value="{{x}}">
+						{% endif %}
+						<label class="form-check-label" for="cuisines-{{ loop.index }}">
+							{{x | title}}
+						</label>
+					</div>
+					{% endfor %}
+				</div>
+				<div id="cuisines" class="col-6">
+					{% for x in forms[0].cuisines[15:] %}
 					<div class="form-check">
 						{% if x|lower in recipes.cuisines %}
 						<input class="form-check-input" name="cuisines-{{ loop.index }}" type="checkbox" value="{{x}}" checked>
