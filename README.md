@@ -382,6 +382,8 @@ HTML / CSS | 5 |
 - **Changelog**
   - Validate **HTML**
 - **Fixes**  
+  - [sign-up.html](/templates/sign-up.html)
+    - Fixed broken link to add recipe after user logges in
   - [profile.css](/static/custom/css/profile.css)
     - made the `nav` darker for netter visibility for smaller screens
 

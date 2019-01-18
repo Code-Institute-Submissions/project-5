@@ -13,20 +13,22 @@
 <section id="sign-up" class="container-fluid">
 	<div class="row">
 		<div class="card mx-auto">
-			<div class="card-header">Sign up</div>
+			<div class="card-header">
+				<h2 class="text-center text-light">Sign up</h2>
+			</div>
 			<div class="card-body">
 				<form class="form-signin" method="POST" action="/sign_up">
 					<div class="form-group">
-						<label for="username">User name*</label>
-						<input name="username" type="text" class="form-control" required>
+						<label for="sign-in-username">User name*</label>
+						<input name="username" type="text" class="form-control" id="sign-in-username" required>
 					</div>
 					<div class="form-group">
 						<label for="email">Email</label>
-						<input name="email" type="email" class="form-control">
+						<input name="email" type="email" class="form-control" id="email">
 					</div>
 					<div class="form-group">
-						<label for="user_password">Password*</label>
-						<input class="form-control" name="user_password" type="password" required>
+						<label for="sign-in-password">Password*</label>
+						<input class="form-control" name="user_password" type="password" id="sign-in-password" required>
 					</div>
 					<div class="form-group">
 						<p>

@@ -73,7 +73,7 @@ def login():
     if request.method == "POST":
         username = request.form['username']
         if username == "ci":
-        	username = "CI"
+            username = "CI"
         password = request.form['user_password']
         try:
             user_in_db = users_collection.find_one({"username": username})
@@ -118,7 +118,9 @@ def sign_up():
         session['user'] = request.form['username']
         return redirect(url_for('profile', user_id=user_in_db['_id'], forms=forms))
     if 'user' in session:
-        return render_template("sign-up.html", page_title="Sign up", username=session['user'], forms=forms)
+        user_in_db = mongo.db.users.find_one(
+            {"username": session['user']})
+        return render_template("sign-up.html", page_title="Sign up", user_id=user_in_db['_id'], username=session['user'], forms=forms)
     return render_template("sign-up.html", page_title="Sign up", forms=forms)
 
 # Log out
@@ -209,7 +211,8 @@ def add_recipe(user_id):
         user_in_db = users_collection.find_one({"username": session['user']})
 
         flash("Recipe added. Thank you!")
-        flash("Please note that your recipe must be approved by admin to be view in the site!")
+        flash(
+            "Please note that your recipe must be approved by admin to be view in the site!")
         flash("However you can still view your recipe trought profile page.")
         return redirect(url_for("recipe", recipe_id=recipe_id))
     if 'user' in session:
@@ -240,7 +243,7 @@ def edit_recipe(recipe_id, user_id):
             user_in_db = Search(users_collection).find_one_by_id(user_id)
             logged_in_user = session.get('user')
             if logged_in_user == "CI" or "admin":
-            	return render_template("edit-recipe.html", page_title="Edit recipe", recipe_id=recipe_id, recipes=recipe, forms=forms,  user_in_db=user_in_db, user_id=user_in_db['_id'])
+                return render_template("edit-recipe.html", page_title="Edit recipe", recipe_id=recipe_id, recipes=recipe, forms=forms,  user_in_db=user_in_db, user_id=user_in_db['_id'])
             for x in user_in_db["recipes"]:
                 if x == recipe_id:
                     return render_template("edit-recipe.html", page_title="Edit recipe", recipe_id=recipe_id, recipes=recipe, forms=forms,  user_in_db=user_in_db, user_id=user_in_db['_id'])
@@ -251,31 +254,31 @@ def edit_recipe(recipe_id, user_id):
 
 @app.route('/delete_recipe/<recipe_id>/<user_id>', methods=['GET'])
 def delete_recipe(recipe_id, user_id):
-	user_in_db = Search(users_collection).find_one_by_id(user_id)
-	logged_in_user = session.get('user')
-	if request.method == "GET":
-		if logged_in_user == user_in_db['username']:
-			recipes_collection.remove({'_id': ObjectId(recipe_id)})
-			users_collection.update({'_id': ObjectId(user_id)}, {
-									"$pull": {"recipes": recipe_id}})
-			Database().update_search_form()
-			flash("Your recipe has been delated")
-			return redirect(url_for('index'))
-		elif logged_in_user == "CI" or "admin":
-			recipes_collection.remove({'_id': ObjectId(recipe_id)})
-			user_id = [x for x in users_collection.find()
-						if recipe_id in x["recipes"]]
-			if len(user_id) > 0:
-				user_id = user_id[0]["_id"]
-				users_collection.update({'_id': ObjectId(user_id)}, {
-										"$pull": {"recipes": recipe_id}})
-			Database().update_search_form()
-			flash("Your recipe has been delated")
-			return redirect(url_for('index'))
-		else:
-			flash("Your are NOT allowed to delete this recipe!")
-			return redirect(url_for('index'))
-	return redirect(url_for('index'))
+    user_in_db = Search(users_collection).find_one_by_id(user_id)
+    logged_in_user = session.get('user')
+    if request.method == "GET":
+        if logged_in_user == user_in_db['username']:
+            recipes_collection.remove({'_id': ObjectId(recipe_id)})
+            users_collection.update({'_id': ObjectId(user_id)}, {
+                "$pull": {"recipes": recipe_id}})
+            Database().update_search_form()
+            flash("Your recipe has been delated")
+            return redirect(url_for('index'))
+        elif logged_in_user == "CI" or "admin":
+            recipes_collection.remove({'_id': ObjectId(recipe_id)})
+            user_id = [x for x in users_collection.find()
+                       if recipe_id in x["recipes"]]
+            if len(user_id) > 0:
+                user_id = user_id[0]["_id"]
+                users_collection.update({'_id': ObjectId(user_id)}, {
+                    "$pull": {"recipes": recipe_id}})
+            Database().update_search_form()
+            flash("Your recipe has been delated")
+            return redirect(url_for('index'))
+        else:
+            flash("Your are NOT allowed to delete this recipe!")
+            return redirect(url_for('index'))
+    return redirect(url_for('index'))
 
 
 # Vote up for a recipe
@@ -346,20 +349,20 @@ def approve_recipe(recipe_id):
             tags_schema = list(forms_collection.find())[-1]
             new_tags = []
             for k in hidden_recipe:
-            	if k == "dishTypes" or k == "cuisines" or k == "diets":
-            		for v in hidden_recipe[k]:
-            			if v.lower() not in tags_schema[k]:
-            				tags_schema[k].append(v.lower())
-            				new_tags.append(v.lower())
+                if k == "dishTypes" or k == "cuisines" or k == "diets":
+                    for v in hidden_recipe[k]:
+                        if v.lower() not in tags_schema[k]:
+                            tags_schema[k].append(v.lower())
+                            new_tags.append(v.lower())
             new_tags_schema = {
                 "dishTypes": tags_schema["dishTypes"],
                 "cuisines": tags_schema["cuisines"],
                 "diets": tags_schema["diets"],
                 "popularity": ["ascending", "decreasing"],
-			}
+            }
             if len(new_tags) > 0:
-            	forms_collection.update(
-            	    {'_id': ObjectId(form_schema_id)}, new_tags_schema)
+                forms_collection.update(
+                    {'_id': ObjectId(form_schema_id)}, new_tags_schema)
             return recipe(recipe_id)
     return redirect(url_for('index'))
 
@@ -664,4 +667,3 @@ if __name__ == '__main__':
         app.run(host=os.environ.get('IP'),
                 port=os.environ.get('PORT'),
                 debug=False)
-
