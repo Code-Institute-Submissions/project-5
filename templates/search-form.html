@@ -27,7 +27,7 @@
 						<div class="col-6">
 							{% for x in forms[0].dishTypes[:15] %}
 							<div class="form-check">
-								<input class="form-check-input" name="dishTypes-0{{ loop.index }}" type="checkbox" value="{{x | title}}" id="dishTypes-0{{ loop.index }}">
+								<input class="form-check-input" name="dishTypes-0{{ loop.index }}" type="checkbox" value="{{x}}" id="dishTypes-0{{ loop.index }}">
 								<label class="form-check-label" for="dishTypes-0{{ loop.index }}">
 									{{x | title}}
 								</label>
@@ -53,7 +53,7 @@
 						<div class="col-6">
 							{% for x in forms[0].cuisines[:15] %}
 							<div class="form-check">
-								<input class="form-check-input" name="cuisines-0{{ loop.index }}" type="checkbox" value="{{x | title}}" id="cuisines-0{{ loop.index }}">
+								<input class="form-check-input" name="cuisines-0{{ loop.index }}" type="checkbox" value="{{x}}" id="cuisines-0{{ loop.index }}">
 								<label class="form-check-label" for="cuisines-0{{ loop.index }}">
 									{{x | title}}
 								</label>
@@ -77,7 +77,7 @@
 					<hr>
 					{% for x in forms[0].diets %}
 					<div class="form-check">
-						<input class="form-check-input" name="diets-{{ loop.index }}" type="checkbox" value="{{x}}" id="diets-0{{ loop.index }}">
+						<input class="form-check-input" name="diets-{{ loop.index }}" type="checkbox" value="{{x}}" id="diets-{{ loop.index }}">
 						<label class="form-check-label" for="diets-{{ loop.index }}">
 							{{x | title}}
 						</label>
