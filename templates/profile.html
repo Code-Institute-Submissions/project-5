@@ -18,10 +18,10 @@
 			<h2 class="card-title text-center">Welcome {{ user_in_db.username|title }}</h2>
 			<div class="card-body">
 				<div class="row">
-					<div class="col-xs-12 col-md-6">
+					<div class="col-12 col-md-6">
 						<img class="card-img-top" src="/static/img/{{user_in_db.pic}}" alt="Profile  picture">
 					</div>
-					<div class="col-xs-12 col-md-6">
+					<div class="col-12 col-md-6">
 						<ul class="list-group list-group-flush">
 							<li class="list-group-item text-center">
 								<span class="font-weight-bold">Profile name:</span> {{ user_in_db.username|title }}
@@ -63,7 +63,7 @@
 					</div>
 					{% endif %}
 					{% if recipes|length == 2 %}
-					<div class="card col-xs-12 col-md-6">
+					<div class="card col-12 col-md-6">
 						<h5 class="card-title text-center">{{ recipe.title|title }}</h5>
 						<div class="row justify-content-center">
 							<p><i class="fas fa-star fa-lg"></i> {{ recipe.aggregateLikes }}</p>
@@ -76,7 +76,7 @@
 					</div>
 					{% endif %}
 					{% if recipes|length > 2 %}
-					<div class="card col-xs-12 col-md-4">
+					<div class="card col-12 col-md-4">
 						<h5 class="card-title text-center">{{ recipe.title|title }}</h5>
 						<div class="row justify-content-center">
 							<p><i class="fas fa-star fa-lg"></i> {{ recipe.aggregateLikes }}</p>

@@ -8,7 +8,7 @@
 
 <section id="index-welcome" class="vh100 container-fluid">
 	<div id="trivia" class="row justify-content-center">
-		<div class="col-xs-12 col-md-6 text-center">
+		<div class="col-12 col-md-6 text-center">
 			<h3> Did you know?</h3>
 			<hr>
 			{% for x in trivia %}
@@ -20,16 +20,16 @@
 
 <section id="index-recipes" class="container">
 	<div class="row">
-		<div class="col-xs-12">
-			<h3 class="text-center col-xs-12 col-md-8 offset-md-2">{{main_recipe.title}}</h3>
+		<div class="col-12">
+			<h3 class="text-center col-12 col-md-8 offset-md-2">{{main_recipe.title}}</h3>
 			<hr>
 			<div class="row card-deck">
-				<div class=" card col-xs-12 col-md-6 offset-md-1">
+				<div class=" card col-12 col-md-6 offset-md-1">
 					<a href="{{url_for('recipe', recipe_id=main_recipe._id)}}">
 						<img class="card-img-top" src="{{ main_recipe.image }}" alt="{{main_recipe.title}}">
 					</a>
 				</div>
-				<div class="card col-xs-12 col-md-4">
+				<div class="card col-12 col-md-4">
 					<div class="card-body">
 						{% set recipe = main_recipe %}
 						{% include "recipe-template.html" %}
@@ -37,7 +37,7 @@
 					<hr>
 					<div class="row">
 						{% for recipe in side_recipes %}
-						<div class="col-xs-12 col-md-4">
+						<div class="col-12 col-md-4">
 							<a href="{{url_for('recipe', recipe_id=recipe._id)}}">
 								<img class="card-img-top" src="{{ recipe.image }}" alt="{{recipe.title}}">
 							</a>

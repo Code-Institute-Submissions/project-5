@@ -11,14 +11,14 @@
 	<div class="row">
 		<div class="container">
 			<div class="row">
-				<h2 class=" col-12 text-center">{{recipe.title|title}}
+				<h2 class="pt-4 col-12 text-center">{{recipe.title|title}}
 					<button onclick="return print_recipe('{{recipe._id}}')" class="btn btn-light"><i class="fas fa-print"></i>
 					</button>
 				</h2>
 			</div>
 			<hr>
 			<div class="row">
-				<div class="col-xs-12 col-md-6">
+				<div class="col-12 col-md-6">
 					<div class="row">
 						<div class="col-12">
 							<img class="card-img-top" src="{{ recipe.image }}" alt="{{recipe.title}}">
@@ -57,7 +57,7 @@
 						
 					</div>
 				</div>
-				<div class="col-xs-12 col-md-6">
+				<div class="col-12 col-md-6">
 					<p class="card-text"><a href="{{url_for('search_by_time', limit=12, offset=0)}}"><i class="fas fa-clock"></i>
 						{{ recipe.readyInMinutes }} min</a>
 					</p>
@@ -73,7 +73,7 @@
 			<hr>
 			<div class="row">
 				<h3 class="col-12 text-center">Steps</h3>
-				<div class="col-xs-12">
+				<div class="col-12">
 					<ol>
 						{% set list = recipe.analyzedInstructions[0].steps %}
 						{% for dic in list %}
@@ -88,7 +88,7 @@
 	<hr>
 	<div class="row">
 		<h3 class="col-12 text-center">Wine pairing</h3>
-		<div class="col-xs-12 text-center">
+		<div class="col-12 text-center">
 			<p>{{recipe.winePairing.pairingText}}</p>
 		</div>
 	</div>

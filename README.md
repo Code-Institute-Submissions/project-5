@@ -382,10 +382,13 @@ HTML / CSS | 5 |
 - **Changelog**
   - Validate **HTML**
 - **Fixes**  
+  - Fixed minor layout issues as accidentaly used `col-xs-12` instead of `col-12`
   - [sign-up.html](/templates/sign-up.html)
     - Fixed broken link to add recipe after user logges in
   - [profile.css](/static/custom/css/profile.css)
     - made the `nav` darker for netter visibility for smaller screens
+  - [recipe.html](/templates/recipe.html), [recipes.html](/templates/recipes.html) and [search-form-small.html](/templates/search-form-small.html)
+    - Added more padding to top header as when logged in as **CI** or **admin** the second `nav` was covering to title
 
 
 ### **Testing and improvements**
