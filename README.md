@@ -9,8 +9,6 @@
 			- [Users](#users)
 			- [Pages](#pages)
 		- [**General Design**](#general-design)
-		- [**Wireframes**](#wireframes)
-		- [**Template**](#template)
 	- [**Features**](#features)
 		- [Existing features](#existing-features)
 		- [Features left to implement](#features-left-to-implement)
@@ -20,23 +18,12 @@
 	- [**Testing**](#testing)
 		- [Tools used for testing](#tools-used-for-testing)
 	- [**Changelog and Fixes**](#changelog-and-fixes)
-		- [**Changelog**](#changelog)
-			- [1.0](#10)
-			- [1.1](#11)
-			- [1.2](#12)
-			- [1.3](#13)
-			- [1.4](#14)
-			- [1.5](#15)
-				- [Search form](#search-form)
-			- [1.6](#16)
-			- [1.7](#17)
-			- [1.8](#18)
-			- [1.9](#19)
-			- [2.0](#20)
-			- [2.1](#21)
+		- [Before 2.2](#before-22)
+		- [2.2 and later](#22-and-later)
 			- [2.2](#22)
 			- [2.3](#23)
 			- [2.4](#24)
+			- [2.5](#25)
 		- [**Testing and improvements**](#testing-and-improvements)
 		- [**Some user feedbacks**](#some-user-feedbacks)
 		- [**Need to fix**](#need-to-fix)
@@ -162,7 +149,6 @@ Create 6 - 7 pages for the project.
   - Show recipes by users
     - Create functionality for the user to delete recipe from database on this page
   
-
 ### **General Design**
 
 Design | Importance
@@ -170,10 +156,6 @@ Design | Importance
 Functionality | 7 |
 User experiences | 6 |
 HTML / CSS | 5 |
-
-### **Wireframes**
-
-### **Template**
 
 [**To top**](#Table-of-Contents)
 
@@ -208,13 +190,13 @@ HTML / CSS | 5 |
 ### Front End
 
 <!-- Change links -->
+
 - [Bootstrap 4.0.0](https://getbootstrap.com/docs/4.0/getting-started/introduction/)
   - The project uses **Bootstrap** to speed up the development.
 - [Font Awesome 4.7.0](https://fontawesome.com/)
   - The project uses **Font Awesome** for icons.
 - [jQuery v3.3.1](https://blog.jquery.com/2018/01/20/jquery-3-3-1-fixed-dependencies-in-release-tag/)
   - The project uses **jQuery** for better user experiences as well as sending requests to server.
-    - [jQuery Easing](https://cdnjs.com/libraries/jquery-easing) - used for "back to top button"
 
 ### Back End
 
@@ -254,108 +236,98 @@ HTML / CSS | 5 |
 
 *[Git](https://git-scm.com/) has been used for version control.*
 
-- There are xxxxx different branches:
+- There are 5 different branches:
 
   - [master branch](https://github.com/MiroslavSvec/project-4/tree/master) used in production.  
     - *The application is built from this branch on **Heroku***
 
-  - *6 other branches has been created for development purpose only. Where each branch represent different version of the application.*
+  - *4 other branches has been created for development purpose only. Where each branch represent different version of the application.*
 
-### **Changelog**
+### Before 2.2
 
-#### 1.0
+*Before version 2.2 I did not use separated branches.*
 
-- Added User registration and Login  
-- Added Admin dashboard for testing
-- Added @routes for all above
-- Added security via hashed password
-- Users are now stored in mongoDB database
-- Added unique link for every user
-- Added sessions for users
+- **1.0**
+  - Added User registration and Login  
+  - Added Admin dashboard for testing
+  - Added @routes for all above
+  - Added security via hashed password
+  - Users are now stored in mongoDB database
+  - Added unique link for every user
+  - Added sessions for users
 
-#### 1.1
+- **1.1**
+  - Connected to API
 
-- Connected to API
+- **1.2**
+  - Added fundamentals for recipes page
+  - Added fundamentals for single recipe page
+  - Added Search class for searching the database for recipes
+  - Added functionality to search by dish types, cuisines, time needed and diets
+  - Redesign  Search class to work for any collection
+  - helper.py no longer used
+  - Updating db now via JS for better user experiences
+  - Added SearchForm class for main search
+  - Also connected the form to back-end
 
-#### 1.2
+- **1.3**
+  - Finished index recipes section
+  - Added random recipes and trivia to this section
+  - Finished recipe.html
 
-- Added fundamentals for recipes page
-- Added fundamentals for single recipe page
-- Added Search class for searching the database for recipes
-- Added functionality to search by dish types, cuisines, time needed and diets
-- Redesign  Search class to work for any collection
-- helper.py no longer used
-- Updating db now via JS for better user experiences
-- Added SearchForm class for main search
-- Also connected the form to back-end
+- **1.4**
+  - Added schema for recipe based on the API
+  - Added constructor class base on the schema for updating a recipe
+  - Finished edit recipe
+  - Added more JS for user experiences
+  - Fixed many errors along the way
+  - Added filters and errors handling in add / edit form
+  - Users are now able to print the recipes
 
-#### 1.3
+- **1.5**
+  - schema.py no longer in use
+  - Moved Recipe class to classes.py
+  - Slightly improved database structure for better readability and manipulation with data
+  - Extended the Search class to be able to search by `$match`, `$text`
+  - Search class now dynamically set the default limit based on documents count
+  - User is now redirected to the last page viewed when log-in/out
+  - Add flashed messages for user when login-in / out and search recipes errors
+  - Moved "Trivia" section to top for better visibility
+  - **Search form**
+    - Added second button to search form for user to clearly see what he is searching for
+    - While changing the tags user now see the number of results before searching
+    - If no recipes found the search button is disabled and user is asked to remove some of the filters
+    - Removed "Search by" as this was getting too confusing for user. Instead the search input searches for any matching results
+    - Added min and max length to imput search. JS also checking for input length and enabling / disabling search input btn
+    - JS now also checking how many recipes are found on input change
+    - Create separate view for mobile devices search
 
-- Finished index recipes section
-- Added random recipes and trivia to this section
-- Finished recipe.html
+- **1.6**
+  - Deployed to Heroku for testing the app on mobile devices
+  - Added env variables and removed key.py as no longer in use
 
-#### 1.4
+- **1.7**
+  - Send out the app to users for testing
+  - Added links to Footer
 
-- Added schema for recipe based on the API
-- Added constructor class base on the schema for updating a recipe
-- Finished edit recipe
-- Added more JS for user experiences
-- Fixed many errors along the way
-- Added filters and errors handling in add / edit form
-- Users are now able to print the recipes
+- **1.8**
+  - Added Pagination to recipes and search
+  - Search class has now option to search without limiting the results
 
-#### 1.5
+- **1.9**
+  - Added Voting system for recipes
+  - Changed the styles of sign-up.html
+  - Added option to delete recipe
 
-- schema.py no longer in use
-- Moved Recipe class to classes.py
-- Slightly improved database structure for better readability and manipulation with data
-- Extended the Search class to be able to search by `$match`, `$text`
-- Search class now dynamically set the default limit based on documents count
-- User is now redirected to the last page viewed when log-in/out
-- Add flashed messages for user when login-in / out and search recipes errors
-- Moved "Trivia" section to top for better visibility
+- **2.0**
+  - Finished Profile page
 
-##### Search form
+- **2.1**
+  - Fixed voting system
+  - Added few improvements from users stories
+  - Fixed issue where email address was not storing in database
 
-- Added second button to search form for user to clearly see what he is searching for
-- While changing the tags user now see the number of results before searching
-- If no recipes found the search button is disabled and user is asked to remove some of the filters
-- Removed "Search by" as this was getting too confusing for user. Instead the search input searches for any matching results
-- Added min and max length to imput search. JS also checking for input length and enabling / disabling search input btn
-- JS now also checking how many recipes are found on input change
-- Create separate view for mobile devices search
-
-#### 1.6
-
-- Deployed to Heroku for testing the app on mobile devices
-- Added env variables and removed key.py as no longer in use
-
-#### 1.7
-
-- Send out the app to users for testing
-- Added links to Footer
-
-#### 1.8
-
-- Added Pagination to recipes and search
-- Search class has now option to search without limiting the results
-
-#### 1.9
-
-- Added Voting system for recipes
-- Changed the styles of sign-up.html
-- Added option to delete recipe
-
-#### 2.0
-
-- Finished Profile page
-
-#### 2.1
-
-- Fixed voting system
-- Added few improvements from users stories
-- Fixed issue where email address was not storing in database
+### 2.2 and later
 
 #### 2.2
 
@@ -404,6 +376,15 @@ HTML / CSS | 5 |
       - **CI** and **admin** now able to delete other user recipes without errors when owner of the recipe no longer exists
   - [classes.py](classes.py)
     - Updated `Database()` methods to match the recipe schema
+
+#### 2.5
+
+- **Changelog**
+  - Validate **HTML**
+- **Fixes**  
+  - [profile.css](/static/custom/css/profile.css)
+    - made the `nav` darker for netter visibility for smaller screens
+
 
 ### **Testing and improvements**
 

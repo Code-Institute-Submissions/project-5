@@ -35,8 +35,7 @@
 	<nav class="navbar navbar-expand-md navbar-light fixed-top pb-3 pt-3">
 		<div class="container">
 			<a class="navbar-brand font-weight-bold" href="/">Cookbook</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav" aria-controls="navbarSupportedContent"
-			 aria-expanded="false" aria-label="Toggle navigation">
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 
@@ -45,31 +44,26 @@
 					<li class="nav-item hidden-md-down">
 						<a class="nav-link" href="{{url_for('recipes', limit=12, offset=0)}}">All recipes</a>
 					</li>
-					{% if session.user %}
-					<br>
+					{% if session.user %}					
 					<li class="nav-item">
 						<a class="nav-link" href="{{url_for('profile', user_id=user_id)}}">Profile</a>
-					</li>
-					<br>
+					</li>					
 					<li class="nav-item">
 						<a class="nav-link" href="/add_recipe/{{ user_id }}">Add Recipe</a>
 					</li>
-					{% endif %}					
-					<br>
+					{% endif %}						
 					{% block search_form_btn %}
 					<li id="search-form-toggle" class="nav-item">
 						<a href="/mobile_search" id="search-btn" class="btn btn-outline-info">
 							<i class="fas fa-search"></i>
 						</a>
 					</li>
-					{% endblock search_form_btn %}
-					<br>					
+					{% endblock search_form_btn %}										
 					{% if session.user %}
 					<li class="nav-item text-right">
 						<button class="btn btn-outline-warning my-2 my-sm-0" type="button" data-toggle="modal" data-target="#log-out-modal"><i
 							 class="fas fa-sign-out-alt"></i></button>
-					</li>
-					<br>
+					</li>					
 					{% else %}
 					<li class="nav-item text-right">
 						<button class="btn btn-outline-success my-2 my-sm-0" type="button" data-toggle="modal" data-target="#log-in-modal"><i
@@ -81,10 +75,8 @@
 						<a class="btn btn-outline-success" href="/graphs">
 							<i class="fas fa-chart-area"></i>
 						</a>
-					</li>
-					<br>
+					</li>					
 				</ul>
-
 			</div>
 		</div>
 		<!-- Admin access nav -->
@@ -131,16 +123,16 @@
 	<footer id="footer" class="container-fluid">
 		<div class="row pt-5">
 			<div class="col-12 text-center footer-links">
-				<a href="#" target="_blank" class="rounded-circle">
+				<a href="https://twitter.com/" target="_blank" class="rounded-circle">
 					<i class="fab fa-twitter fa-2x" aria-hidden="true"></i>
 				</a>
-				<a href="#" target="_blank">
+				<a href="https://www.facebook.com/" target="_blank">
 					<i class="fab fa-facebook-f fa-2x" aria-hidden="true"></i>
 				</a>
-				<a href="#" target="_blank">
+				<a href="https://www.linkedin.com/" target="_blank">
 					<i class="fab fa-linkedin-in fa-2x" aria-hidden="true"></i>
 				</a>
-				<a href="#" target="_blank">
+				<a href="https://www.instagram.com/" target="_blank">
 					<i class="fab fa-instagram fa-2x" aria-hidden="true"></i>
 				</a>
 			</div>
@@ -159,7 +151,7 @@
 				<a href="https://github.com/MiroslavSvec/project-4" target="_blank">
 					<i class="fab fa-github fa-2x" aria-hidden="true"></i>
 				</a>
-				<a href="mailto: miroslav.svec.work@gmail.com">
+				<a href="mailto:miroslav.svec.work@gmail.com">
 					<i class="fas fa-at fa-2x" aria-hidden="true"></i>
 				</a>
 			</div>
@@ -170,12 +162,12 @@
 
 	{% block log_in_modal %}
 	<!-- Log in Modal -->
-	<div id="log-in-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="log-in" aria-hidden="true">
+	<div id="log-in-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-sm mx-auto mt-5">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="log-out">Log in</h5>
+						<h5 class="modal-title" id="log-in">Log in</h5>
 						<button class="close" type="button" data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">×</span>
 						</button>
@@ -184,11 +176,11 @@
 						<form method="POST" action="/login">
 							<div class="form-group">
 								<label for="username">User name</label>
-								<input name="username" type="text" class="form-control" required>
+								<input name="username" type="text" class="form-control" id="username" required>
 							</div>
 							<div class="form-group">
 								<label for="user_password">Password</label>
-								<input class="form-control" name="user_password" type="password" required>
+								<input class="form-control" name="user_password" type="password" id="user_password" required>
 							</div>
 							<button type="submit" class="btn btn-outline-primary btn-block">Login</button>
 						</form>
@@ -204,7 +196,7 @@
 	
 	<!-- Log out modal -->
 	{% block log_out_modal %}
-	<div class="modal fade" id="log-out-modal" tabindex="-1" role="dialog" aria-labelledby="log-out" aria-hidden="true">
+	<div class="modal fade" id="log-out-modal" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">

@@ -77,7 +77,7 @@
 					<hr>
 					{% for x in forms[0].diets %}
 					<div class="form-check">
-						<input class="form-check-input" name="diets-{{ loop.index }}" type="checkbox" value="{{x}}">
+						<input class="form-check-input" name="diets-{{ loop.index }}" type="checkbox" value="{{x}}" id="diets-{{ loop.index }}">
 						<label class="form-check-label" for="diets-{{ loop.index }}">
 							{{x | title}}
 						</label>
@@ -89,7 +89,7 @@
 					<hr>
 					{% for x in forms[0].popularity %}
 					<div class="form-check">
-						<input class="form-check-input" type="radio" name="sort"  value="{{x}}" >
+						<input class="form-check-input" type="radio" name="sort"  value="{{x}}" id="diets-{{ loop.index }}">
 						<label class="form-check-label" for="sort-{{ loop.index }}">
 							{{x | title}}
 						</label>

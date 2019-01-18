@@ -18,11 +18,8 @@ Nav
 
 */
 
-.navbar,
-.card,
-.card-body,
-.list-group-item {
-	background-color: rgba(0, 0, 0, 0.5);
+.navbar {
+	background-color: rgba(0, 0, 0, 0.95);
 }
 
 /* 
@@ -34,4 +31,11 @@ Cards
 .card,
 .card-body {
 	color: #dddddd;
+}
+
+.card,
+.card-body,
+.list-group-item {
+	border-radius: 20px;
+	background-color: rgba(0, 0, 0, 0.5);
 }
