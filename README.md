@@ -212,12 +212,24 @@ HTML / CSS | 5 |
 ### Tools used for testing
 
 - **Front End**
-  - [W3C Markup Validation Service](https://validator.w3.org/) (All pages)
+  - [W3C Markup Validation Service](https://validator.w3.org/)
+    - [graphs.html](/templates/graphs.html)
+      - 10 errors due to the graphs injecting with **pygal**
+    - All other pages **Document checking completed. No errors or warnings to show.**
 
   - [W3C CSS Validation Service](https://jigsaw.w3.org/css-validator/) (All pages)
+    - Shows 29 errors and 975 warnings due to the **Boostrap 4** clasees and rules. 
+    - There are no errors showing in custom CSS's
 
   - [JSHint](https://jshint.com/) (Report of all custom JS functions)
     - **Metrics**
+      - There are 32 functions in this file.
+      - Function with the largest signature take 3 arguments, while the median is 0.5.
+      - Largest function has 18 statements in it, while the median is 3.5.
+      - The most complex function has a cyclomatic complexity value of 6 while the median is 1.
+    - **11 unused variables**
+      - This is because the functions are called from templates
+  - 
 - **Back End**
   - [Jupyter Notebook](https://jupyter.org/index.html)
     - *Most of the functions has been pre-written and tested in **Jupyter Notebook**.*
@@ -380,7 +392,7 @@ HTML / CSS | 5 |
 #### 2.5
 
 - **Changelog**
-  - Validate **HTML**
+  - Validate **HTML**, **CSS** and **JS**
 - **Fixes**  
   - Fixed minor layout issues as accidentaly used `col-xs-12` instead of `col-12`
   - [sign-up.html](/templates/sign-up.html)

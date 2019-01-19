@@ -1,5 +1,5 @@
 $(document).ready(function () {
-	$("#update-db").removeAttr("disabled")
+	$("#update-db").removeAttr("disabled");
 
 	$("#update-db").on("click", function () {
 		$("#update-db").attr("disabled", true).html("Updating");

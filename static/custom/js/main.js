@@ -94,17 +94,17 @@ function checked_checkboxes() {
 		$("#tags_search_btn")
 			.attr("disabled", "disabled")
 			.html("Select a tag!");
-		return false
+		return false;
 	}
 	let checkboxes = {};
 	for (let i = 0; i < checked.length; i++) {
 		checkboxes[checked[i].name] = checked[i].value;
 	}
-	checkboxes["limit"] = $(".search-overlay input[name=limit]").val();
-	checkboxes["search_input"] = $(
+	checkboxes.limit = $(".search-overlay input[name=limit]").val();
+	checkboxes.search_input = $(
 		".search-overlay input[name=search_input]"
 	).val();
-	checkboxes["search_by"] = $(".search-overlay input[name=search_by]").val();
+	checkboxes.search_by = $(".search-overlay input[name=search_by]").val();
 	$.post("/num_of_tags_results", checkboxes, function(data, status) {
 		if (data != 0) {
 			$("#num_of_results").html(`

@@ -4,5 +4,5 @@ Nav
 */
 
 (function () {
-	$('.navbar').removeClass("navbar-light").addClass("navbar-dark")
+	$('.navbar').removeClass("navbar-light").addClass("navbar-dark");
 })();
