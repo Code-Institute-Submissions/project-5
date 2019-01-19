@@ -11,6 +11,9 @@
 		- [**General Design**](#general-design)
 	- [**Features**](#features)
 		- [Existing features](#existing-features)
+			- [Database existing features](#database-existing-features)
+			- [Existing pages](#existing-pages)
+			- [helper](#helper)
 		- [Features left to implement](#features-left-to-implement)
 	- [**Technologies used**](#technologies-used)
 		- [Front End](#front-end)
@@ -165,12 +168,157 @@ HTML / CSS | 5 |
 
 ### Existing features
 
-- [**index.html**](https://github.com/MiroslavSvec/project-4/blob/master/templates/index.html)
-  - **Create Account / Login form**
-    - allow user to create an account
-    - allow user to log-in to existing account
-- **Any other page**
+*For more detail information please visit [**Changelog and Fixes**](#changelog-and-fixes)*
+
+#### Database existing features
+
+- **Schemas**
+- **Collections**
+
+#### Existing pages
+
+- **Any page**
   - **Navigation**
+    - logo always leads user to [index.html](/templates/index.html)
+    - **All Users**
+      - user is now able to access [recipes.html](/templates/recipes.html) from any page
+      - user is now able to access [search-form-sm.html](/templates/search-form-sm.html) on portable devices or access `search_form_modal` on extra large screens
+      - user is now able to access [graphs.html](/templates/graphs.html) from any page
+    - **Anonymous**
+      - user is now able to access `log_in_modal` to log-in to **Flask** session or access [sign-up.html](/templates/sign-up.html) to create an account
+    - **Logged in**
+      - user is now able to access `log_out_modal` to log out from current **Flask** session
+      - user is now able to access [add-recipe.html](/templates/add-recipe.html) from any page
+      - user is now able to access [profile.html](/templates/profile.html) from any page
+    - **Logged in as Admin / CI**
+      - **CI** and **admin** user's are able to access [admin.html](/templates/admin.html) from any page
+- **[index.html](/templates/index.html)**
+  - added functionality for `trivia` section. Randomly select document from `trivia` collection (40 in total)
+  - added functionality for `index-recipes` section. Randomly select 5 documents from `recipes` collection
+- **[recipes.html](/templates/recipes.html)** *By default user is able to view all `visible` recipes - pagination sorted by `aggregateLikes` in form of cards.*
+  - picture will take the user to detail view of the clicked recipe ([recipe.html](/templates/recipe.html))
+  - user is now able to click on any of the tags **"dishTypes", "cuisines", "diets" and "readyInMinutes"** to instantly search for clicked tag
+  - add pagination on bottom of the page. By default **6** with offset **0 / 12**
+- **[recipe.html](/templates/recipe.html)**  *Show user detail information about a recipe.*
+  - **All Users**
+    - allow user to view detail information including
+      - **title, picture, time needed, ingredients, aggregate likes, steps, wine pairing(if any), author, dish types(if any), cuisines(if any), diets(if any)**  
+      *All tags are clickable and allow user to instantly search for recipes of the clicked tag.*
+    - allow user to print the recipe
+  - **Anonymous**
+    - user is now able to access `log_in_modal` by clicking on **"You must be logged in to vote / edit recipe"**
+  - **Logged in**
+    - user is now able to vote up or down for the viewed recipe. All votes are recorded to prevent user to vote multiple times for the same recipe
+    - **If owner**
+      - user is now able to access `delete-recipe` modal to delete the viewed recipe
+      - user is now able to access [add-edit-template.html](/templates/add-edit-template.html) to edit the viewed recipe
+  - **Logged in as Admin / CI**
+    - **If user recipe**
+      - able to access `delete-recipe` modal to delete the viewed recipe
+      - access [add-edit-template.html](/templates/add-edit-template.html) to edit the viewed recipe
+      - approve hidden recipes  
+      *All users recipes are hidden by default.*
+      - hide visible recipes
+- **[profile.html](/templates/profile.html)**
+  - allow logged in user to see detail information about his profile including
+    - **Picture** *Randomly selected while creating profile (from 4).*
+    - **Profile name**
+    - **Profile email** *If provided.*
+    - **Recipe section**
+      - If there are no recipes the user can access [add-recipe.html](/templates/add-recipe.html) instead.
+      - **If any**
+        - allow user to see basic information about his own recipes including **title** and **aggregate likes**
+        - allow user to access [edit-recipe.html](/templates/edit-recipe.html) to edit each recipe
+        - allow user to access [recipe.html](/templates/recipe.html) to view each recipe
+- **[admin.html](/templates/admin.html)**
+  - **CI or admin users only** *username: **CI** or **ci** password **codeinstitute***
+    - **Recipes**
+      - Show all user recipes `_id`
+      - Show all hidden (user) recipes `_id`
+    - **Users**
+      - Show basic information about each user in `users` collection. Including `username`, `_id`, `email`(if any), `recipes` and `votes`.
+    - **Database**
+      - Show current [search form schema](/assets/db/search-form-schema.json) in use including `_id` and all tags
+      - Update the current [search form schema](/assets/db/search-form-schema.json) manually
+- **[add-recipe.html](/templates/add-recipe.html)**
+  - allow logged in user to add new recipe to database base on [recipe schema](/assets/db/)
+    - **Title for the recipe**
+    - **Picture for the recipe (optional)** *Default picture always selected if no url is provided.*
+    - **Time needed**
+    - **Ingredients**
+      - allow user to add or delete a ingredient to minimum of 1.
+    - **Steps** 
+      - allow user to add or delete a steps to minimum of 1.
+    - **Wine pairing (optional)**
+      - allow user to add wine pairing to the recipe.
+    - **Tags (optional)**
+      - allow user to add new tag
+      - if tag already exists it will be automatically checked for user
+      - select any of the tags already exists in database
+- **[edit-recipe.html](/templates/edit-recipe.html)**
+  - allow logged in user to edit his own recipe  
+  *Same rules apply as in [add-recipe.html](/templates/add-recipe.html)*
+- **[graphs.html](/templates/graphs.html)**  
+*All graphs shows recipes including the ones which are hidden.*  
+*I did not want to have testing recipes visible on the website.*
+
+  - **User's recipes vs Database recipes**
+  - **User's recipes vs Database recipes (Dish Types)**
+  - **User's recipes vs Database recipes (Cuisines)**
+  - **User's recipes vs Database recipes (Diets)**
+
+- **[search-form.html](/templates/search-form.html)**
+  - **Input search**
+    - on input change user now see the number of results before searching
+    - if no recipes found the search button is disabled
+  - **Tags search**
+    - while changing the tags user now see the number of results before searching
+    - if no recipes found the search button is disabled and user is asked to remove some of the filters
+  - **Limit results**
+    - working for both **Input search** and **Tags search**
+  - **Popularity**
+    - working for both **Input search** and **Tags search** 
+  - create separate view for mobile devices search **[search-form-sm.html](/templates/search-form-sm.html)** which inherit from this template
+- **[404.html](/templates/404.html)**
+  - allow user to get back to [index.html](/templates/index.html) after **404** error
+- **[500.html](/templates/500.html)**
+  - allow user to get back to [index.html](/templates/index.html) after **500** error  
+  *500 error will also automatically log out user from **Flask** session to prevent additional errors.*
+
+#### [helper](/helper/classes.py)
+*Main class for sending queries to **mlab***  
+- **`Search`**  
+*Construct a query based on user input/s and return it's results.*  
+*All methods which sending quires to **mLab** can return `None` if no documents are found.* 
+  - `find_one_by_id()`
+    - return single document for given `_id`
+  - `sort_find_all()`
+    - return collection of documents with only one filter (`{"visibility": True}`)
+  - `match()`
+    - return collection of documents for given **array of filters**  
+    *Mainly used for searching by tags. The result will match any documents which match all of the filters given*
+  - `text()`
+    - create an "wild card" `text` index
+    - return collection of documents for given **string**  
+    *Mostly used for search via `input`.*
+  - `all_filters()`
+    - return collection of documents for given **key** and **value**  
+    *However, all other filters can be passed to `__init__()`.*  
+    *Mainly used while searching by individual tags group.*  
+  - `random()`
+    - return collection of documents based on **collection** and **number of results** given  
+    *Used to get random documents for `trivia` and `index-recipes` sections in [index.html](/templates/index.html)*
+  - `pagination()`
+    - return dictionary containing data for pagination including **results, num_of_results, next_url** and **previous_url**
+  - `__len__()`
+    - return number of documents in given **collection**
+- **`SearchForm(Search)`**  
+- **`Database`**  
+- **`Recipe(dict)`**  
+- **`Charts`**  
+
+
+  
 
 ### Features left to implement
 
@@ -215,11 +363,12 @@ HTML / CSS | 5 |
   - [W3C Markup Validation Service](https://validator.w3.org/)
     - [graphs.html](/templates/graphs.html)
       - 10 errors due to the graphs injecting with **pygal**
-    - All other pages **Document checking completed. No errors or warnings to show.**
+    - All other pages 
+      - **Document checking completed. No errors or warnings to show.**
 
   - [W3C CSS Validation Service](https://jigsaw.w3.org/css-validator/) (All pages)
-    - Shows 29 errors and 975 warnings due to the **Boostrap 4** clasees and rules. 
-    - There are no errors showing in custom CSS's
+    - Shows 29 errors and 975 warnings due to the **Boostrap 4** clasees and rules.  
+    *There are no errors showing in custom CSS's*
 
   - [JSHint](https://jshint.com/) (Report of all custom JS functions)
     - **Metrics**
@@ -229,7 +378,6 @@ HTML / CSS | 5 |
       - The most complex function has a cyclomatic complexity value of 6 while the median is 1.
     - **11 unused variables**
       - This is because the functions are called from templates
-  - 
 - **Back End**
   - [Jupyter Notebook](https://jupyter.org/index.html)
     - *Most of the functions has been pre-written and tested in **Jupyter Notebook**.*
@@ -402,6 +550,8 @@ HTML / CSS | 5 |
     - made the `nav` darker for netter visibility for smaller screens
   - [recipe.html](/templates/recipe.html), [recipes.html](/templates/recipes.html) and [search-form-small.html](/templates/search-form-small.html)
     - Added more padding to top header as when logged in as **CI** or **admin** the second `nav` was covering to title
+  - [app.py](/app.py)
+    - `hide_recipe()` database is now updated every time a recipe is hidden to preven empty tags
 
 
 ### **Testing and improvements**
@@ -507,7 +657,6 @@ Encountered many glitches with Flexbox and iOS (especially tablets). Where some 
 
 ## **What could be done better?**
 
-- Could take the advantage of WTForms which could greatly speed up the development
 - MUCH better error handling. Right now, minimum to none
 - Again, tests has been done manually or with little use of automated tests
 - Also need to push to GitHub more often and or number the pushes more clearly

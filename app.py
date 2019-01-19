@@ -376,8 +376,8 @@ def hide_recipe(recipe_id):
             hide_recipe = recipes_collection.find_one(
                 {'_id': ObjectId(recipe_id)})
             hide_recipe['visibility'] = False
-            recipes_collection.update(
-                {'_id': ObjectId(recipe_id)}, hide_recipe)
+            recipes_collection.update({'_id': ObjectId(recipe_id)}, hide_recipe)
+            Database().update_search_form()
             return recipe(recipe_id)
     return redirect(url_for('index'))
 

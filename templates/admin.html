@@ -48,10 +48,19 @@
 						<div class="card-header"> {{user.username}}</div>
 						<div class="card-body">
 							<ul>
+								{% if user.email %}
 								<li>email: {{user.email}}</li>
+								{% endif %}
 								<li>
 									<ul>Recipes:
 										{% for id in user.recipes %}
+										<li>{{ id }}</li>
+										{% endfor %}
+									</ul>
+								</li>
+								<li>
+									<ul>Voted recipes:
+										{% for id in user.votes %}
 										<li>{{id}}</li>
 										{% endfor %}
 									</ul>

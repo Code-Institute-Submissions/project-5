@@ -221,7 +221,7 @@ class Database:
         for x in key:
             form[f"{x}"] = []
             for y in self.update(x):
-                form[f"{x}"].append(y.capitalize())
+                form[f"{x}"].append(y.lower())
         return form
 
     def update_search_form(self, key=["dishTypes", "cuisines", "diets"]):

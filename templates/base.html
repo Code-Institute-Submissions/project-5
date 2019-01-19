@@ -1,234 +1,219 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="Cookbook">
+		<meta name="author" content="Miroslav Svec">
+		<!-- Bootstrap  CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+		crossorigin="anonymous">
+		<!-- FA -->
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+		crossorigin="anonymous">
+		<!-- Fonts -->
+		<link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">		
+		<!-- Favicon -->
+		<link rel="shortcut icon" href="/static/img/favicon.ico">
+		<!-- Custom styles -->
+		<link rel="stylesheet" href="{{url_for('static', filename='custom/css/style.css')}}" type="text/css" />
+		{% block css %}{% endblock css %}
+		<link rel="stylesheet" href="{{url_for('static', filename='custom/css/screen.css')}}" type="text/css" /> 
 
-<head>
+		<title>{{page_title}}</title>
+	</head>
+	
+	<body>
+		<!-- Navbar -->
+		<nav class="navbar navbar-expand-md navbar-light fixed-top pb-3 pt-3">
+			<div class="container">
+				<a class="navbar-brand font-weight-bold" href="/">Cookbook</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
 
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="description" content="">
-	<meta name="author" content="">
-
-	<!-- Bootstrap  CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-	 crossorigin="anonymous">
-
-	<!-- FA -->
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
-	 crossorigin="anonymous">
-
-	<!-- Fonts -->
-	<link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
-
-	<link rel="shortcut icon" href="/static/img/favicon.ico">
-
-	<!-- Custom styles -->
-	<link rel="stylesheet" href="{{url_for('static', filename='custom/css/style.css')}}" type="text/css" />
-	{% block css %}{% endblock css %}
-	<link rel="stylesheet" href="{{url_for('static', filename='custom/css/screen.css')}}" type="text/css" /> 
-
-	<title>{{page_title}}</title>
-
-
-
-</head>
-
-<body>
-	<!-- Navbar -->
-	<nav class="navbar navbar-expand-md navbar-light fixed-top pb-3 pt-3">
-		<div class="container">
-			<a class="navbar-brand font-weight-bold" href="/">Cookbook</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-
-			<div class="collapse navbar-collapse" id="main-nav">
-				<ul class="navbar-nav ml-auto text-center">
-					<li class="nav-item hidden-md-down">
-						<a class="nav-link" href="{{url_for('recipes', limit=12, offset=0)}}">All recipes</a>
-					</li>
-					{% if session.user %}					
-					<li class="nav-item">
-						<a class="nav-link" href="{{url_for('profile', user_id=user_id)}}">Profile</a>
-					</li>					
-					<li class="nav-item">
-						<a class="nav-link" href="/add_recipe/{{ user_id }}">Add Recipe</a>
-					</li>
-					{% endif %}						
-					{% block search_form_btn %}
-					<li id="search-form-toggle" class="nav-item">
-						<a href="/mobile_search" id="search-btn" class="btn btn-outline-info">
-							<i class="fas fa-search"></i>
-						</a>
-					</li>
-					{% endblock search_form_btn %}										
-					{% if session.user %}
-					<li class="nav-item text-right">
-						<button class="btn btn-outline-warning my-2 my-sm-0" type="button" data-toggle="modal" data-target="#log-out-modal"><i
-							 class="fas fa-sign-out-alt"></i></button>
-					</li>					
-					{% else %}
-					<li class="nav-item text-right">
-						<button class="btn btn-outline-success my-2 my-sm-0" type="button" data-toggle="modal" data-target="#log-in-modal"><i
-							 class="fas fa-sign-in-alt"></i>
-						</button>
-					</li>
-					{% endif %}
-					<li class="nav-item">
-						<a class="btn btn-outline-success" href="/graphs">
-							<i class="fas fa-chart-area"></i>
-						</a>
-					</li>					
-				</ul>
+				<div class="collapse navbar-collapse" id="main-nav">
+					<ul class="navbar-nav ml-auto text-center">
+						<li class="nav-item hidden-md-down">
+							<a class="nav-link" href="{{url_for('recipes', limit=12, offset=0)}}">All recipes</a>
+						</li>
+						{% if session.user %}					
+						<li class="nav-item">
+							<a class="nav-link" href="{{url_for('profile', user_id=user_id)}}">Profile</a>
+						</li>					
+						<li class="nav-item">
+							<a class="nav-link" href="/add_recipe/{{ user_id }}">Add Recipe</a>
+						</li>
+						{% endif %}						
+						{% block search_form_btn %}
+						<li id="search-form-toggle" class="nav-item">
+							<a href="/mobile_search" id="search-btn" class="btn btn-outline-info">
+								<i class="fas fa-search"></i>
+							</a>
+						</li>
+						{% endblock search_form_btn %}										
+						{% if session.user %}
+						<li class="nav-item text-right">
+							<button class="btn btn-outline-warning my-2 my-sm-0" type="button" data-toggle="modal" data-target="#log-out-modal"><i
+								class="fas fa-sign-out-alt"></i></button>
+						</li>					
+						{% else %}
+						<li class="nav-item text-right">
+							<button class="btn btn-outline-success my-2 my-sm-0" type="button" data-toggle="modal" data-target="#log-in-modal"><i
+								class="fas fa-sign-in-alt"></i>
+							</button>
+						</li>
+						{% endif %}
+						<li class="nav-item">
+							<a class="btn btn-outline-success" href="/graphs">
+								<i class="fas fa-chart-area"></i>
+							</a>
+						</li>					
+					</ul>
+				</div>
 			</div>
-		</div>
-		<!-- Admin access nav -->
-		{% block admin_nav %}
-		{% if session.user == "admin" or session.user == "CI" %}
-		<div class="navbar-nav">
-			<li class="nav-item">
-				<a class="btn btn-outline-danger" href="{{url_for('dashboard', user_id=user_id)}}">Admin <i class="fas fa-user-secret"></i></a>
-			</li>
-		</div>
-		{% endif %}
-		{% endblock admin_nav %}	
-		<!-- Alerts modal -->
-		<div id="alerts" class="container-fluid">
-			<div class="row justify-content-around">
-				<div id="messages">
-					{% with messages = get_flashed_messages() %}
-					{% if messages %}
-					{% for message in messages %}
-					<p class="text-center">{{ message }}</p>
-					{% endfor %}
-					{% endif %}
-					{% endwith %}
+			<!-- Admin access nav -->
+			{% block admin_nav %}
+			{% if session.user == "admin" or session.user == "CI" %}
+			<div class="navbar-nav">
+				<li class="nav-item">
+					<a class="btn btn-outline-danger" href="{{url_for('dashboard', user_id=user_id)}}">Admin <i class="fas fa-user-secret"></i></a>
+				</li>
+			</div>
+			{% endif %}
+			{% endblock admin_nav %}	
+			<!-- Alerts modal -->
+			<div id="alerts" class="container-fluid">
+				<div class="row justify-content-around">
+					<div id="messages">
+						{% with messages = get_flashed_messages() %}
+						{% if messages %}
+						{% for message in messages %}
+						<p class="text-center">{{ message }}</p>
+						{% endfor %}
+						{% endif %}
+						{% endwith %}
+					</div>
+				</div>
+			</div>
+		</nav>
+
+		<!-- Search form modal -->
+		{% block search_form_modal %}
+		{% include 'search-form.html' %}
+		{% endblock search_form_modal %}
+
+
+		<!-- Main Content -->
+		<main class="pt-2">
+			{% block main_content %} {% endblock main_content %}
+		</main>
+
+		<!-- Footer -->
+		<footer id="footer" class="container-fluid">
+			<div class="row pt-5">
+				<div class="col-12 text-center footer-links">
+					<a href="https://twitter.com/" target="_blank" class="rounded-circle">
+						<i class="fab fa-twitter fa-2x" aria-hidden="true"></i>
+					</a>
+					<a href="https://www.facebook.com/" target="_blank">
+						<i class="fab fa-facebook-f fa-2x" aria-hidden="true"></i>
+					</a>
+					<a href="https://www.linkedin.com/" target="_blank">
+						<i class="fab fa-linkedin-in fa-2x" aria-hidden="true"></i>
+					</a>
+					<a href="https://www.instagram.com/" target="_blank">
+						<i class="fab fa-instagram fa-2x" aria-hidden="true"></i>
+					</a>
+				</div>
+			</div>		
+			<div class="row text-center justify-content-center">
+				<hr>
+				<div class="col-12">
+					<a href="https://www.linkedin.com/in/miroslav-svec-58a448151/" target="_blank">
+						CREATED BY MIROSLAV ŠVEC
+					</a>
+				</div>
+			</div>
+			<br>
+			<div class="row text-center pb-5">
+				<div class="col-12">
+					<a href="https://github.com/MiroslavSvec/project-4" target="_blank">
+						<i class="fab fa-github fa-2x" aria-hidden="true"></i>
+					</a>
+					<a href="mailto:miroslav.svec.work@gmail.com">
+						<i class="fas fa-at fa-2x" aria-hidden="true"></i>
+					</a>
+				</div>
+			</div>
+		</footer>
+
+		<!-- Log in Modal -->
+		{% block log_in_modal %}	
+		<div id="log-in-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-sm mx-auto mt-5">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="log-in">Log in</h5>
+							<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">×</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<form method="POST" action="/login">
+								<div class="form-group">
+									<label for="username">User name</label>
+									<input name="username" type="text" class="form-control" id="username" required>
+								</div>
+								<div class="form-group">
+									<label for="user_password">Password</label>
+									<input class="form-control" name="user_password" type="password" id="user_password" required>
+								</div>
+								<button type="submit" class="btn btn-outline-primary btn-block">Login</button>
+							</form>
+						</div>
+						<div class="modal-footer justify-content-center">
+							<a class="btn btn-outline-info btn-block mt-3" href="{{url_for('sign_up')}}">Register an Account</a>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</nav>
-
-	{% block search_form_modal %}
-	{% include 'search-form.html' %}
-	{% endblock search_form_modal %}
-
-
-	<!-- Main Content -->
-
-	<main class="pt-2">
-		{% block main_content %} {% endblock main_content %}
-	</main>
-
-
-
-
-	<!-- Footer -->
-	<footer id="footer" class="container-fluid">
-		<div class="row pt-5">
-			<div class="col-12 text-center footer-links">
-				<a href="https://twitter.com/" target="_blank" class="rounded-circle">
-					<i class="fab fa-twitter fa-2x" aria-hidden="true"></i>
-				</a>
-				<a href="https://www.facebook.com/" target="_blank">
-					<i class="fab fa-facebook-f fa-2x" aria-hidden="true"></i>
-				</a>
-				<a href="https://www.linkedin.com/" target="_blank">
-					<i class="fab fa-linkedin-in fa-2x" aria-hidden="true"></i>
-				</a>
-				<a href="https://www.instagram.com/" target="_blank">
-					<i class="fab fa-instagram fa-2x" aria-hidden="true"></i>
-				</a>
-			</div>
-		</div>		
-		<div class="row text-center justify-content-center">
-			<hr>
-			<div class="col-12">
-				<a href="https://www.linkedin.com/in/miroslav-svec-58a448151/" target="_blank">
-					CREATED BY MIROSLAV ŠVEC
-				</a>
-			</div>
-		</div>
-		<br>
-		<div class="row text-center pb-5">
-			<div class="col-12">
-				<a href="https://github.com/MiroslavSvec/project-4" target="_blank">
-					<i class="fab fa-github fa-2x" aria-hidden="true"></i>
-				</a>
-				<a href="mailto:miroslav.svec.work@gmail.com">
-					<i class="fas fa-at fa-2x" aria-hidden="true"></i>
-				</a>
-			</div>
-		</div>
-	</footer>
-
-
-
-	{% block log_in_modal %}
-	<!-- Log in Modal -->
-	<div id="log-in-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-sm mx-auto mt-5">
+		{% endblock log_in_modal %} 
+		
+		<!-- Log out modal -->
+		{% block log_out_modal %}
+		<div class="modal fade" id="log-out-modal" tabindex="-1" role="dialog" aria-hidden="true">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="log-in">Log in</h5>
+						<h5 class="modal-title" id="log-out">Ready to Leave?</h5>
 						<button class="close" type="button" data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">×</span>
 						</button>
 					</div>
-					<div class="modal-body">
-						<form method="POST" action="/login">
-							<div class="form-group">
-								<label for="username">User name</label>
-								<input name="username" type="text" class="form-control" id="username" required>
-							</div>
-							<div class="form-group">
-								<label for="user_password">Password</label>
-								<input class="form-control" name="user_password" type="password" id="user_password" required>
-							</div>
-							<button type="submit" class="btn btn-outline-primary btn-block">Login</button>
-						</form>
-					</div>
-					<div class="modal-footer justify-content-center">
-						<a class="btn btn-outline-info btn-block mt-3" href="{{url_for('sign_up')}}">Register an Account</a>
+					<div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+					<div class="modal-footer">
+						<button class="btn btn-outline-secondary" type="button" data-dismiss="modal">Cancel</button>
+						<a class="btn btn-outline-warning" href="{{url_for('logout')}}">Logout</a>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	{% endblock log_in_modal %} 
-	
-	<!-- Log out modal -->
-	{% block log_out_modal %}
-	<div class="modal fade" id="log-out-modal" tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="log-out">Ready to Leave?</h5>
-					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">×</span>
-					</button>
-				</div>
-				<div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-				<div class="modal-footer">
-					<button class="btn btn-outline-secondary" type="button" data-dismiss="modal">Cancel</button>
-					<a class="btn btn-outline-warning" href="{{url_for('logout')}}">Logout</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	{% endblock log_out_modal %}
+		{% endblock log_out_modal %}
 
-	<!-- Bootstrap core JavaScript-->
-	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-	 crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-	 crossorigin="anonymous"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-	 crossorigin="anonymous"></script>
-	<!-- Main JS-->
-	<script src="{{ url_for('static', filename='custom/js/main.js') }}"></script>
+		<!-- Bootstrap core JavaScript-->
+		<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+		crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
+		<!-- Main JS-->
+		<script src="{{ url_for('static', filename='custom/js/main.js') }}"></script>
 
-	{% block scripts %}{% endblock scripts %}
-
-</body>
-
+		<!-- Custom scripts -->
+		{% block scripts %}{% endblock scripts %}
+	</body>
 </html>
