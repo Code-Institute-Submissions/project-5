@@ -393,6 +393,7 @@ HTML / CSS | 5 |
 
 - **Changelog**
   - Validate **HTML**, **CSS** and **JS**
+  - Added [favicon.ico](/static/img/favicon.ico)
 - **Fixes**  
   - Fixed minor layout issues as accidentaly used `col-xs-12` instead of `col-12`
   - [sign-up.html](/templates/sign-up.html)
