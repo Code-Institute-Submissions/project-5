@@ -13,7 +13,7 @@
 		- [Existing features](#existing-features)
 			- [Database existing features](#database-existing-features)
 			- [Existing pages](#existing-pages)
-			- [helper](#helper)
+			- [Helper](#helper)
 		- [Features left to implement](#features-left-to-implement)
 	- [**Technologies used**](#technologies-used)
 		- [Front End](#front-end)
@@ -195,9 +195,9 @@ HTML / CSS | 5 |
 - **[index.html](/templates/index.html)**
   - added functionality for `trivia` section. Randomly select document from `trivia` collection (40 in total)
   - added functionality for `index-recipes` section. Randomly select 5 documents from `recipes` collection
-- **[recipes.html](/templates/recipes.html)** *By default user is able to view all `visible` recipes - pagination sorted by `aggregateLikes` in form of cards.*
+- **[recipes.html](/templates/recipes.html)** *By default user is able to view all `visible` recipes (- pagination) sorted by `aggregateLikes` in form of cards.*
   - picture will take the user to detail view of the clicked recipe ([recipe.html](/templates/recipe.html))
-  - user is now able to click on any of the tags **"dishTypes", "cuisines", "diets" and "readyInMinutes"** to instantly search for clicked tag
+  - user is now able to click on any of the tags **"dishTypes", "cuisines", "diets" and "readyInMinutes"** to instantly search for recipes of clicked tag
   - add pagination on bottom of the page. By default **6** with offset **0 / 12**
 - **[recipe.html](/templates/recipe.html)**  *Show user detail information about a recipe.*
   - **All Users**
@@ -285,8 +285,12 @@ HTML / CSS | 5 |
   - allow user to get back to [index.html](/templates/index.html) after **500** error  
   *500 error will also automatically log out user from **Flask** session to prevent additional errors.*
 
-#### [helper](/helper/classes.py)
-*Main class for sending queries to **mlab***  
+#### [Helper](/helper/classes.py)
+
+**`Search`**
+
+**Main class for sending queries to mlab**
+
 - **`Search`**  
 *Construct a query based on user input/s and return it's results.*  
 *All methods which sending quires to **mLab** can return `None` if no documents are found.* 
@@ -312,13 +316,80 @@ HTML / CSS | 5 |
     - return dictionary containing data for pagination including **results, num_of_results, next_url** and **previous_url**
   - `__len__()`
     - return number of documents in given **collection**
-- **`SearchForm(Search)`**  
-- **`Database`**  
-- **`Recipe(dict)`**  
-- **`Charts`**  
 
+**`SearchForm(Search)`**
 
-  
+**Main Class for working with [search-form.html](/templates/search-form.html) and [search-form-sm.html](/templates/search-form-sm.html).**  
+
+*This Class is mainly used to format the inputs and construct filters which are passed to `Search()` to get results.*  
+*This is also why the `SearchForm` class inherit from `Search()`.*
+
+*Example of data which needs to be cleared can be viewed [here](/assets/db/form-search-data-examp.json).*
+
+- **`SearchForm(Search)`**
+  - `search_by_tags()`
+    - main method which return the final result if user search by tags
+  - `search_by_input()`
+    - main method which return the final result if user search by input
+  - `get_limit()`
+    - return `limit` (if selected by user) or delete this key and return **12** (default value for pagination) if not
+  - `popularity()`
+    - return the `order` of recipes (**Ascending** or **Decreasing**) depends on user selection  
+    *By default the `order` is set to **Decreasing**.*
+  - `form_filters()`
+    - return filters which are passed to query in form **list** of **dictionaries**  
+    *This method format the data passed.*  
+    *Example: `[{'visibility': True}, {'cuisines': 'nordic'}]`*
+  - `format_tags()`
+    - return dictionary of filters in form of **key** and **list** of **values**  
+    *Example: `{'diets': ['vegan', 'fodmap friendly'], 'dishTypes': ['dessert']}`* 
+  - `search_input()`
+    - format the **string** and create the query with `Search().text()`
+  - `search_tags()`
+    - final stage which add the formated filters selected by user to `Search().match()`
+
+**`Database`**
+
+**Used to update tags for [search-form.html](/templates/search-form.html) and [search-form-sm.html](/templates/search-form-sm.html)**
+
+*The initial idea was much bigger for this class. However, as I updated the `Search` class later on to work with any collection this class only update the tags now.*
+
+- **`Database`**
+  - `update()`
+    - search for existing tags and return them in form of in form of **key** and **list** of **values**
+  - `update_db()`
+    - if new tags found `append` them **list** associate with **key**
+  - `update_search_form()`
+    - main method wich update the document in **form** collection at the end
+
+**`Recipe(dict)`**
+
+**Create recipe based on [recipe schema](/assets/db/recipe_schema.json)**
+
+*Both `add_recipe()` and `edit_recipe()` use this class.*
+
+- **`Recipe(dict)`**
+  - `formate_data()`
+    - format the data from request and return them in form of dictionary
+  - `get_ingredients()`
+    - format data from `form["ingredient"]` and return them in form of **list** of **dictionaries**
+  - `get_steps()`
+    - format data from `form["steps"]` and return them in form of **list** of **dictionaries**
+  - `recipe_schema()`
+    - final stage wich return the recipe in form of **dictionary** based on the [recipe schema](/assets/db/recipe_schema.json)
+
+**`Charts`**
+
+**Construct data for [graphs.html](/templates/graphs.html) and return them**
+
+- **`Charts`**
+  - `users_vs_db()`
+    - construct graph data wich shows **User's** vs. **Database** recipes in total in form of **pie chart**
+  - `line_graph()`
+    - construct graph data wich shows **User's** vs. **Database** recipes in total for selected tag in form of **line chart**
+  - `users_vs_db()`
+    - return separate data for **User's** and **Database** in form of **dictionary**  
+    *This method is used to used to separate data and pass them to `line_graph()`*
 
 ### Features left to implement
 
@@ -552,7 +623,8 @@ HTML / CSS | 5 |
     - Added more padding to top header as when logged in as **CI** or **admin** the second `nav` was covering to title
   - [app.py](/app.py)
     - `hide_recipe()` database is now updated every time a recipe is hidden to preven empty tags
-
+  - [helper](/helper/classes.py)
+    - fixed major bug when `Recipe` class lower cased image url's
 
 ### **Testing and improvements**
 

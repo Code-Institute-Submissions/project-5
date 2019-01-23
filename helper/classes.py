@@ -241,6 +241,9 @@ class Recipe(dict):
         for key in form_data:
             if key == "_id":
                 continue
+            if key == "new_img" or key == "old_img":
+            	formated_inputs[f"{key}"] = []
+            	formated_inputs[key].append(form_data[key])
             value_key = key
             key = key.split("-")
             key = key[0]
