@@ -241,7 +241,7 @@ HTML / CSS | 5 |
       - Show current [search form schema](/assets/db/search-form-schema.json) in use including `_id` and all tags
       - Update the current [search form schema](/assets/db/search-form-schema.json) manually
 - **[add-recipe.html](/templates/add-recipe.html)**
-  - allow logged in user to add new recipe to database base on [recipe schema](/assets/db/)
+  - allow logged in user to add new recipe to database base on [recipe schema](/assets/db/recipe_schema.json)
     - **Title for the recipe**
     - **Picture for the recipe (optional)** *Default picture always selected if no url is provided.*
     - **Time needed**
@@ -621,6 +621,8 @@ HTML / CSS | 5 |
     - made the `nav` darker for netter visibility for smaller screens
   - [recipe.html](/templates/recipe.html), [recipes.html](/templates/recipes.html) and [search-form-small.html](/templates/search-form-small.html)
     - Added more padding to top header as when logged in as **CI** or **admin** the second `nav` was covering to title
+  - [search-form.html](/templates/search-form.html)
+    - changed `container` to `container-fluid` as this gives more space to long tags such as **Eastern European**
   - [app.py](/app.py)
     - `hide_recipe()` database is now updated every time a recipe is hidden to preven empty tags
   - [helper](/helper/classes.py)
