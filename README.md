@@ -1,7 +1,8 @@
 
-## **Table of Contents**
+# **Table of Contents**
 
-- [**The Cookbook**](#the-cookbook)
+- [**Table of Contents**](#table-of-contents)
+	- [**The Cookbook**](#the-cookbook)
 	- [**CI Brief**](#ci-brief)
 	- [**UX**](#ux)
 		- [**Requirements**](#requirements)
@@ -22,29 +23,30 @@
 		- [Tools used for testing](#tools-used-for-testing)
 	- [**Changelog and Fixes**](#changelog-and-fixes)
 		- [Before 2.2](#before-22)
+			- [**Testing and improvements before 2.2**](#testing-and-improvements-before-22)
+			- [**Some user feedbacks before 2.2**](#some-user-feedbacks-before-22)
 		- [2.2 and later](#22-and-later)
 			- [2.2](#22)
 			- [2.3](#23)
 			- [2.4](#24)
 			- [2.5](#25)
-		- [**Testing and improvements**](#testing-and-improvements)
-		- [**Some user feedbacks**](#some-user-feedbacks)
-		- [**Need to fix**](#need-to-fix)
-			- [BS4 Flex-box iOS](#bs4-flex-box-ios)
+			- [Bootstrap 4 Flex-box on iOS](#bootstrap-4-flex-box-on-ios)
 	- [**Deployment**](#deployment)
 	- [**How to run the project locally?**](#how-to-run-the-project-locally)
 	- [**What could be done better?**](#what-could-be-done-better)
 	- [**Credits**](#credits)
 		- [Special thanks to](#special-thanks-to)
+		- [Recipes](#recipes)
+		- [Media](#media)
 
 <hr />
 
-# **The Cookbook**
+## **The Cookbook**
 
 Hello there,  
 and welcome to my fourth [Code Institute (CI)](https://courses.codeinstitute.net/) school project.
 
-In this project I should be able to show that I can create a web aplication using [Python 3](https://www.python.org/downloads/) and [Flask]( http://flask.pocoo.org/) which works with cloud **SQL** / **NoSQL** databes.
+In this project I should be able to show that I can create a web application using [Python 3](https://www.python.org/downloads/) and [Flask]( http://flask.pocoo.org/) which works with cloud **SQL** / **NoSQL** database.
 
 I decided to follow the given example from CI for this project.
 
@@ -70,7 +72,7 @@ I decided to follow the given example from CI for this project.
 
 ## **UX**
 
-*I personally hate to cook and as I almost never visit those kind of websites, I search around the web first to get a general idea of the design and data required for this project.*
+*I personally do not like to cook and as I almost never visit those kind of websites, I search around the web first to get a general idea of the design and data required for this project.*
 
 *I visited many websites and the only thing I didn’t like was that they all looks a bit "outdated" in design and sometimes "too busy".*
 
@@ -172,8 +174,28 @@ HTML / CSS | 5 |
 
 #### Database existing features
 
+*I decided to use NoSQL database as the recipes form **API** are in this format. Also the main idea was not to overwhelm a user with too many drop-downs such as "Is the ingredient in kg, pounds, tons or spoons?".*
+
+*[mLab](https://mlab.com/welcome/) was used to store the recipes.*
+
 - **Schemas**
+  - created [recipe schema](/assets/db/recipe_schema.json) based on the recipes recieved from **API**  
+  *Example of [recipe](/assets/db/api_recipe_example.json) recieved from **API***
+  - [user schema](/assets/db/user-schema.json)
+  
 - **Collections**
+  - **recipes**
+    - used to store all recipes
+  - **trivia**
+    - used to store trivia for [index.html](/templates/index.html)
+  - **forms**
+    - used to store form tags for [search-form.html](/templates/search-form.html) and [search-form-sm.html](/templates/search-form-sm.html)
+  - **schemas**
+    - used to store schemas such as [recipe schema](/assets/db/recipe_schema.json)
+  - **testing**
+    - used for development process only to avoid damage to the main **recipe** collection
+  - **back_up**
+    - used to store all recipes as back up if something goes wrong with the **recipe** collection
 
 #### Existing pages
 
@@ -289,7 +311,7 @@ HTML / CSS | 5 |
 
 **`Search`**
 
-**Main class for sending queries to mlab**
+**Main class for sending queries to mLab**
 
 - **`Search`**  
 *Construct a query based on user input/s and return it's results.*  
@@ -346,7 +368,7 @@ HTML / CSS | 5 |
   - `search_input()`
     - format the **string** and create the query with `Search().text()`
   - `search_tags()`
-    - final stage which add the formated filters selected by user to `Search().match()`
+    - final stage which add the formatted filters selected by user to `Search().match()`
 
 **`Database`**
 
@@ -360,7 +382,7 @@ HTML / CSS | 5 |
   - `update_db()`
     - if new tags found `append` them **list** associate with **key**
   - `update_search_form()`
-    - main method wich update the document in **form** collection at the end
+    - main method which update the document in **form** collection at the end
 
 **`Recipe(dict)`**
 
@@ -384,21 +406,24 @@ HTML / CSS | 5 |
 
 - **`Charts`**
   - `users_vs_db()`
-    - construct graph data wich shows **User's** vs. **Database** recipes in total in form of **pie chart**
+    - construct graph data which shows **User's** vs. **Database** recipes in total in form of **pie chart**
   - `line_graph()`
-    - construct graph data wich shows **User's** vs. **Database** recipes in total for selected tag in form of **line chart**
+    - construct graph data which shows **User's** vs. **Database** recipes in total for selected tag in form of **line chart**
   - `users_vs_db()`
     - return separate data for **User's** and **Database** in form of **dictionary**  
-    *This method is used to used to separate data and pass them to `line_graph()`*
+    *This method is used to separate data and pass them to `line_graph()`*
+
+[**To top**](#Table-of-Contents)
 
 ### Features left to implement
 
-- [**index.html**](https://github.com/MiroslavSvec/project-4/blob/master/templates/index.html)
-  - Create Account / Login form
-    - check user password (not required for this project)
-- **Any other page**
-  - **Navigation**
-    - **Top Navbar**
+- **[search-form.html](/templates/search-form.html) as `search_form_modal`**
+  - **Tags search**
+    - with adding more and more tags the modal eventually can not hold the numbers  
+    *Easiest solution is just to use [search-form-sm.html](/templates/search-form-sm.html) for all screens and discard the modal view. Other option is to let **Jinja** to get the total number of elements (tags) and inject the columns as required. Similar approach as I done with user recipes in [profile.html](/templates/profile.html).*
+- [sign-up.html](/templates/sign-up.html)
+  - add second field for password to cross check it
+  - add email as required field and / or allow users to login via email
 
 [**To top**](#Table-of-Contents)
 
@@ -408,19 +433,21 @@ HTML / CSS | 5 |
 
 ### Front End
 
-<!-- Change links -->
-
 - [Bootstrap 4.0.0](https://getbootstrap.com/docs/4.0/getting-started/introduction/)
   - The project uses **Bootstrap** to speed up the development.
-- [Font Awesome 4.7.0](https://fontawesome.com/)
+- [Font Awesome 5.3.1](https://fontawesome.com/)
   - The project uses **Font Awesome** for icons.
-- [jQuery v3.3.1](https://blog.jquery.com/2018/01/20/jquery-3-3-1-fixed-dependencies-in-release-tag/)
+- [jQuery 3.2.1](https://blog.jquery.com/2017/03/20/jquery-3-2-1-now-available/)
   - The project uses **jQuery** for better user experiences as well as sending requests to server.
 
 ### Back End
 
 - [Flask 1.0.2](http://flask.pocoo.org/docs/1.0/) a micro web Python framework
   - **Flask** was used to build the application as well as to speed up the development process.
+- [PyMongo 3.7.2](https://api.mongodb.com/python/current/)
+  - **PyMongo** was used to send quires to **mLab**
+- [Pygal 2.4.0](http://pygal.org/en/stable/)
+  - **Pygal** was used to generate and render the graphs data for [graphs.html](/templates/graphs.html)
 
 [**To top**](#Table-of-Contents)
 
@@ -438,7 +465,7 @@ HTML / CSS | 5 |
       - **Document checking completed. No errors or warnings to show.**
 
   - [W3C CSS Validation Service](https://jigsaw.w3.org/css-validator/) (All pages)
-    - Shows 29 errors and 975 warnings due to the **Boostrap 4** clasees and rules.  
+    - Shows 29 errors and 975 warnings due to the **Bootstrap 4** clasees and rules.  
     *There are no errors showing in custom CSS's*
 
   - [JSHint](https://jshint.com/) (Report of all custom JS functions)
@@ -529,7 +556,7 @@ HTML / CSS | 5 |
     - While changing the tags user now see the number of results before searching
     - If no recipes found the search button is disabled and user is asked to remove some of the filters
     - Removed "Search by" as this was getting too confusing for user. Instead the search input searches for any matching results
-    - Added min and max length to imput search. JS also checking for input length and enabling / disabling search input btn
+    - Added min and max length to input search. JS also checking for input length and enabling / disabling search input btn
     - JS now also checking how many recipes are found on input change
     - Create separate view for mobile devices search
 
@@ -557,6 +584,28 @@ HTML / CSS | 5 |
   - Fixed voting system
   - Added few improvements from users stories
   - Fixed issue where email address was not storing in database
+
+#### **Testing and improvements before 2.2**
+
+- Fixed bug in add/edit recipe where JS was incorrectly injecting `maxlength` of 60 instead of 150 in "Steps" section
+- Reduced limit on "Ingredients" input `minlength` from 5 to 3
+- Moved Alerts to top for better visibility
+- Decided to use the mobile search for tablets as well
+- At least one tag must be selected to use the for searching recipes
+- Fixed bug where user will not be redirected to mobile search on tablets like screens (medium size resolutions)
+- Fixed 500 error when trying to print recipe while logged out
+- Fixed bug where user could vote for his own recipe.
+- Added statement to check if cursor is `None` which occurs when empty form is submitted for example.
+- Fixed major glitch. As soon as user voted for one recipe he could not vote for any other recipes as the app said "You already voted for this recipe"
+
+#### **Some user feedbacks before 2.2**
+
+- Fixed many typos
+- Changed the "Welcome" message in profile page
+- Increased `setTimeout()` from 5s to 7s in `flashed_messages()` as some of the messages was hard to read all before disappearing
+- If not logged in user can now click on "You must be logged in to vote / edit recipe" to bring the log in modal
+- Made "Register an Account" to looks like a btn for better visibility
+- Reduced input search `minlength` from 5 to 4 for words like a "Fish" for example
 
 ### 2.2 and later
 
@@ -596,7 +645,7 @@ HTML / CSS | 5 |
   - [app.py](app.py)
     - Added functionality to automatically add new tags to search form schema in `approve_recipe()`
     - Added functionality for user to have random (from 4) profile picture while creating account in `sign_up()`
-    - Cleaned up the code and andded external files for **CSS** and **JS**
+    - Cleaned up the code and added external files for **CSS** and **JS**
 - **Fixes**
   - Recipe `visibility` is now always set to `False` every time the user edit the recipe for security reasons
   - Changed form search schema to lower cases to prevent duplications and errors in future.
@@ -614,9 +663,9 @@ HTML / CSS | 5 |
   - Validate **HTML**, **CSS** and **JS**
   - Added [favicon.ico](/static/img/favicon.ico)
 - **Fixes**  
-  - Fixed minor layout issues as accidentaly used `col-xs-12` instead of `col-12`
+  - Fixed minor layout issues as accidentally used `col-xs-12` instead of `col-12`
   - [sign-up.html](/templates/sign-up.html)
-    - Fixed broken link to add recipe after user logges in
+    - Fixed broken link to add recipe after user log in
   - [profile.css](/static/custom/css/profile.css)
     - made the `nav` darker for netter visibility for smaller screens
   - [recipe.html](/templates/recipe.html), [recipes.html](/templates/recipes.html) and [search-form-small.html](/templates/search-form-small.html)
@@ -624,46 +673,15 @@ HTML / CSS | 5 |
   - [search-form.html](/templates/search-form.html)
     - changed `container` to `container-fluid` as this gives more space to long tags such as **Eastern European**
   - [app.py](/app.py)
-    - `hide_recipe()` database is now updated every time a recipe is hidden to preven empty tags
+    - `hide_recipe()` database is now updated every time a recipe is hidden to prevent empty tags
   - [helper](/helper/classes.py)
     - fixed major bug when `Recipe` class lower cased image url's
 
-### **Testing and improvements**
 
-- xk lines of manual testing which I never documented :(
-- FIxed bug in add/edit recipe where JS was incorrectly injecting `maxlength` of 60 instead of 150 in "Steps" section
-- Reduced limit on "Ingredients" input `minlength` from 5 to 3
-- Moved Alerts to top for better visibility
-- Decided to use the mobile search for tablets as well
-- At least one tag must be selected to use the for searching recipes
-- Fixed bug where user will not be redirected to mobile search on tablets like screens (medium size resolutions)
-- Fixed 500 error when trying to print recipe while logged out
-- Fixed bug where user could vote for his own recipe.
-- Added statement to check if cursor is `None` which occurs when empty form is submitted for example.
-- Fixed major glitch. As soon as user voted for one recipe he could not vote for any other recipes as the app said "You already voted for this recipe"
+#### Bootstrap 4 Flex-box on iOS
 
-### **Some user feedbacks**
-
-- Fixed many typos
-- Changed the "Welcome" message in profile page
-- Increased `setTimeout()` from 5s to 7s in `flashed_messages()` as some of the messages was hard to read all before disappearing
-- If not logged in user can now click on "You must be loged in to vote / edit recipe" to bring the log in modal
-- Made "Register an Account" to looks like a btn for better visibility
-- Reduced input search `minlength` from 5 to 4 for words like a "Fish" for example
-
-### **Need to fix**
-
-- somehow add partial search in the form
-- add second field for cross check the password in register form
-- maybe add email as required field and / or allow users to login via email
-- disable drop-down with user stories in add / edit recipe
-- check-boxes needs to align better on mobile view
-- add more custom CSS
-- need to add more JS for better user xp
-
-#### BS4 Flex-box iOS
-
-Encountered many glitches with Flexbox and iOS (especially tablets). Where some of them are still present and therefore the app is not fully responsive with older versions of Safari.
+*Encountered many glitches with **Flexbox** and **iOS** (especially tablets).  
+Where some of them are still present and therefore the application is not fully compatible with older versions of **Safari**.*
 
 - Fixed issue where user was unable to access the search on iOS tablets. Was forced to use JS at the end to change the `a` to `button` on lg and xl screens.
 - Found workaround with search form will not trigger event on checkbox change and / or input change. Using JS to check if user using Safari on tablet / mobile view and if so the attr `disabled` is removed so user can use the form.
@@ -685,6 +703,7 @@ Encountered many glitches with Flexbox and iOS (especially tablets). Where some 
     - Added **Config Vars**
       - IP `0.0.0.0`
       - PORT `5000`
+      - MONGO_URI
       - SECRET_KEY
     - **Deploy**
       - Connected the app to **GitHub** project
@@ -695,10 +714,10 @@ Encountered many glitches with Flexbox and iOS (especially tablets). Where some 
           - Installing requirements with pip
           - Discovering process types
             - Procfile declares types -> web
-          - Compressing... 
+          - Compressing...
             - Done: 48.8M
           - Launching...
-            - Released v40 https://p4-cookbook.herokuapp.com/ deployed to Heroku
+            - Released v57 https://p4-cookbook.herokuapp.com/ deployed to Heroku
 
 [**To top**](#Table-of-Contents)
 
@@ -706,7 +725,9 @@ Encountered many glitches with Flexbox and iOS (especially tablets). Where some 
 
 ## **How to run the project locally?**
 
-<!-- Edit -->
+*Please note that the project can not be run locally without database user name and password.*
+
+*Due to the security reasons I do not publish any of those and therefore the project can not be really run locally.*
 
 1. Download and install [Python 3](https://www.python.org/downloads/)
 2. Clone or download the project  
@@ -719,6 +740,7 @@ Encountered many glitches with Flexbox and iOS (especially tablets). Where some 
 6. Set **venv** variables
    - IP `0.0.0.0`
    - PORT `5000`
+   - MONGO_URI such as `mongodb://<dbuser>:<dbpassword>@ds225442.mlab.com:25442/<dbname>`
    - SECRET_KEY `my_secret_key`
    - DEVELOPMENT (optional)
 7. Run the application
@@ -733,7 +755,6 @@ Encountered many glitches with Flexbox and iOS (especially tablets). Where some 
 
 - MUCH better error handling. Right now, minimum to none
 - Again, tests has been done manually or with little use of automated tests
-- Also need to push to GitHub more often and or number the pushes more clearly
 
 [**To top**](#Table-of-Contents)
 
@@ -747,4 +768,16 @@ Encountered many glitches with Flexbox and iOS (especially tablets). Where some 
 
   *All of you gave me constructive feedback which made the project better* 😊
 
+### Recipes
+
+- all non user recipes data and pictures are taken from [spoonacular.com](https://spoonacular.com/) using [Rapid API](https://rapidapi.com/)
+
+### Media
+
+- [favicon](/static/img/favicon.ico)
+  - generated from [favicon-generator.org](https://www.favicon-generator.org/)
+- all other images
+  - was borrowed from multiple websites and cannot take any credit for them
+
 [**To top**](#Table-of-Contents)
+
